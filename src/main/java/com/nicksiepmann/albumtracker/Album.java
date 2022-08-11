@@ -5,6 +5,9 @@
 package com.nicksiepmann.albumtracker;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -15,17 +18,21 @@ public class Album {
     private String name;
     private String notes;
     private ArrayList<Song> songs;
-    private TaskIndex taskIndex;
+    private Index index;
 
     public Album() {
         this.songs = new ArrayList<>();
-        this.taskIndex = new TaskIndex();
+        this.index = new Index();
     }
 
     public Album(String name) {
         this.name = name;
         this.songs = new ArrayList<>();
-        this.taskIndex = new TaskIndex();
+        this.index = new Index();
+    }
+
+    public Index getIndex() {
+        return index;
     }
 
     public String getName() {
@@ -69,13 +76,8 @@ public class Album {
         this.songs.add(new Song(name));
     }
 
-
-    public TaskIndex getTaskIndex() {
-        return taskIndex;
-    }
-    
-    public void addTaskToSong(Song song, String name){
-        if (getTaskIndex().getTaskMap().containsKey(name)){
+    public void addTaskToSong(Song song, String name) {
+        if (this.index.getTaskIndex().containsKey(name)) {
             song.addTask(name);
         } else {
             System.out.println("task not found in index");
@@ -84,8 +86,7 @@ public class Album {
 
     @Override
     public String toString() {
-        return "Album{" + "name=" + name + ", notes=" + notes + ", songs=" + songs + ", taskIndex=" + taskIndex + '}';
+        return "Album{" + "name=" + name + ", notes=" + notes + ", songs=" + songs + ", " + "taskIndex=" + index.getTaskIndex().keySet().stream().map(s -> s + " " + index.getTaskIndex().get(s)[0] + "/" + index.getTaskIndex().get(s)[1]).collect(Collectors.joining(";")) + '}';
     }
-
 
 }

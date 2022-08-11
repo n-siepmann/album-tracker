@@ -4,6 +4,8 @@
  */
 package com.nicksiepmann.albumtracker;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 
 /**
@@ -20,14 +22,31 @@ public class consoleUI {
 //        String albumName = scanner.nextLine();
         Album album = new Album("ALBUM");
         album.addSong("SONG");
-        album.getTaskIndex().addPhase("PHASE");
         Song song = album.getSong("SONG");
-        album.getTaskIndex().getPhaseMap().get("PHASE");
-        album.getTaskIndex().addTask("TASK","PHASE");
-        
-        
-        
-        
+        album.getIndex().addPhase("PHASE");
+        album.getIndex().createTask("TASK");
+        System.out.println(album.toString());
+        album.addTaskToSong(song, "TASK");
+        album.getIndex().createTask("ANOTHER");
+        album.addTaskToSong(song, "ANOTHER");
+        System.out.println(album.toString());
+        album.getIndex().addPhase("PHASE2");
+        album.getIndex().createTask("NEWPHASETASK");
+        album.addTaskToSong(song, "NEWPHASETASK");
+        System.out.println(album.toString());
+        song.getTasks().stream().sorted((p1, p2) -> {
+            return album.getIndex().getTaskIndex().get(p1.getName())[0] - album.getIndex().getTaskIndex().get(p2.getName())[0];
+        }).forEach(s -> System.out.println(s.getName() + "(" + album.getIndex().getPhases().get(album.getIndex().getTaskIndex().get(s.getName())[1]) + ")"));
+        album.getIndex().moveTask("TASK", true);
+        System.out.println("moved");
+        album.getIndex().getTaskIndex().put("NEWPHASETASK", new Integer[]{4, 1});
+        System.out.println(album.getIndex().getTaskIndex().get("NEWPHASETASK")[0]);
+        album.getIndex().moveTask("TASK", true);
+        System.out.println("moved?");
+        System.out.println(album.toString());
+        song.getTasks().stream().sorted((p1, p2) -> {
+            return album.getIndex().getTaskIndex().get(p1.getName())[0] - album.getIndex().getTaskIndex().get(p2.getName())[0];
+        }).forEach(s -> System.out.println(s.getName() + "(" + album.getIndex().getPhases().get(album.getIndex().getTaskIndex().get(s.getName())[1]) + ")"));
 
         System.out.println("commands: add notes, show album, add song, edit song, exit");
 
