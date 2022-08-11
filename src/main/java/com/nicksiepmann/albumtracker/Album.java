@@ -15,17 +15,17 @@ public class Album {
     private String name;
     private String notes;
     private ArrayList<Song> songs;
-    private ArrayList<Phase> phases;
+    private TaskIndex taskIndex;
 
     public Album() {
         this.songs = new ArrayList<>();
-        this.phases = new ArrayList<>();
+        this.taskIndex = new TaskIndex();
     }
 
     public Album(String name) {
         this.name = name;
         this.songs = new ArrayList<>();
-        this.phases = new ArrayList<>();
+        this.taskIndex = new TaskIndex();
     }
 
     public String getName() {
@@ -65,21 +65,27 @@ public class Album {
         return null;
     }
 
-    public void addSong(Song song) {
-        this.songs.add(song);
+    public void addSong(String name) {
+        this.songs.add(new Song(name));
     }
 
-    public ArrayList<Phase> getPhases() {
-        return phases;
-    }
 
-    public void addPhases(Phase phase) {
-        this.phases.add(phase);
+    public TaskIndex getTaskIndex() {
+        return taskIndex;
+    }
+    
+    public void addTaskToSong(Song song, String name){
+        if (getTaskIndex().getTaskMap().containsKey(name)){
+            song.addTask(name);
+        } else {
+            System.out.println("task not found in index");
+        }
     }
 
     @Override
     public String toString() {
-        return "Album{" + "name=" + name + ", notes=" + notes + ", songs=" + songs + ", phases=" + phases + '}';
+        return "Album{" + "name=" + name + ", notes=" + notes + ", songs=" + songs + ", taskIndex=" + taskIndex + '}';
     }
+
 
 }

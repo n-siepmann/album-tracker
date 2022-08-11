@@ -16,9 +16,18 @@ public class consoleUI {
 
         Scanner scanner = new Scanner(System.in);
         System.out.println("Welcome to album tracker");
-        System.out.println("Album name?");
-        String albumName = scanner.nextLine();
-        Album album = new Album(albumName);
+//        System.out.println("Album name?");
+//        String albumName = scanner.nextLine();
+        Album album = new Album("ALBUM");
+        album.addSong("SONG");
+        album.getTaskIndex().addPhase("PHASE");
+        Song song = album.getSong("SONG");
+        album.getTaskIndex().getPhaseMap().get("PHASE");
+        album.getTaskIndex().addTask("TASK","PHASE");
+        
+        
+        
+        
 
         System.out.println("commands: add notes, show album, add song, edit song, exit");
 
@@ -28,11 +37,6 @@ public class consoleUI {
             switch (msg) {
                 case "exit":
                     return;
-//                case "new album":
-//                    System.out.println("Album name?");
-//                    String albumName = scanner.nextLine();
-//                    album = new Album(albumName);
-//                    break;
                 case "add notes":
                     System.out.println("notes:");
                     album.setNotes(scanner.nextLine());
@@ -42,12 +46,12 @@ public class consoleUI {
                 case "add song":
                     System.out.println("name?");
                     String songName = scanner.nextLine();
-                    album.addSong(new Song(songName));
+                    album.addSong(songName);
                     break;
                 case "edit song":
                     System.out.println("which song?");
                     songName = scanner.nextLine();
-                    Song song = album.getSong(songName);
+                    song = album.getSong(songName);
                     System.out.println("editing " + song.getName());
                     System.out.println("commands: add notes, add task, add subtask, complete task, exit");
                     loop:
