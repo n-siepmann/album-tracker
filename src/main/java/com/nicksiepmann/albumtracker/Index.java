@@ -31,7 +31,7 @@ public class Index {
             return;
         }
         if (!this.taskIndex.containsKey(name)) {
-            int latestPhase = taskIndex.values().stream().mapToInt(s -> s[0]).max().orElse(this.phases.size() - 1);
+            int latestPhase = taskIndex.values().stream().mapToInt(s -> s[1]).max().orElse(this.phases.size() - 1);
             Integer[] values = {taskIndex.keySet().size(), latestPhase};
             this.taskIndex.put(name, values);
             System.out.println("created task " + name + "in position " + taskIndex.get(name)[0] + " and phase " + taskIndex.get(name)[1] + ": " + phases.get(taskIndex.get(name)[1]));

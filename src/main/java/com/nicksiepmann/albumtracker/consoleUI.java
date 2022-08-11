@@ -5,6 +5,7 @@
 package com.nicksiepmann.albumtracker;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -15,24 +16,46 @@ import java.util.Scanner;
 public class consoleUI {
 
     public static void main(String[] args) {
-
         Scanner scanner = new Scanner(System.in);
         System.out.println("Welcome to album tracker");
 //        System.out.println("Album name?");
 //        String albumName = scanner.nextLine();
         Album album = new Album("ALBUM");
         album.addSong("SONG");
+        album.addSong("MORESONG");
+        album.addSong("THIRDSONG");
         Song song = album.getSong("SONG");
         album.getIndex().addPhase("PHASE");
         album.getIndex().createTask("TASK");
         System.out.println(album.toString());
         album.addTaskToSong(song, "TASK");
         album.getIndex().createTask("ANOTHER");
+        album.getIndex().createTask("YETANOTHER");
+        album.getIndex().createTask("YETANOTHERSTILL");
         album.addTaskToSong(song, "ANOTHER");
         System.out.println(album.toString());
         album.getIndex().addPhase("PHASE2");
         album.getIndex().createTask("NEWPHASETASK");
         album.addTaskToSong(song, "NEWPHASETASK");
+        album.addTaskToSong(album.getSong("MORESONG"), "NEWPHASETASK");
+        song.getTasks().get(1).addTask("SUBTASK");
+
+        GridBuilder gridBuilder = new GridBuilder();
+
+        String[][] grid = gridBuilder.buildGrid(album, true);
+
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[0].length; j++) {
+                if (grid[i][j] != null) {
+                    System.out.print(grid[i][j]);
+                }
+                System.out.print("\t");
+            }
+            System.out.println();
+        }
+
+        String msg = scanner.nextLine();
+
         System.out.println(album.toString());
         song.getTasks().stream().sorted((p1, p2) -> {
             return album.getIndex().getTaskIndex().get(p1.getName())[0] - album.getIndex().getTaskIndex().get(p2.getName())[0];
