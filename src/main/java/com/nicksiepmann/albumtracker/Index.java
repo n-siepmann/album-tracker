@@ -4,6 +4,7 @@
  */
 package com.nicksiepmann.albumtracker;
 
+import com.google.cloud.spring.data.datastore.core.mapping.Entity;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -11,6 +12,7 @@ import java.util.HashMap;
  *
  * @author Nick.Siepmann
  */
+@Entity
 public class Index {
 
     private HashMap<String, Integer[]> taskIndex; //task name, [global order, phase number]
@@ -19,6 +21,19 @@ public class Index {
     public Index() {
         this.taskIndex = new HashMap<>();
         this.phases = new ArrayList<>();
+    }
+
+    public Index(HashMap<String, Integer[]> taskIndex, ArrayList<String> phases) {
+        this.taskIndex = taskIndex;
+        this.phases = phases;
+    }
+
+    public void setTaskIndex(HashMap<String, Integer[]> taskIndex) {
+        this.taskIndex = taskIndex;
+    }
+
+    public void setPhases(ArrayList<String> phases) {
+        this.phases = phases;
     }
 
     public HashMap<String, Integer[]> getTaskIndex() {

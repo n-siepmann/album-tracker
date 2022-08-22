@@ -4,6 +4,7 @@
  */
 package com.nicksiepmann.albumtracker;
 
+import com.google.cloud.spring.data.datastore.core.mapping.Entity;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -11,6 +12,7 @@ import java.util.Objects;
  *
  * @author Nick.Siepmann
  */
+
 public class Task extends TaskContainer {
 
     private String name;
@@ -86,7 +88,6 @@ public class Task extends TaskContainer {
     @Override
     public String toString() {
         return "Task{" + "name=" + name + ", done=" + done + ", split=" + split + ", subtasks=" + super.getTasks().toString() + '}';
-//        return "Task{" + "name=" + name + ", done=" + done + ", split=" + split + '}';
     }
 
 }

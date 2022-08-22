@@ -4,12 +4,14 @@
  */
 package com.nicksiepmann.albumtracker;
 
+import com.google.cloud.spring.data.datastore.core.mapping.Entity;
 import java.util.ArrayList;
 
 /**
  *
  * @author Nick.Siepmann
  */
+
 public abstract class TaskContainer {
 
     private ArrayList<Task> tasks;
@@ -56,10 +58,16 @@ public abstract class TaskContainer {
     public ArrayList<Task> getTasks() {
         return tasks;
     }
+    
+    public String cleanString(String input){
+        String output = input.replace("~","").replace("¬", "");
+        return output;
+    }
 
     @Override
     public String toString() {
         return "TaskContainer{" + "tasks=" + tasks + '}';
+//    return tasks.toString();
     }
     
     

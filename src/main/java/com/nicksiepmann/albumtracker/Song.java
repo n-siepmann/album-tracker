@@ -4,6 +4,7 @@
  */
 package com.nicksiepmann.albumtracker;
 
+import com.google.cloud.spring.data.datastore.core.mapping.Entity;
 import java.util.ArrayList;
 
 /**
@@ -23,13 +24,13 @@ public class Song extends TaskContainer {
         this.name = name;
         this.notes = "";
     }
-   
+
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name = cleanString(name);
     }
 
     public String getNotes() {
@@ -37,7 +38,7 @@ public class Song extends TaskContainer {
     }
 
     public void setNotes(String notes) {
-        this.notes = notes;
+        this.notes = cleanString(notes);
     }
 
     public void addNotes(String notes) {
@@ -51,6 +52,8 @@ public class Song extends TaskContainer {
     @Override
     public String toString() {
         return "Song{" + "name=" + name + ", notes=" + notes + ", tasks=" + super.getTasks().toString() + '}';
+//        return name + "~" + notes + "~" + super.getTasks().toString();
+
     }
 
 }

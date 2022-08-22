@@ -20,7 +20,7 @@ public class consoleUI {
         System.out.println("Welcome to album tracker");
 //        System.out.println("Album name?");
 //        String albumName = scanner.nextLine();
-        Album album = new Album("ALBUM");
+        Album album = new Album("ALBUM", "ARTIST");
         album.addSong("SONG");
         album.addSong("MORESONG");
         album.addSong("THIRDSONG");
@@ -74,7 +74,7 @@ public class consoleUI {
         System.out.println("commands: add notes, show album, add song, edit song, exit");
 
         while (scanner.hasNext()) {
-            String msg = scanner.nextLine();
+            msg = scanner.nextLine();
 
             switch (msg) {
                 case "exit":
