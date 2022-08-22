@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
+-->
+<html>
+    <head>
+        <title>Album Tracker</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="../static/bootstrap.min.css">
+        <link rel="stylesheet" href="bootstrap.min.css">
+        <link rel="stylesheet" href="../static/styles.css">
+        <link rel="stylesheet" href="styles.css">
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">Album Tracker</a>
+                <div class="collapse navbar-collapse show" id="navbarColor01">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Album</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Tasks</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <main>
+            <header><h1>Album name</h1></header>
+            <div>
+                <table class="table">
+                    <tr class="table-light">
+                        <td rowspan ="2"> </td>
+                        <td colspan="2">Phase 1</td>
+                        <td>Phase 2</td>
+                        <td rowspan ="2"></td>
+                    </tr>
+                    <tr class="table-light">
+                        <td>Task 1</td>                   
+                        <td>Task 2</td>                    
+                        <td>Task 3</td>
+                    </tr>
+                    <tr>
+                        <td>Song 1</td>
+                        <td>
+                            <button type="button" class="btn btn-primary btn-sm">&#10006;</button>
+                            <button type="button" class="btn btn-secondary btn-sm">&#10035;</button>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-primary btn-sm">&#10004;</button>
+                            <button type="button" class="btn btn-secondary btn-sm">&#10035;</button>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-primary btn-sm">&#10022;</button>
+                            <button type="button" class="btn btn-secondary btn-sm">&#10035;</button>
+                        </td>
+
+                        <td>
+                            <button type="button" class="btn btn-outline-dark btn-sm">More info</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Song 2</td>
+                        <td>
+                            <button type="button" class="btn btn-primary btn-sm">&#10006;</button>
+                            <button type="button" class="btn btn-secondary btn-sm">&#10035;</button>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-info btn-sm">&#10010;</button>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-info btn-sm">&#10010;</button>
+                        </td>
+
+                        <td>
+                            <button type="button" class="btn btn-outline-dark btn-sm">More info</button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </main>
+        <footer>
+            <p>Nick Siepmann | 2022</p>
+        </footer>
+    </body>
+</html>

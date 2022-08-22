@@ -1,0 +1,4 @@
+## YAML Template.
+---
+runtime: java17
+instance_class: F2

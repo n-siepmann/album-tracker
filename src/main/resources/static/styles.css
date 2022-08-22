@@ -1,0 +1,93 @@
+@import url("bootstrap.min.css");
+
+section.divide-thirds{
+    width: 33%;
+    min-width:300px;
+    display: inline-grid;
+    vertical-align: top;
+    grid-template-rows: auto;
+    height: 100%;
+    padding: 10px 10px 10px 10px;
+}
+section.center-float{
+    width: 33%;
+    min-width:300px;
+    display: block;
+    height: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 20px;
+}
+section.divide-halves{
+    width: 49%;
+    display: inline-grid;
+    vertical-align: top;
+    grid-template-rows: auto;
+    height: 100%;
+    padding-right: 10px;
+}
+.divide-halves .btn {
+    margin-top: 10px;
+}
+.table-light{
+    vertical-align: middle;
+}
+
+section.divide-thirds:nth-child(2){
+    background-color: var(--bs-light);
+}
+header{
+    margin: 10px 10px 10px 10px;
+    display: block;
+}
+
+header .btn{
+    margin-left:10px;
+}
+
+header h1{
+    display: inline;
+}
+header h2{
+    font-size: 1.2rem;
+    display: inline;
+    margin-left: 20px;
+}
+header h3{
+    display: block;
+    margin-top: 20px;
+}
+
+footer{
+    text-align: center;
+    background-color: var(--bs-gray-400);
+    /*    background-image: linear-gradient(to right, var(--bs-light),var(--bs-gray-400),var(--bs-light));*/
+    padding-top: 5px;
+    width: 100%;
+    text-transform: uppercase;
+    font-size: 12px;
+    color: var(--bs-gray-600);
+    position: fixed;
+    bottom: 0;
+    right: 0;
+}
+
+.card-body{
+    padding: 10px 10px 10px 10px;
+}
+.center-float .btn{
+    margin-top: 10px;
+}
+@media screen and (max-width: 991px){
+    section.detail{
+        display: inline-block;
+        width: 100%;
+    }
+    section.center-two{
+        display: inline-block;
+        width: 100%;
+
+    }

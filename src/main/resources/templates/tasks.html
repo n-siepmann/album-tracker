@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
+-->
+<html>
+    <head>
+        <title>Album Tracker</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="../static/bootstrap.min.css">
+        <link rel="stylesheet" href="bootstrap.min.css">
+        <link rel="stylesheet" href="../static/styles.css">
+        <link rel="stylesheet" href="styles.css">
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">Album Tracker</a>
+                <div class="collapse navbar-collapse show" id="navbarColor01">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Album</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Tasks</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <main>
+            <header>
+                <h1>Edit Tasks</h1>
+                <h3 class="text-muted">Album Name<button type="button" class="btn btn-outline-primary btn-sm">Change name</button></h3>
+
+            </header>
+            <div>
+                <table class="table">
+                    <tr class="table-light">
+                        <td>Tasks</td>
+                        <td>up/down</td>
+                        <td>Phase 1</td>
+                        <td>Phase 2</td>
+                    </tr>
+                    <tr>
+                        <td>Task 1</td>  
+                        <td>
+                            <button type="button" class="btn btn-primary btn-sm">&#9650;</button>
+                            <button type="button" class="btn btn-primary btn-sm">&#9660;</button>
+                        </td>
+                        <td><input type="radio" name="Task1" value="option-value" id="option-1"></td>
+                        <td><input type="radio" name="Task1" value="option-value" id="option-1"></td>
+                    </tr>
+                    <tr>
+                        <td>Task 2</td>  
+                        <td>
+                            <button type="button" class="btn btn-primary btn-sm">&#9650;</button>
+                            <button type="button" class="btn btn-primary btn-sm">&#9660;</button>
+                        </td>
+                        <td><input type="radio" name="Task2" value="option-value" id="option-1"></td>
+                        <td><input type="radio" name="Task2" value="option-value" id="option-1"></td>
+                    </tr>
+                </table>
+            </div>
+        </main>
+        <footer>
+            <p>Nick Siepmann | 2022</p>
+        </footer>
+    </body>
+</html>
