@@ -39,19 +39,25 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                     <table class="table">
                         <tr>
                             <td class="table-light" rowspan="2">Phase 1</td>
-                            <td><button type="button" class="btn btn-primary btn-sm">?</button>
-                                <button type="button" class="btn btn-secondary btn-sm">#</button></td>
+                            <td>
+                                <button type="button" class="btn btn-primary btn-sm" title="Incomplete">&#10006;</button>
+                                <button type="button" class="btn btn-secondary btn-sm" title="Task options" onclick="openForm()">&#10035;</button>
+                            </td>
                             <td>Task 1</td>                   
                         </tr>
                         <tr>
-                            <td><button type="button" class="btn btn-primary btn-sm">?</button>
-                                <button type="button" class="btn btn-secondary btn-sm">#</button></td>
+                            <td>
+                                <button type="button" class="btn btn-success btn-sm" title="Complete">&#10004;</button>
+                                <button type="button" class="btn btn-secondary btn-sm" title="Task options" onclick="openForm()">&#10035;</button>
+                            </td>
                             <td>Task 2</td>                   
                         </tr>
                         <tr>
                             <td class="table-light">Phase 2</td>
-                            <td><button type="button" class="btn btn-primary btn-sm">?</button>
-                                <button type="button" class="btn btn-secondary btn-sm">#</button></td>
+                            <td>
+                                <button type="button" class="btn btn-warning btn-sm" title="Contains subtasks">&#10022;</button>
+                                <button type="button" class="btn btn-secondary btn-sm" title="Task options" onclick="openForm()">&#10035;</button>
+                            </td>
                             <td>Task 3</td>                   
                         </tr>
                     </table>
@@ -65,6 +71,55 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                     <table><tr><td>Notes in here</td></tr></table>
                 </section>
             </div>
+
+
+
+            <div class="form-popup card mb-3" id="subtaskform">
+                <h3 class="card-header">Task name - <span class="text-muted">Song name</span>
+                    <button type="button" class="btn btn-outline-secondary btn-sm" title="Close subtask menu" onclick="closeForm()">&#9932;</button><br>
+                    <button type="submit" class="btn btn-danger btn-sm">Delete task</button>
+                </h3>
+
+                <div class="card-body">
+                    <form class="form-container"> 
+                        <div class="form-group">
+                            <table class="table">
+                                <tr>
+                                    <td class="table-light">Subtask 1</td>
+                                    <td>
+                                        <button type="button" class="btn btn-primary btn-sm" title="Incomplete">&#10006;</button>
+                                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="table-light">Subtask 2</td>
+                                    <td>
+                                        <button type="button" class="btn btn-success btn-sm" title="Complete">&#10004;</button>
+                                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="newsubtask" placeholder="New subtask">
+                        </div>
+
+                        <button type="submit" class="btn btn-info">Add subtask</button>
+
+                    </form>
+                </div>
+            </div>
+
+            <script>
+                function openForm() {
+                    document.getElementById("subtaskform").style.display = "block";
+                }
+
+                function closeForm() {
+                    document.getElementById("subtaskform").style.display = "none";
+                }
+            </script>
+
         </main>
         <footer>
             <p>Nick Siepmann | 2022</p>
