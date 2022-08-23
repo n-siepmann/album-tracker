@@ -19,4 +19,5 @@ public interface AlbumRepository extends DatastoreRepository<Album, Long> {
     
     List<Album> findByNameAndArtist(String name, String artist);
 
+
 }

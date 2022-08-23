@@ -111,6 +111,26 @@ public class Index {
 
     }
 
+    public String[][] getTasksAndPhases() {
+        if (!this.phases.isEmpty()) {
+            Object[] sortedKeySet = taskIndex.keySet().stream().sorted((p1, p2) -> {
+                return taskIndex.get(p1)[0] - taskIndex.get(p2)[0];
+            }).toArray();
+
+            String[][] tasksAndPhases = new String[this.taskIndex.keySet().size()][2];
+
+            for (int i = 0; i < sortedKeySet.length; i++) {
+                tasksAndPhases[i][0] = String.valueOf(sortedKeySet[i]);
+                tasksAndPhases[i][1] = String.valueOf(taskIndex.get(sortedKeySet[i])[1]);
+                
+                System.out.println(tasksAndPhases[i][0] + "/" + tasksAndPhases[i][1]);
+            }
+
+            return tasksAndPhases;
+        }
+        return null;
+    }
+
     public ArrayList<String> getPhases() {
         return phases;
     }

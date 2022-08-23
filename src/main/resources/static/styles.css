@@ -84,20 +84,24 @@ footer{
     margin-top: 10px;
 }
 
-.card .closebutton {
+.closebutton {
     margin-left: 20px;
+    position: absolute;
     font-size: 0.6rem;
     vertical-align: top;
     margin-top: 5px;
+    margin-left: auto;
+    margin-right: auto;
+    right: 10px;
 }
 
 
 @media screen and (max-width: 991px){
-    section.detail{
+    section.divide-thirds{
         display: inline-block;
         width: 100%;
     }
-    section.center-two{
+    section.divide-halves{
         display: inline-block;
         width: 100%;
 
@@ -126,3 +130,6 @@ footer{
     background-color: white;
 }
 
+.deleteform{
+    z-index: 10;
+}

@@ -3,67 +3,83 @@
 Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
 Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
 -->
-<html>
+<html lang="en-US" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
     <head>
         <title>Album Tracker</title>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="../static/bootstrap.min.css">
-        <link rel="stylesheet" href="bootstrap.min.css">
-        <link rel="stylesheet" href="../static/styles.css">
-        <link rel="stylesheet" href="styles.css">
-    </head>
-    <body>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="#">Album Tracker</a>
-            </div>
-        </nav>
-        <main>
-            <section class="divide-halves">
-                <table class="table">
-                    <tr>
-                        <td class="table-light">Album 1</td>
-                        <td><button type="button" class="btn btn-primary btn-sm">Open album</button></td>
-                        <td><button type="button" class="btn btn-danger btn-sm" title="Delete" onclick="openDeleteForm()">Delete album</button></td>
-                    </tr>
-                    <tr>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <link rel="stylesheet" href="../static/bootstrap.min.css">
+                    <link rel="stylesheet" href="bootstrap.min.css">
+                        <link rel="stylesheet" href="../static/styles.css">
+                            <link rel="stylesheet" href="styles.css">
+                                </head>
+                                <body>
+                                    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+                                        <div class="container-fluid">
+                                            <a class="navbar-brand" href="/albums">Album Tracker</a>
+                                        </div>
+                                    </nav>
+                                    <main>
+                                        <section class="divide-halves">
+                                            <table class="table">
+                                                <tr th:each="album : ${albums}">
+                                                    <td class="table-light" th:text="${album.name}"></td>
+                                                    <td>
+                                                        <form th:action="@{/index}">
+                                                            <button type="submit" class="btn btn-primary btn-sm" th:name="id" th:value="${album.id}">Open album</button>
+                                                        </form>
+                                                    </td>
+                                                    <td>
+                                                        <form th:action="@{/delete}">
+                                                            <button type="button" class="btn btn-danger btn-sm" title="Delete" onclick="openForm('deleteform')">Delete album</button>
+                                                            <div class="form-popup card mb-3 deleteform" id="deleteform">
+                                                                <h3 class="card-header">Delete <span th:text="${album.name}"></span>?
+                                                                    <button type="button" class="btn btn-outline-secondary btn-sm closebutton" title="Close delete prompt" onclick="closeForm('deleteform')">&#9932;</button><br>
+                                                                </h3>
+                                                                <div class="card-body">
+                                                                    <button type="submit" class="btn btn-danger" title="Delete" th:name="id" th:value="${album.id}">Delete</button>
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                    </td>
+                                                </tr>
 
-                </table>
-            </section>
-            <section class="divide-halves">
-                <button type="button row" class="btn btn-info btn-lg">New album</button>
+                                            </table>
+                                        </section>
+                                        <section class="divide-halves">
+                                            <form th:action="@{/newalbum}">
+                                                <button type="button" class="btn btn-info btn-lg" title="New album" onclick="openForm('albumform')">New album</button>
+                                                <div class="form-popup card mb-3" id="albumform">
+                                                    <h3 class="card-header">New album
+                                                        <button type="button" class="btn btn-outline-secondary btn-sm closebutton" title="Close subtask menu" onclick="closeForm('albumform')">&#9932;</button><br>
+                                                    </h3>
+                                                    <form>
+                                                        <div class="card-body">
+                                                            <input type="text" class="form-control" id="albumname" placeholder="Album name" th:name="name">                                                            
+                                                                <input type="text" class="form-control" id="artistname" placeholder="Artist name" th:name="artist">
+                                                                    <button type="submit" class="btn btn-primary" title="Name">Create album</button>
+                                                                    </div>
+                                                                    </form>
+                                                                    </div>
+                                                                    </form>
+                                                                    <form th:action="@{/logout}">
+                                                                        <button type="submit" class="btn btn-dark btn-lg">Log out</button>
+                                                                    </form>
+                                                                    </section>
 
-                <button type="button row" class="btn btn-dark btn-lg">Log out</button>
-            </section>
 
+                                                                    <script>
+                                                                        function openForm(name) {
+                                                                            document.getElementById(name).style.display = "block";
+                                                                        }
 
-            <div class="form-popup card mb-3" id="deleteform">
-                <h3 class="card-header">Delete <span>SONG/TASK NAME</span>?
-                    <button type="button" class="btn btn-outline-secondary btn-sm closebutton" title="Close subtask menu" onclick="closeDeleteForm()">&#9932;</button><br>
-                </h3>
-                <form>
-                    <div class="card-body">
-                        <button type="submit" class="btn btn-danger" title="Delete">Delete</button>
-                    </div>
-                </form>
-            </div>
-            
-
-
-            <script>
-                function openDeleteForm() {
-                    document.getElementById("deleteform").style.display = "block";
-                }
-
-                function closeDeleteForm() {
-                    document.getElementById("deleteform").style.display = "none";
-                }
-
-            </script>
-        </main>
-        <footer>
-            <p>Nick Siepmann | 2022</p>
-        </footer>
-    </body>
-</html>
+                                                                        function closeForm(name) {
+                                                                            document.getElementById(name).style.display = "none";
+                                                                        }
+                                                                    </script>
+                                                                    </main>
+                                                                    <footer>
+                                                                        <p>Nick Siepmann | 2022</p>
+                                                                    </footer>
+                                                                    </body>
+                                                                    </html>

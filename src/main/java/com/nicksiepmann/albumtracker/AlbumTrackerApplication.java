@@ -31,7 +31,6 @@ public class AlbumTrackerApplication {
 //        Album savedAlbum = this.albumRepository.save(album);
 //        return savedAlbum.toString();
 //    }
-
     @ShellMethod
     public String saveAlbumTest() {
         Album album = new Album("name", "artist");
@@ -57,7 +56,10 @@ public class AlbumTrackerApplication {
         System.out.println(album.toString());
         album.getIndex().addPhase("PHASE2");
         album.getIndex().createTask("NEWPHASETASK");
+        album.getIndex().setTaskPhase("NEWPHASETASK", 1);
         album.addTaskToSong(song, "NEWPHASETASK");
+        album.getIndex().createTask("NEWPHASETASK2");
+        album.getIndex().addPhase("PHASE3");
         album.addTaskToSong(album.getSong("MORESONG"), "NEWPHASETASK");
         song.getTasks().get(1).addTask("SUBTASK");
         System.out.println("saving");
