@@ -31,8 +31,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
         </nav>
         <main>
             <header>
-                <h1>Song name</h1>
-                <h2 class="text-muted">Album name</h2>
+                <h1>Song name<button type="button" class="btn btn-outline-primary btn-sm" title="Rename" onclick="openRenameForm()">Change name</button></h1>
             </header>
             <div>
                 <section class="divide-thirds">
@@ -76,9 +75,8 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
 
             <div class="form-popup card mb-3" id="subtaskform">
                 <h3 class="card-header">Task name - <span class="text-muted">Song name</span>
-                    <button type="button" class="btn btn-outline-secondary btn-sm" title="Close subtask menu" onclick="closeForm()">&#9932;</button><br>
-                    <button type="submit" class="btn btn-danger btn-sm">Delete task</button>
-                </h3>
+                    <button type="button" class="btn btn-outline-secondary btn-sm closebutton" title="Close subtask menu" onclick="closeForm()">&#9932;</button><br>
+                    <button type="button" class="btn btn-danger btn-sm" title="Delete" onclick="openDeleteForm()">Delete task</button>                </h3>
 
                 <div class="card-body">
                     <form class="form-container"> 
@@ -88,14 +86,14 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                     <td class="table-light">Subtask 1</td>
                                     <td>
                                         <button type="button" class="btn btn-primary btn-sm" title="Incomplete">&#10006;</button>
-                                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                        <button type="button" class="btn btn-danger btn-sm" title="Delete" onclick="openDeleteForm()">Delete</button>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td class="table-light">Subtask 2</td>
                                     <td>
                                         <button type="button" class="btn btn-success btn-sm" title="Complete">&#10004;</button>
-                                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                        <button type="button" class="btn btn-danger btn-sm" title="Delete" onclick="openDeleteForm()">Delete</button>
                                     </td>
                                 </tr>
                             </table>
@@ -104,10 +102,33 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                             <input type="text" class="form-control" id="newsubtask" placeholder="New subtask">
                         </div>
 
-                        <button type="submit" class="btn btn-info">Add subtask</button>
+                        <button type="button" class="btn btn-info">Add subtask</button>
 
                     </form>
                 </div>
+            </div>
+
+            <div class="form-popup card mb-3" id="deleteform">
+                <h3 class="card-header">Delete <span>SONG/TASK NAME</span>?
+                    <button type="button" class="btn btn-outline-secondary btn-sm closebutton" title="Close subtask menu" onclick="closeDeleteForm()">&#9932;</button><br>
+                </h3>
+                <form>
+                    <div class="card-body">
+                        <button type="submit" class="btn btn-danger" title="Delete">Delete</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="form-popup card mb-3" id="renameform">
+                <h3 class="card-header">Rename album
+                    <button type="button" class="btn btn-outline-secondary btn-sm closebutton" title="Close subtask menu" onclick="closeRenameForm()">&#9932;</button><br>
+                </h3>
+                <form>
+                    <div class="card-body">
+                        <input type="text" class="form-control" id="newalbumname" placeholder="New name">
+                        <button type="submit" class="btn btn-primary" title="Rename">Rename</button>
+                    </div>
+                </form>
             </div>
 
             <script>
@@ -117,6 +138,20 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
 
                 function closeForm() {
                     document.getElementById("subtaskform").style.display = "none";
+                }
+                function openDeleteForm() {
+                    document.getElementById("deleteform").style.display = "block";
+                }
+
+                function closeDeleteForm() {
+                    document.getElementById("deleteform").style.display = "none";
+                }
+                function openRenameForm() {
+                    document.getElementById("renameform").style.display = "block";
+                }
+
+                function closeRenameForm() {
+                    document.getElementById("renameform").style.display = "none";
                 }
             </script>
 

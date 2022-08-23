@@ -82,13 +82,13 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                     </tr>
                 </table>
             </div>
-            
-            
-            
+
+
+
             <div class="form-popup card mb-3" id="subtaskform">
                 <h3 class="card-header">Task name - <span class="text-muted">Song name</span>
-                    <button type="button" class="btn btn-outline-secondary btn-sm" title="Close subtask menu" onclick="closeForm()">&#9932;</button><br>
-                    <button type="submit" class="btn btn-danger btn-sm">Delete task</button>
+                    <button type="button" class="btn btn-outline-secondary btn-sm closebutton" title="Close subtask menu" onclick="closeForm()">&#9932;</button><br>
+                    <button type="button" class="btn btn-danger btn-sm" onclick="openDeleteForm()">Delete task</button>
                 </h3>
 
                 <div class="card-body">
@@ -99,14 +99,14 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                     <td class="table-light">Subtask 1</td>
                                     <td>
                                         <button type="button" class="btn btn-primary btn-sm" title="Incomplete">&#10006;</button>
-                                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                        <button type="button" class="btn btn-danger btn-sm" onclick="openDeleteForm()">Delete</button>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td class="table-light">Subtask 2</td>
                                     <td>
                                         <button type="button" class="btn btn-success btn-sm" title="Complete">&#10004;</button>
-                                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                        <button type="button" class="btn btn-danger btn-sm" onclick="openDeleteForm()">Delete</button>
                                     </td>
                                 </tr>
                             </table>
@@ -115,10 +115,21 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                             <input type="text" class="form-control" id="newsubtask" placeholder="New subtask">
                         </div>
 
-                        <button type="submit" class="btn btn-info">Add subtask</button>
+                        <button type="button" class="btn btn-info">Add subtask</button>
 
                     </form>
                 </div>
+            </div>
+
+            <div class="form-popup card mb-3" id="deleteform">
+                <h3 class="card-header">Delete <span>SONG/TASK NAME</span>?
+                    <button type="button" class="btn btn-outline-secondary btn-sm closebutton" title="Close subtask menu" onclick="closeDeleteForm()">&#9932;</button><br>
+                </h3>
+                <form>
+                    <div class="card-body">
+                        <button type="submit" class="btn btn-danger" title="Delete">Delete</button>
+                    </div>
+                </form>
             </div>
 
             <script>
@@ -128,6 +139,14 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
 
                 function closeForm() {
                     document.getElementById("subtaskform").style.display = "none";
+                }
+
+                function openDeleteForm() {
+                    document.getElementById("deleteform").style.display = "block";
+                }
+
+                function closeDeleteForm() {
+                    document.getElementById("deleteform").style.display = "none";
                 }
             </script>
 

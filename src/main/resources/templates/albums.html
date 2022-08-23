@@ -25,7 +25,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                     <tr>
                         <td class="table-light">Album 1</td>
                         <td><button type="button" class="btn btn-primary btn-sm">Open album</button></td>
-                        <td><button type="button" class="btn btn-danger btn-sm">Delete album</button></td>
+                        <td><button type="button" class="btn btn-danger btn-sm" title="Delete" onclick="openDeleteForm()">Delete album</button></td>
                     </tr>
                     <tr>
 
@@ -36,6 +36,31 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
 
                 <button type="button row" class="btn btn-dark btn-lg">Log out</button>
             </section>
+
+
+            <div class="form-popup card mb-3" id="deleteform">
+                <h3 class="card-header">Delete <span>SONG/TASK NAME</span>?
+                    <button type="button" class="btn btn-outline-secondary btn-sm closebutton" title="Close subtask menu" onclick="closeDeleteForm()">&#9932;</button><br>
+                </h3>
+                <form>
+                    <div class="card-body">
+                        <button type="submit" class="btn btn-danger" title="Delete">Delete</button>
+                    </div>
+                </form>
+            </div>
+            
+
+
+            <script>
+                function openDeleteForm() {
+                    document.getElementById("deleteform").style.display = "block";
+                }
+
+                function closeDeleteForm() {
+                    document.getElementById("deleteform").style.display = "none";
+                }
+
+            </script>
         </main>
         <footer>
             <p>Nick Siepmann | 2022</p>

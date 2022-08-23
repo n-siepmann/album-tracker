@@ -32,37 +32,83 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
         <main>
             <header>
                 <h1>Edit Tasks</h1>
-                <h3 class="text-muted">Album Name<button type="button" class="btn btn-outline-primary btn-sm">Change name</button></h3>
+                <h3 class="text-muted">Album Name<button type="button" class="btn btn-outline-primary btn-sm" title="Rename" onclick="openRenameForm()">Change name</button></h3>
 
             </header>
             <div>
                 <table class="table">
                     <tr class="table-light">
                         <td>Tasks</td>
-                        <td>up/down</td>
+                        <td/>
+                        <td/>
                         <td>Phase 1</td>
                         <td>Phase 2</td>
+                        <td/>
                     </tr>
                     <tr>
                         <td>Task 1</td>  
+                        <td><button type="button" class="btn btn-outline-primary btn-sm" title="Rename" onclick="openRenameForm()">Change name</button></td>
                         <td>
                             <button type="button" class="btn btn-primary btn-sm">&#9650;</button>
                             <button type="button" class="btn btn-primary btn-sm">&#9660;</button>
                         </td>
                         <td><input type="radio" name="Task1" value="option-value" id="option-1"></td>
                         <td><input type="radio" name="Task1" value="option-value" id="option-1"></td>
+                        <td><button type="button" class="btn btn-danger btn-sm" onclick="openDeleteForm()">Delete</button></td>
                     </tr>
                     <tr>
-                        <td>Task 2</td>  
+                        <td>Task 2</td> 
+                        <td><button type="button" class="btn btn-outline-primary btn-sm" title="Rename" onclick="openRenameForm()">Change name</button></td>
                         <td>
                             <button type="button" class="btn btn-primary btn-sm">&#9650;</button>
                             <button type="button" class="btn btn-primary btn-sm">&#9660;</button>
                         </td>
                         <td><input type="radio" name="Task2" value="option-value" id="option-1"></td>
                         <td><input type="radio" name="Task2" value="option-value" id="option-1"></td>
+                        <td><button type="button" class="btn btn-danger btn-sm" onclick="openDeleteForm()">Delete</button></td>
                     </tr>
                 </table>
             </div>
+
+            <div class="form-popup card mb-3" id="deleteform">
+                <h3 class="card-header">Delete <span>SONG/TASK NAME</span>?
+                    <button type="button" class="btn btn-outline-secondary btn-sm closebutton" title="Close subtask menu" onclick="closeDeleteForm()">&#9932;</button><br>
+                </h3>
+                <form>
+                    <div class="card-body">
+                        <button type="submit" class="btn btn-danger" title="Delete">Delete</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="form-popup card mb-3" id="renameform">
+                <h3 class="card-header">Rename ALBUM/TASK
+                    <button type="button" class="btn btn-outline-secondary btn-sm closebutton" title="Close subtask menu" onclick="closeRenameForm()">&#9932;</button><br>
+                </h3>
+                <form>
+                    <div class="card-body">
+                        <input type="text" class="form-control" id="newalbumname" placeholder="New name">
+                        <button type="submit" class="btn btn-primary" title="Rename">Rename</button>
+                    </div>
+                </form>
+            </div>
+
+            <script>
+                function openDeleteForm() {
+                    document.getElementById("deleteform").style.display = "block";
+                }
+
+                function closeDeleteForm() {
+                    document.getElementById("deleteform").style.display = "none";
+                }
+                function openRenameForm() {
+                    document.getElementById("renameform").style.display = "block";
+                }
+
+                function closeRenameForm() {
+                    document.getElementById("renameform").style.display = "none";
+                }
+            </script>
         </main>
         <footer>
             <p>Nick Siepmann | 2022</p>
