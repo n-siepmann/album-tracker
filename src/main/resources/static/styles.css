@@ -95,6 +95,14 @@ footer{
     right: 10px;
 }
 
+.btn-reorder {
+    padding-left: 0.4rem;
+    padding-right: 0.4rem;
+    padding-top: 0.1rem;
+    padding-bottom: 0.1rem;
+    font-size: 0.7rem;
+}
+
 
 @media screen and (max-width: 991px){
     section.divide-thirds{

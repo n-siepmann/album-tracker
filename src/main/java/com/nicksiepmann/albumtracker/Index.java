@@ -102,6 +102,8 @@ public class Index {
             Integer[] val = {taskIndex.get(name)[0], phase};
             taskIndex.put(name, val);
 
+            // set phase of any tasks earler in the hierarchy set to a higher phase to be equal to the given phase
+            taskIndex.values().stream().filter(s -> s[0] < val[0]).filter(s -> s[1] > val[1]).forEach(s -> s[1] = val[1]);
             // set phase of any tasks later in the hierarchy set to a lower phase to avoid doubling back into a previous phase
             taskIndex.values().stream().filter(s -> s[0] > val[0]).filter(s -> s[1] < val[1]).forEach(s -> s[1] = val[1]);
 
@@ -121,9 +123,8 @@ public class Index {
 
             for (int i = 0; i < sortedKeySet.length; i++) {
                 tasksAndPhases[i][0] = String.valueOf(sortedKeySet[i]);
-                tasksAndPhases[i][1] = String.valueOf(taskIndex.get(sortedKeySet[i])[1]);
-                
-                System.out.println(tasksAndPhases[i][0] + "/" + tasksAndPhases[i][1]);
+                tasksAndPhases[i][1] = String.valueOf(taskIndex.get((String) sortedKeySet[i])[1]);
+
             }
 
             return tasksAndPhases;
@@ -145,4 +146,13 @@ public class Index {
         }
     }
 
+    public void deletePhase(int phasenumber) {
+        this.phases.remove(phasenumber);
+        this.taskIndex.values().stream().filter(s -> s[1] >= phasenumber && s[1] > 0).forEach(s -> s[1]--);
+    }
+
+    public void deleteTask(String task) {
+        this.taskIndex.remove(task);
+        checkGaps();
+    }
 }
