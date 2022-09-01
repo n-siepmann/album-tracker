@@ -20,7 +20,10 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                 <div class="collapse navbar-collapse show" id="navbarColor01">
                     <ul class="navbar-nav me-auto">
                         <li class="nav-item">
-                            <a class="nav-link" href="/edit">Album</a>
+                            <a class="nav-link" href="/">Overview</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/edit">Edit</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="/tasks">Tasks</a>
@@ -31,7 +34,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
         </nav>
         <main>
             <header>
-                <h1>Song name<button type="button" class="btn btn-outline-primary btn-sm" title="Rename" onclick="openRenameForm()">Change name</button></h1>
+                <h1><span th:text="${song.name}"></span><button type="button" class="btn btn-outline-primary btn-sm" title="Rename" onclick="openRenameForm()">Change name</button></h1>
             </header>
             <div>
                 <section class="divide-thirds">
@@ -67,7 +70,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                 </section>
                 <section class="divide-thirds">
                     <h2>Notes</h2>
-                    <table><tr><td>Notes in here</td></tr></table>
+                    <table><tr><td th:text="${song.notes}"></td></tr></table>
                 </section>
             </div>
 

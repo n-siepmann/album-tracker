@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
+-->
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+    </head>
+    <body>
+        <div class="form-group" th:fragment="subtasktable" id="subtaskreplace">
+            <table class="table">
+                <tr  th:each="item : ${task}">
+                    <td class="table-light" th:text="${item.name}"></td>
+                    <td>
+                        <form class="form-container" th:action="@{/subtaskstatus}"> 
+                            <input type="hidden" name="songname" th:value="${songname}" />
+                            <input type="hidden" name="taskname" th:value="${taskname}" />
+                            <input type="hidden" name="subtaskname" th:value="${item.name}" />
+                            <button type="submit" class="btn btn-primary btn-sm" title="Incomplete" th:name="value" th:value="complete" th:if="!${item.done}">&#10006;</button>
+                            <button type="submit" class="btn btn-success btn-sm" title="Complete" th:name="value" th:value="incomplete" th:if="${item.done}">&#10004;</button>
+                            <button type="submit" class="btn btn-danger btn-sm" title="Delete" th:name="value" th:value="delete" >Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </body>
+</html>

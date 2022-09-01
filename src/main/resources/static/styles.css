@@ -103,6 +103,12 @@ footer{
     font-size: 0.7rem;
 }
 
+.form-inline {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+}
+
 
 @media screen and (max-width: 991px){
     section.divide-thirds{
@@ -119,6 +125,7 @@ footer{
 * {
     box-sizing: border-box;
 }
+
 
 /* The popup form - hidden by default */
 .form-popup {

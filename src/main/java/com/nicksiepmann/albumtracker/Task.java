@@ -12,7 +12,6 @@ import java.util.Objects;
  *
  * @author Nick.Siepmann
  */
-
 public class Task extends TaskContainer {
 
     private String name;
@@ -50,8 +49,12 @@ public class Task extends TaskContainer {
     }
 
     public void setDone(boolean done) {
-        if (super.allDone(super.getTasks())) {
-            this.done = done;
+        if (done) {
+            if (super.allDone(super.getTasks())) {
+                this.done = true;
+            }
+        } else {
+            this.done = false;
         }
     }
 
@@ -62,6 +65,16 @@ public class Task extends TaskContainer {
     public void setSplit(boolean split) {
         this.split = split;
     }
+
+    @Override
+    public void removeTask(String name) {
+        super.removeTask(name);
+        if (super.getTasks().isEmpty()){
+            this.split = false;
+        }
+    }
+    
+    
 
     @Override
     public int hashCode() {

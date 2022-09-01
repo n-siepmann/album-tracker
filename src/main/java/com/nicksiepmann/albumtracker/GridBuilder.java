@@ -4,10 +4,13 @@
  */
 package com.nicksiepmann.albumtracker;
 
+import org.springframework.stereotype.Component;
+
 /**
  *
  * @author Nick.Siepmann
  */
+@Component
 public class GridBuilder {
 
     public GridBuilder() {
@@ -26,7 +29,7 @@ public class GridBuilder {
     }
 
     public String[][] buildGrid(Album album) {
-        String[][] grid = new String[album.getSongs().size() + 2][album.getIndex().getTaskIndex().keySet().size() + 1];
+        String[][] grid = new String[album.getSongs().size() + 2][album.getIndex().getTaskIndex().keySet().size() + 2]; //extra column on the end for More Info button
 
         for (int i = 0; i < album.getSongs().size(); i++) {
             grid[i + 2][0] = album.getSongs().get(i).getName();
@@ -42,7 +45,7 @@ public class GridBuilder {
         }
 
         for (int i = 2; i < grid.length; i++) {
-            for (int j = 1; j < grid[0].length; j++) {
+            for (int j = 1; j < grid[0].length - 1; j++) {
                 Task task = album.getSong(grid[i][0]).getTask(grid[1][j]);
                 if (task != null) {
                     grid[i][j] = "X";
