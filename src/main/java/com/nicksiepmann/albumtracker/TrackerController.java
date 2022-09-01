@@ -43,6 +43,11 @@ public class TrackerController {
         return "redirect:/login";
     }
 
+    @GetMapping("/home")
+    public String getHome(Model model) {
+        return "/";
+    }
+
     @GetMapping("/")
     public String getIndex(Model model) {
         if (this.album != null) {
@@ -115,8 +120,8 @@ public class TrackerController {
     public String getTask(@PathVariable String taskId, Model model) {
         ArrayList<Task> task = this.album.getSong(taskId.split("_")[1]).getTask(taskId.split("_")[2]).getTasks();
         model.addAttribute("task", task);
-        model.addAttribute("songname",taskId.split("_")[1]);
-        model.addAttribute("taskname",taskId.split("_")[2]);
+        model.addAttribute("songname", taskId.split("_")[1]);
+        model.addAttribute("taskname", taskId.split("_")[2]);
 //        System.out.println("refreshing data with " + model.getAttribute("task"));
         return "fragments::subtasktable";
     }
@@ -199,11 +204,11 @@ public class TrackerController {
     }
 
     @RequestMapping("/new/song") //create new song
-    public String newSong(@RequestParam(value = "name") String name, Model model) {
+    public String newSong(@RequestParam(value = "name") String name, @RequestParam(value = "returnto") String returnto, Model model) {
         if (this.album != null) {
             this.album.addSong(name);
             this.albumRepository.save(album);
-            return "redirect:/";
+            return "redirect:/" + returnto.trim();
         }
         return "redirect:/albums";
     }
@@ -240,7 +245,7 @@ public class TrackerController {
     }
 
     @RequestMapping("/settaskstatus")
-    public String setTaskStatus(@RequestParam(value = "songname") String songName, @RequestParam(value = "taskname") String taskName, @RequestParam(value = "value") String value, Model model) {
+    public String setTaskStatus(@RequestParam(value = "songname") String songName, @RequestParam(value = "taskname") String taskName, @RequestParam(value = "value") String value, @RequestParam(value = "returnto") String returnto, Model model) {
         if (this.album != null) {
             switch (value) {
                 case "complete":
@@ -258,7 +263,7 @@ public class TrackerController {
             }
 
             this.albumRepository.save(album);
-            return "redirect:/";
+            return "redirect:/" + returnto.trim();
         }
         return "redirect:/albums";
     }
@@ -270,7 +275,7 @@ public class TrackerController {
 //    @PutMapping("/songs/{id}/tasks") //update tasks for specified song from current album
 //
     @RequestMapping("/albums/rename") //update name/notes for current album
-    public String renameAlbum(@RequestParam(value = "id") String id, @RequestParam(value = "name") String name, @RequestParam(value = "artist") String artist, Model model) {
+    public String renameAlbum(@RequestParam(value = "id") String id, @RequestParam(value = "name") String name, @RequestParam(value = "artist") String artist, @RequestParam(value = "returnto") String returnto, Model model) {
         if (this.albumRepository.count() > 0) {
             Optional<Album> optAlbum = this.albumRepository.findById(Long.valueOf(id));
             if (optAlbum.isPresent() && !id.equals("")) {
@@ -280,7 +285,7 @@ public class TrackerController {
                 this.albumRepository.save(album);
                 this.album = album;
                 model.addAttribute("album", this.album);
-                return "redirect:/";
+                return "redirect:/" + returnto.trim();
             }
         }
         return "error";
@@ -297,6 +302,16 @@ public class TrackerController {
             return "redirect:/albums";
         }
         System.out.println("delete failed: id was " + id);
+        return "redirect:/albums";
+    }
+
+    @RequestMapping("/delete/song") //set specified album as current album
+    public String deleteSong(@RequestParam(value = "song") String song, @RequestParam(value = "returnto") String returnto, Model model) {
+        if (this.album != null) {
+            this.album.getSongs().remove(this.album.getSong(song));
+            this.albumRepository.save(album);
+            return "redirect:/" + returnto;
+        }
         return "redirect:/albums";
     }
 

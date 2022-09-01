@@ -109,7 +109,6 @@ footer{
   align-items: center;
 }
 
-
 @media screen and (max-width: 991px){
     section.divide-thirds{
         display: inline-block;

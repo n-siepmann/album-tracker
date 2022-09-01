@@ -35,20 +35,8 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                     <main>
                                         <header>
                                             <h1>Edit Tasks</h1>
-                                            <h3 class="text-muted"><span th:text="${album.name}"></span>
-                                                <button type="button" class="btn btn-outline-primary btn-sm" title="Phases" onclick="openForm('phasesform')">Edit Phases</button></h3>
-                                            <button type="button" class="btn btn-info"  onclick="openForm('addtaskform')">Add Task</button>
-                                            <div class="form-popup card mb-3" id="addtaskform">
-                                                <form  th:action="@{/new/task}">
-                                                    <h3 class="card-header">New task
-                                                        <button type="button" class="btn btn-outline-secondary btn-sm closebutton" title="Close" onclick="closeForm('addtaskform')">&#9932;</button><br>
-                                                    </h3>
-                                                    <div class="card-body">
-                                                        <input type="text" class="form-control" id="taskname" placeholder="Task name" th:name="name">                                                            
-                                                            <button type="submit" class="btn btn-primary" title="Create Task">Create Task</button>
-                                                    </div>  
-                                                </form>                                                                              
-                                            </div>                                                                                
+                                            <h3><span th:text="${album.name}"></span> <small class="lead">(<span th:text="${album.artist}"></span>)</small>
+                                                <button type="button" class="btn btn-outline-primary btn-sm" title="Phases" onclick="openForm('phasesform')">Edit Phases</button></h3>                                                                               
                                         </header>
                                         <div>
                                             <table class="table">
@@ -74,22 +62,33 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                                             <input type="hidden" name="value" th:value="${task[0]} + '_' + ${phaseStat.index}" />
                                                             <input type="radio" th:name="${task[0]}" th:value="${task[0]} + '_' + ${phaseStat.index}" th:checked="${task[1]} == ${phaseStat.index}" th:onclick="this.form.submit()">
                                                         </form>
-                                                        </td>
-                                                        <td><button type="button" class="btn btn-danger btn-sm" th:attr="onclick='openForm(\'deletetaskform' + ${taskStat.index} + '\')'">Delete</button>
-                                                            <div class="form-popup card mb-3 deleteform" th:attr="id='deletetaskform' + ${taskStat.index}">
-                                                                <h3 class="card-header">Delete <span th:text="${task[0]}"></span>?
-                                                                    <button type="button" class="btn btn-outline-secondary btn-sm closebutton" title="Close" th:attr="onclick='closeForm(\'deletetaskform' + ${taskStat.index} + '\')'">&#9932;</button><br>
-                                                                </h3>
-                                                                <form th:action="@{/delete/task}">
-                                                                    <div class="card-body">
-                                                                        <button type="submit" class="btn btn-danger" title="Delete" th:name="task" th:value="${task[0]}">Delete</button>
-                                                                    </div>
-                                                                </form>
-                                                            </div>
-                                                        </td>
+                                                    </td>
+                                                    <td><button type="button" class="btn btn-danger btn-sm" th:attr="onclick='openForm(\'deletetaskform' + ${taskStat.index} + '\')'">Delete</button>
+                                                        <div class="form-popup card mb-3 deleteform" th:attr="id='deletetaskform' + ${taskStat.index}">
+                                                            <h3 class="card-header">Delete <span th:text="${task[0]}"></span>?
+                                                                <button type="button" class="btn btn-outline-secondary btn-sm closebutton" title="Close" th:attr="onclick='closeForm(\'deletetaskform' + ${taskStat.index} + '\')'">&#9932;</button><br>
+                                                            </h3>
+                                                            <form th:action="@{/delete/task}">
+                                                                <div class="card-body">
+                                                                    <button type="submit" class="btn btn-danger" title="Delete" th:name="task" th:value="${task[0]}">Delete</button>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </td>
                                                 </tr>
                                             </table>
-
+                                            <button type="button" class="btn btn-info"  onclick="openForm('addtaskform')">Add Task</button>
+                                            <div class="form-popup card mb-3" id="addtaskform">
+                                                <form  th:action="@{/new/task}">
+                                                    <h3 class="card-header">New task
+                                                        <button type="button" class="btn btn-outline-secondary btn-sm closebutton" title="Close" onclick="closeForm('addtaskform')">&#9932;</button><br>
+                                                    </h3>
+                                                    <div class="card-body">
+                                                        <input type="text" class="form-control" id="taskname" placeholder="Task name" th:name="name">                                                            
+                                                            <button type="submit" class="btn btn-primary" title="Create Task">Create Task</button>
+                                                    </div>  
+                                                </form>                                                                              
+                                            </div> 
                                         </div>
 
 

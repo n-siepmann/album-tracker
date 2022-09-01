@@ -7,107 +7,128 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
     <head>
         <title>Album Tracker</title>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="../static/bootstrap.min.css">
-        <link rel="stylesheet" href="bootstrap.min.css">
-        <link rel="stylesheet" href="../static/styles.css">
-        <link rel="stylesheet" href="styles.css">
-    </head>
-    <body>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="/albums">Album Tracker</a>
-                <div class="collapse navbar-collapse show" id="navbarColor01">
-                    <ul class="navbar-nav me-auto">
-                        <li class="nav-item">
-                            <a class="nav-link" href="/">Overview</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/edit">Edit</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/tasks">Tasks</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-        <main>
-            <header>
-                <h1>Edit Album</h1>
-                <h3 class="text-muted"><span th:text="${album.name}"></span><button type="button" class="btn btn-outline-primary btn-sm" title="Rename" onclick="openRenameForm()">Change name</button></h3>
-            </header>
-            <div>
-                <section class="divide-thirds">
-                    <table class="table">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <link rel="stylesheet" href="../static/bootstrap.min.css">
+                    <link rel="stylesheet" href="bootstrap.min.css">
+                        <link rel="stylesheet" href="../static/styles.css">
+                            <link rel="stylesheet" href="styles.css">
+                                </head>
+                                <body>
+                                    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+                                        <div class="container-fluid">
+                                            <a class="navbar-brand" href="/albums">Album Tracker</a>
+                                            <div class="collapse navbar-collapse show" id="navbarColor01">
+                                                <ul class="navbar-nav me-auto">
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" href="/">Overview</a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" href="/edit">Edit</a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" href="/tasks">Tasks</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </nav>
+                                    <main>
+                                        <header>
+                                            <h1>Edit Album</h1>
+                                            <h3><span th:text="${album.name}"></span> <small class="lead">(<span th:text="${album.artist}"></span>)</small></h3>                            
+                                            <form  th:action="@{/albums/rename}">
+                                                <button type="button" class="btn btn-outline-primary btn-sm" title="Rename" onclick="openForm('renameform')">Change name/artist</button>
+                                                <div class="form-popup card mb-3" id="renameform">
+                                                    <h3 class="card-header">Rename album
+                                                        <button type="button" class="btn btn-outline-secondary btn-sm closebutton" title="Close" onclick="closeForm('renameform')">&#9932;</button><br>
+                                                    </h3>
+                                                    <div class="card-body">
+                                                        <input type="hidden" name="returnto" value="edit"/>
+                                                        <input type="text" class="form-control" id="albumname" placeholder="Album name" th:name="name">                                                            
+                                                            <input type="text" class="form-control" id="artistname" placeholder="Artist name" th:name="artist">
+                                                                <button type="submit" class="btn btn-primary" title="Amend" th:name="id" th:value="${album.id}">Amend album</button>
+                                                                </div>
+                                                                </div>
+                                                                </form></h3>
+                                                                </header>
+                                                                <div>
+                                                                    <section class="divide-thirds">
+                                                                        <table class="table">
 
-                        <tr>
-                            <td class="table-light">Song 1</td>
-                            <td>
-                                <button type="button" class="btn btn-outline-dark btn-sm">More info</button>
-                            </td>
-                            <td>
-                                <button type="button" class="btn btn-danger btn-sm" title="Delete" onclick="openDeleteForm()">Delete</button>
-                            </td>
-                        </tr>
-                        <tr><td><button type="button" class="btn btn-info">Add Song</button></td><td/><td/></tr>
+                                                                            <tr th:each="song : ${album.songs}">
+                                                                                <td class="table-light" th:text="${song.name}"></td>
+                                                                                <td>
+                                                                                    <form th:action="@{/song}">
+                                                                                        <button type="submit" class="btn btn-outline-dark btn-sm" th:name="name" th:value="${song.name}">More info</button>
+                                                                                    </form>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <button type="button" class="btn btn-danger btn-sm" th:attr="onclick='openForm(\'deletesongform' + ${songStat.index} + '\')'">Delete</button>
+                                                                                    <div class="form-popup card mb-3 deleteform" th:attr="id='deletesongform' + ${songStat.index}">
+                                                                                        <h3 class="card-header">Delete <span th:text="${song.name}"></span>?
+                                                                                            <button type="button" class="btn btn-outline-secondary btn-sm closebutton" title="Close" th:attr="onclick='closeForm(\'deletesongform' + ${songStat.index} + '\')'">&#9932;</button><br>
+                                                                                        </h3>
+                                                                                        <form th:action="@{/delete/song}">
+                                                                                            <input type="hidden" name="returnto" value="edit">
+                                                                                                <div class="card-body">
+                                                                                                    <button type="submit" class="btn btn-danger" title="Delete" th:name="song" th:value="${song.name}">Delete</button>
+                                                                                                </div>
+                                                                                        </form>
+                                                                                    </div>                                                        </td>
+                                                                            </tr>
 
-                    </table>
+                                                                        </table>
+                                                                        <button type="button" class="btn btn-info"  onclick="openForm('addsongform')">New Song</button>
+                                                                    </section>
+                                                                    <section class="divide-thirds">
+                                                                        <h2>Comments</h2>
+                                                                        <table><tr><td>COMMENTS HERE</td></tr></table>
+                                                                    </section>
+                                                                    <section class="divide-thirds">
+                                                                        <h2>Notes</h2>
+                                                                        <table><tr><td>NOTES HERE</td></tr></table>
+                                                                    </section>
+                                                                </div>
 
-                </section>
-                <section class="divide-thirds">
-                    <h2>Comments</h2>
-                    <table><tr><td>COMMENTS HERE</td></tr></table>
-                </section>
-                <section class="divide-thirds">
-                    <h2>Notes</h2>
-                    <table><tr><td>NOTES HERE</td></tr></table>
-                </section>
-            </div>
+                                                                <div class="form-popup card mb-3" id="renameform">
+                                                                    <h3 class="card-header">Rename album
+                                                                        <button type="button" class="btn btn-outline-secondary btn-sm closebutton" title="Close subtask menu" onclick="closeForm('renameform')">&#9932;</button><br>
+                                                                    </h3>
+                                                                    <form>
+                                                                        <div class="card-body">
+                                                                            <input type="text" class="form-control" id="newalbumname" placeholder="New name">
+                                                                                <button type="submit" class="btn btn-primary" title="Rename">Rename</button>
+                                                                        </div>
+                                                                    </form>
+                                                                </div>
 
 
-            <div class="form-popup card mb-3 deleteform" id="deleteform">
-                <h3 class="card-header">Delete <span>SONG/TASK NAME</span>?
-                    <button type="button" class="btn btn-outline-secondary btn-sm closebutton" title="Close subtask menu" onclick="closeDeleteForm()">&#9932;</button><br>
-                </h3>
-                <form>
-                    <div class="card-body">
-                        <button type="submit" class="btn btn-danger" title="Delete">Delete</button>
-                    </div>
-                </form>
-            </div>
+                                                                <div class="form-popup card mb-3" id="addsongform">
+                                                                    <h3 class="card-header">Song name
+                                                                        <button type="button" class="btn btn-outline-secondary btn-sm closebutton" title="Close menu" onclick="closeForm('addsongform')">&#9932;</button>
+                                                                        <br>
+                                                                    </h3>
+                                                                    <form th:action="@{/new/song}">
+                                                                        <div class="card-body">
+                                                                            <input type="hidden" name="returnto" value="edit">
+                                                                                <input type="text" class="form-control" id="name" placeholder="Song name" th:name="name">
+                                                                                    <button type="submit" class="btn btn-primary" title="Name">Create Song</button>
+                                                                                    </div>
+                                                                                    </form>
+                                                                                    </div>
 
-            <div class="form-popup card mb-3" id="renameform">
-                <h3 class="card-header">Rename album
-                    <button type="button" class="btn btn-outline-secondary btn-sm closebutton" title="Close subtask menu" onclick="closeRenameForm()">&#9932;</button><br>
-                </h3>
-                <form>
-                    <div class="card-body">
-                        <input type="text" class="form-control" id="newalbumname" placeholder="New name">
-                        <button type="submit" class="btn btn-primary" title="Rename">Rename</button>
-                    </div>
-                </form>
-            </div>
+                                                                                    <script>
+                                                                                        function openForm(name) {
+                                                                                            document.getElementById(name).style.display = "block";
+                                                                                        }
 
-            <script>
-                function openDeleteForm() {
-                    document.getElementById("deleteform").style.display = "block";
-                }
-
-                function closeDeleteForm() {
-                    document.getElementById("deleteform").style.display = "none";
-                }
-                function openRenameForm() {
-                    document.getElementById("renameform").style.display = "block";
-                }
-
-                function closeRenameForm() {
-                    document.getElementById("renameform").style.display = "none";
-                }
-            </script>
-        </main>
-        <footer>
-            <p>Nick Siepmann | 2022</p>
-        </footer>
-    </body>
-</html>
+                                                                                        function closeForm(name) {
+                                                                                            document.getElementById(name).style.display = "none";
+                                                                                        }
+                                                                                    </script>
+                                                                                    </main>
+                                                                                    <footer>
+                                                                                        <p>Nick Siepmann | 2022</p>
+                                                                                    </footer>
+                                                                                    </body>
+                                                                                    </html>

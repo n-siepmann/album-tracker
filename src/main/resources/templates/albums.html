@@ -33,10 +33,11 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                                         <form  th:action="@{/albums/rename}">
                                                             <button type="button" class="btn btn-outline-primary btn-sm" title="Rename" th:attr="onclick='openForm(\'renameform' + ${albumStat.index} + '\')'">Change name/artist</button>
                                                             <div class="form-popup card mb-3" th:attr="id='renameform' + ${albumStat.index}">
-                                                                <h3 class="card-header">New album
+                                                                <h3 class="card-header">Rename album
                                                                     <button type="button" class="btn btn-outline-secondary btn-sm closebutton" title="Close" th:attr="onclick='closeForm(\'renameform' + ${albumStat.index} + '\')'">&#9932;</button><br>
                                                                 </h3>
                                                                     <div class="card-body">
+                                                                        <input type="hidden" name="returnto" value=""/>
                                                                         <input type="text" class="form-control" id="albumname" placeholder="Album name" th:name="name">                                                            
                                                                             <input type="text" class="form-control" id="artistname" placeholder="Artist name" th:name="artist">
                                                                                 <button type="submit" class="btn btn-primary" title="Amend" th:name="id" th:value="${album.id}">Amend album</button>

@@ -34,7 +34,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                         </div>
                                     </nav>
                                     <main>
-                                        <header><h1><span th:text="${album.name}"></span></h1><br>
+                                        <header><h1><span th:text="${album.name}"></span> <small class="lead">(<span th:text="${album.artist}"></span>)</small></h1><br>
                                                 <button type="button" class="btn btn-info"  onclick="openForm('addsongform')">New Song</button>
                                         </header>
                                         <div>
@@ -56,6 +56,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                                                     </form>
                                                                     <span th:case="*">
                                                                         <form th:action="@{/settaskstatus}">
+                                                                            <input type="hidden" name="returnto" value="" />
                                                                             <input type="hidden" name="songname" th:value="${row[0]}" />
                                                                             <input type="hidden" name="taskname" th:value="${grid[1][cellStat.index]}" />
                                                                             <span th:switch="${cell}">
@@ -84,6 +85,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                                                                         <button type="button" class="btn btn-outline-secondary btn-sm closebutton" title="Close" th:attr="onclick='closeForm(\'deletetaskform' + ${row[0]} + '_' + ${grid[1][cellStat.index]} + '\')'">&#9932;</button><br>
                                                                                     </h3>
                                                                                     <form th:action="@{/settaskstatus}">
+                                                                                        <input type="hidden" name="returnto" value=" "/>
                                                                                         <input type="hidden" name="songname" th:value="${row[0]}" />
                                                                                         <input type="hidden" name="taskname" th:value="${grid[1][cellStat.index]}" />
                                                                                         <div class="card-body">
@@ -122,6 +124,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                             </h3>
                                             <form th:action="@{/new/song}">
                                                 <div class="card-body">
+                                                    <input type="hidden" name="returnto" value="">
                                                     <input type="text" class="form-control" id="name" placeholder="Song name" th:name="name">
                                                         <button type="submit" class="btn btn-primary" title="Name">Create Song</button>
                                                 </div>
