@@ -32,9 +32,11 @@ public class Task extends TaskContainer {
 
     @Override
     public void addTask(String name) {
-        this.split = true;
-        this.done = false;
-        super.addTask(name);
+        if (!super.getTasks().contains(new Task(name))) {
+            this.split = true;
+            this.done = false;
+            super.addTask(name);
+        }
     }
 
     public String getName() {
@@ -70,12 +72,10 @@ public class Task extends TaskContainer {
     @Override
     public void removeTask(String name) {
         super.removeTask(name);
-        if (super.getTasks().isEmpty()){
+        if (super.getTasks().isEmpty()) {
             this.split = false;
         }
     }
-    
-    
 
     @Override
     public int hashCode() {

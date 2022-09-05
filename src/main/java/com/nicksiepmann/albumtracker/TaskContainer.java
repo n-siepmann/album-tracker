@@ -4,21 +4,20 @@
  */
 package com.nicksiepmann.albumtracker;
 
-import com.google.cloud.spring.data.datastore.core.mapping.Entity;
 import java.util.ArrayList;
 
 /**
  *
  * @author Nick.Siepmann
  */
-
 public abstract class TaskContainer {
 
     private ArrayList<Task> tasks;
-    
+
     public TaskContainer() {
         this.tasks = new ArrayList<>();
     }
+
     public Task getTask(String name) {
         Task task = new Task(name);
         if (this.tasks.contains(task)) {
@@ -38,37 +37,36 @@ public abstract class TaskContainer {
             this.tasks.remove(this.tasks.indexOf(task));
         }
     }
-    
-    public boolean allDone(ArrayList<Task> tasks){
+
+    public boolean allDone(ArrayList<Task> tasks) {
         boolean allDone = true;
-        for (Task task : tasks){
-            if (task.isSplit()){
+        for (Task task : tasks) {
+            if (task.isSplit()) {
                 boolean subTasksDone = allDone(task.getTasks());
-                if (subTasksDone = true){
+                if (subTasksDone = true) {
                     task.setDone(true);
                 }
             }
-            if (!task.isDone()){
+            if (!task.isDone()) {
                 allDone = false;
             }
         }
         return allDone;
     }
-    
+
     public ArrayList<Task> getTasks() {
         return tasks;
     }
-    
-    public String cleanString(String input){
-        String output = input.replace("~","").replace("¬", "");
-        return output;
-    }
+//
+//    public String cleanString(String input) {
+//        String output = input.replace("~", "").replace("¬", "").replace(" ", "_");
+//        return output;
+//    }
 
     @Override
     public String toString() {
         return "TaskContainer{" + "tasks=" + tasks + '}';
 //    return tasks.toString();
     }
-    
-    
+
 }

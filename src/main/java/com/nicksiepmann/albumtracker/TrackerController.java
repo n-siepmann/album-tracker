@@ -150,7 +150,7 @@ public class TrackerController {
                 break;
             case "delete":
                 this.album.getSong(songname).getTask(taskname).removeTask(subtaskname);
-                if (this.album.getSong(songname).getTask(taskname).getTasks().size() > 0) {
+                if (this.album.getSong(songname).getTask(taskname).getTasks().isEmpty()) {
                     this.album.getSong(songname).getTask(taskname).setDone(true); // if has task has subtasks and they're all done, set parent task to done
                 }
                 break;
@@ -165,16 +165,20 @@ public class TrackerController {
 
     @RequestMapping("/new/album") //create new album
     public String newAlbum(@RequestParam(value = "name") String name, @RequestParam(value = "artist") String artist, Model model) {
-        Album album = new Album(name, artist);
-        this.albumRepository.save(album);
-        model.addAttribute("album", album);
-        this.album = album;
+        name = cleanString(name);
+        artist = cleanString(artist);
+
+        Album newalbum = new Album(name, artist);
+        this.albumRepository.save(newalbum);
+        model.addAttribute("album", newalbum);
+        this.album = newalbum;
         return "redirect:/";
     }
 
     @RequestMapping("/rename/phase")
     public String renamePhase(@RequestParam(value = "phasenumber") String phasenumber, @RequestParam(value = "newname") String newname, Model model) {
 //        System.out.println(phasenumber);
+        newname = cleanString(newname);
         if (this.album != null) {
             this.album.getIndex().getPhases().set(Integer.valueOf(phasenumber), newname);
             this.albumRepository.save(album);
@@ -186,6 +190,7 @@ public class TrackerController {
     @RequestMapping("/rename/song")
     public String renameSong(@RequestParam(value = "oldname") String oldname, @RequestParam(value = "newname") String newname, @RequestParam(value = "returnto") String returnto, Model model) {
 //        System.out.println(phasenumber);
+        newname = cleanString(newname);
         if (this.album != null) {
             this.album.getSong(oldname).setName(newname);
             this.albumRepository.save(album);
@@ -196,8 +201,32 @@ public class TrackerController {
         return "redirect:/albums";
     }
 
+    @RequestMapping("/albums/rename") //update name/notes for current album
+    public String renameAlbum(@RequestParam(value = "id") String id, @RequestParam(value = "name") String name, @RequestParam(value = "artist") String artist, @RequestParam(value = "returnto") String returnto, Model model) {
+        if (this.albumRepository.count() > 0) {
+            Optional<Album> optAlbum = this.albumRepository.findById(Long.valueOf(id));
+            if (optAlbum.isPresent() && !id.equals("")) {
+
+                name = cleanString(name);
+                artist = cleanString(artist);
+
+                Album foundalbum = optAlbum.get();
+                foundalbum.setName(name);
+                foundalbum.setArtist(artist);
+                this.albumRepository.save(album);
+                this.album = foundalbum;
+                model.addAttribute("album", this.album);
+                String returnString = "redirect:/" + returnto.trim();
+                returnString = returnString.replace("//", "/").replace("index", "");
+                return returnString;
+            }
+        }
+        return "error";
+    }
+
     @RequestMapping("/new/phase") //create new phase
     public String newPhase(@RequestParam(value = "name") String name, Model model) {
+        name = cleanString(name);
         if (this.album != null) {
             this.album.getIndex().getPhases().add(name);
             this.albumRepository.save(album);
@@ -208,6 +237,7 @@ public class TrackerController {
 
     @RequestMapping("/new/task") //create new task
     public String newTask(@RequestParam(value = "name") String name, Model model) {
+        name = cleanString(name);
         if (this.album != null) {
             this.album.getIndex().createTask(name);
             this.albumRepository.save(album);
@@ -218,6 +248,8 @@ public class TrackerController {
 
     @RequestMapping("/new/subtask") //create new task
     public String newSubtask(@RequestParam(value = "songname") String songname, @RequestParam(value = "taskname") String taskname, @RequestParam(value = "subtaskname") String subtaskname, @RequestParam(value = "returnto") String returnto, Model model) {
+        subtaskname = cleanString(subtaskname);
+
         if (this.album != null) {
             Task task = this.album.getSong(songname).getTask(taskname);
             task.addTask(subtaskname);
@@ -232,6 +264,7 @@ public class TrackerController {
 
     @RequestMapping("/new/song") //create new song
     public String newSong(@RequestParam(value = "name") String name, @RequestParam(value = "returnto") String returnto, Model model) {
+        name = cleanString(name);
         if (this.album != null) {
             this.album.addSong(name);
             this.albumRepository.save(album);
@@ -367,28 +400,9 @@ public class TrackerController {
         return "redirect:/albums";
     }
 
-    @RequestMapping("/albums/rename") //update name/notes for current album
-    public String renameAlbum(@RequestParam(value = "id") String id, @RequestParam(value = "name") String name, @RequestParam(value = "artist") String artist, @RequestParam(value = "returnto") String returnto, Model model) {
-        if (this.albumRepository.count() > 0) {
-            Optional<Album> optAlbum = this.albumRepository.findById(Long.valueOf(id));
-            if (optAlbum.isPresent() && !id.equals("")) {
-                Album album = optAlbum.get();
-                album.setName(name);
-                album.setArtist(artist);
-                this.albumRepository.save(album);
-                this.album = album;
-                model.addAttribute("album", this.album);
-                String returnString = "redirect:/" + returnto.trim();
-                returnString = returnString.replace("//", "/").replace("index", "");
-                return returnString;
-            }
-        }
-        return "error";
-    }
 //    @PutMapping("/songs/{id}") //update name/notes for specified song from current album
 //
 //    //delete
-
     @RequestMapping("/delete/album") //set specified album as current album
     public String deleteAlbum(@RequestParam(value = "id") String id, Model model) {
 //        System.out.println("deleting");
@@ -432,7 +446,9 @@ public class TrackerController {
         return "redirect:/albums";
     }
 
-//    @DeleteMapping("/songs/{id}") //delete specified song
-//
-//    @DeleteMapping("/tasks/{id}") //delete specified task
+    public String cleanString(String input) {
+        String output = input.trim().replace("¬", "").replace(" ", "%20");
+        return output;
+    }
+
 }

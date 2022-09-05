@@ -40,7 +40,7 @@ public class Song extends TaskContainer {
     }
 
     public void setName(String name) {
-        this.name = cleanString(name);
+        this.name = name;
     }
 
     public String getNotes() {
@@ -48,7 +48,7 @@ public class Song extends TaskContainer {
     }
 
     public void setNotes(String notes) {
-        this.notes = cleanString(notes);
+        this.notes = notes;
     }
 
     public void addNotes(String notes) {

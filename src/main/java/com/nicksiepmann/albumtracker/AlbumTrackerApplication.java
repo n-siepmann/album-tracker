@@ -26,11 +26,7 @@ public class AlbumTrackerApplication {
         return savedAlbum.toString();
     }
 
-//    @ShellMethod("Saves an album object")
-//    public String saveAlbum(Album album) {
-//        Album savedAlbum = this.albumRepository.save(album);
-//        return savedAlbum.toString();
-//    }
+
     @ShellMethod
     public String saveAlbumTest() {
         Album album = new Album("name", "artist");

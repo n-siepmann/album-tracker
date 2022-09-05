@@ -18,18 +18,16 @@ public class GridBuilder {
 
     public String[][] buildGrid(Album album, boolean transposed, String songname) {
         String[][] grid = buildGrid(album);
-        String[][] transpGrid = new String[grid[0].length - 2][3];
-        for (int i = 1; i < transpGrid.length + 1; i++) {
-            transpGrid[i - 1][0] = grid[0][i];
-            transpGrid[i - 1][1] = grid[1][i];
+        String[][] transpGrid = new String[grid[0].length - 3][3];
+        for (int i = 2; i < transpGrid.length + 2; i++) {
+            transpGrid[i - 2][0] = grid[0][i];
+            transpGrid[i - 2][1] = grid[1][i];
             for (int j = 2; j < grid.length; j++) {
                 if (grid[j][0].equals(songname)) {
-                    transpGrid[i - 1][2] = grid[j][i];
+                    transpGrid[i - 2][2] = grid[j][i];
                 }
             }
         }
-
-//        System.out.println(transpGrid.length);
         return transpGrid;
     }
 
@@ -45,11 +43,12 @@ public class GridBuilder {
         }).toArray();
 
         for (int i = 0; i < album.getIndex().getTaskIndex().keySet().size(); i++) {
-            grid[0][i + 2] = album.getIndex().getPhases().get(album.getIndex().getTaskIndex().get((String) sortedKeySet[i])[1]);
-            grid[1][i + 2] = (String) sortedKeySet[i];
+            String key = (String) sortedKeySet[i];
+            grid[0][i + 2] = album.getIndex().getPhases().get(album.getIndex().getTaskIndex().get(key)[1]);
+            grid[1][i + 2] = key;
         }
 
-        for (int i = 3; i < grid.length; i++) {
+        for (int i = 2; i < grid.length; i++) {
             for (int j = 1; j < grid[0].length - 1; j++) {
                 Task task = album.getSong(grid[i][0]).getTask(grid[1][j]);
                 if (task != null) {
@@ -67,4 +66,17 @@ public class GridBuilder {
         }
         return grid;
     }
+
+    public void printGrid(String[][] grid) {
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[0].length; j++) {
+                if (grid[i][j] != null) {
+                    System.out.print(grid[i][j]);
+                }
+                System.out.print("\t");
+            }
+            System.out.println();
+        }
+    }
+
 }

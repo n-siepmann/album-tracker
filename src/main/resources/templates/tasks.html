@@ -35,7 +35,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                     <main>
                                         <header>
                                             <h1>Edit Tasks</h1>
-                                            <h3><span th:text="${album.name}"></span> <small class="lead">(<span th:text="${album.artist}"></span>)</small>
+                                            <h3><span th:text="${#strings.replace(album.name,'~',' ')}"></span> <small class="lead">(<span th:text="${#strings.replace(album.artist,'~',' ')}"></span>)</small>
                                                 <button type="button" class="btn btn-outline-primary btn-sm" title="Phases" onclick="openForm('phasesform')">Edit Phases</button></h3>                                                                               
                                         </header>
                                         <div>
@@ -43,11 +43,11 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                                 <tr class="table-light">
                                                     <td>Tasks</td>
                                                     <td/>
-                                                    <td th:each="phase : ${phases}"><span th:text="${phase}"></span></td>
+                                                    <td th:each="phase : ${phases}"><span th:text="${#strings.replace(phase,'~',' ')}"></span></td>
                                                     <td/>
                                                 </tr>
                                                 <tr th:each="task : ${tasks}">
-                                                    <td th:text="${task[0]}"></td>  
+                                                    <td th:text="${#strings.replace(task[0],'~',' ')}"></td>  
 
                                                     <td>
                                                         <form th:action="@{/reorder/task/up}">
@@ -65,7 +65,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                                     </td>
                                                     <td><button type="button" class="btn btn-danger btn-sm" th:attr="onclick='openForm(\'deletetaskform' + ${taskStat.index} + '\')'">Delete</button>
                                                         <div class="form-popup card mb-3 deleteform" th:attr="id='deletetaskform' + ${taskStat.index}">
-                                                            <h3 class="card-header">Delete <span th:text="${task[0]}"></span>?
+                                                            <h3 class="card-header">Delete <span th:text="${#strings.replace(task[0],'~',' ')}"></span>?
                                                                 <button type="button" class="btn btn-outline-secondary btn-sm closebutton" title="Close" th:attr="onclick='closeForm(\'deletetaskform' + ${taskStat.index} + '\')'">&#9932;</button><br>
                                                             </h3>
                                                             <form th:action="@{/delete/task}">
@@ -103,7 +103,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                                 <div class="form-group">
                                                     <table class="table">
                                                         <tr th:each="phase : ${phases}">
-                                                            <td class="table-light" th:text="${phase}"></td>
+                                                            <td class="table-light" th:text="${#strings.replace(phase,'~',' ')}"></td>
                                                             <td>
                                                                 <form th:action="@{/rename/phase}">
                                                                     <button type="button" class="btn btn-outline-primary btn-sm" title="Rename" th:attr="onclick='openForm(\'renamephaseform' + ${phaseStat.index} + '\')'">Rename</button>
@@ -125,7 +125,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                                                     <button type="button" class="btn btn-danger btn-sm" title="Delete" th:attr="onclick='openForm(\'deletephaseform' + ${phaseStat.index} + '\')'">Delete</button>
                                                                 </form>
                                                                 <div class="form-popup card mb-3 deleteform" th:attr="id='deletephaseform' + ${phaseStat.index}">
-                                                                    <h3 class="card-header">Delete <span th:text="${phase}"></span>?
+                                                                    <h3 class="card-header">Delete <span th:text="${#strings.replace(phase,'~',' ')}"></span>?
                                                                         <button type="button" class="btn btn-outline-secondary btn-sm closebutton" title="Close" th:attr="onclick='closeForm(\'deletephaseform' + ${phaseStat.index} + '\')'">&#9932;</button><br>
                                                                     </h3>
                                                                     <form  th:action="@{/delete/phase}">

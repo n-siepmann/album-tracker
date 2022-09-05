@@ -49,7 +49,7 @@ public class Index {
             int latestPhase = taskIndex.values().stream().mapToInt(s -> s[1]).max().orElse(this.phases.size() - 1);
             Integer[] values = {taskIndex.keySet().size(), latestPhase};
             this.taskIndex.put(name, values);
-            System.out.println("created task " + name + "in position " + taskIndex.get(name)[0] + " and phase " + taskIndex.get(name)[1] + ": " + phases.get(taskIndex.get(name)[1]));
+//            System.out.println("created task " + name + "in position " + taskIndex.get(name)[0] + " and phase " + taskIndex.get(name)[1] + ": " + phases.get(taskIndex.get(name)[1]));
         } else {
             System.out.println("Task already exists; did you want to reorder?");
         }
