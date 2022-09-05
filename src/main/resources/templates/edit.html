@@ -44,8 +44,8 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                                     </h3>
                                                     <div class="card-body">
                                                         <input type="hidden" name="returnto" value="edit"/>
-                                                        <input type="text" class="form-control" id="albumname" placeholder="Album name" th:name="name">                                                            
-                                                            <input type="text" class="form-control" id="artistname" placeholder="Artist name" th:name="artist">
+                                                        <input type="text" class="form-control" id="albumname" placeholder="Album name" th:name="name" required>                                                            
+                                                            <input type="text" class="form-control" id="artistname" placeholder="Artist name" th:name="artist" required>
                                                                 <button type="submit" class="btn btn-primary" title="Amend" th:name="id" th:value="${album.id}">Amend album</button>
                                                                 </div>
                                                                 </div>
@@ -60,6 +60,16 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                                                                 <td>
                                                                                     <form th:action="@{/song}">
                                                                                         <button type="submit" class="btn btn-outline-dark btn-sm" th:name="name" th:value="${song.name}">More info</button>
+                                                                                    </form>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <form th:action="@{/reorder/song/up}">
+                                                                                        <input type="hidden" name="returnto" value="edit">
+                                                                                            <button type="submit" class="btn btn-secondary btn-sm btn-reorder" title="Move Up" th:name="name" th:value="${song.name}">&#9650;</button>        
+                                                                                    </form>
+                                                                                    <form th:action="@{/reorder/song/down}">
+                                                                                        <input type="hidden" name="returnto" value="edit">
+                                                                                            <button type="submit" class="btn btn-secondary btn-sm  btn-reorder" title="Move Down" th:name="name" th:value="${song.name}">&#9660;</button>        
                                                                                     </form>
                                                                                 </td>
                                                                                 <td>
@@ -82,11 +92,19 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                                                     </section>
                                                                     <section class="divide-thirds">
                                                                         <h2>Comments</h2>
-                                                                        <table><tr><td>COMMENTS HERE</td></tr></table>
+                                                                        <table class="table-light"><tr th:each="comment : ${album.comments}"><td th:text="${comment.userId}"></td><td th:text="${comment.timestamp}"></td><td th:text="${comment.commentText}"></td></tr></table>
+                                                                        <form th:action="@{/album/addcomment}">
+                                                                            <label for="newcomment">Add comment:</label>
+                                                                            <input class="form-control" id="commenttext" name="commenttext" type="text" required>
+                                                                                <button type="submit" class="btn btn-primary" title="Add comment">Add comment</button>
+                                                                        </form>
                                                                     </section>
                                                                     <section class="divide-thirds">
                                                                         <h2>Notes</h2>
-                                                                        <table><tr><td>NOTES HERE</td></tr></table>
+                                                                        <form th:action="@{/album/setnotes}">
+                                                                            <input class="form-control" rows="4" type="text" id="notestext" name="notestext" th:value="${album.notes}">
+                                                                                <button type="submit" class="btn btn-primary" title="Update notes">Update notes</button>
+                                                                        </form>
                                                                     </section>
                                                                 </div>
 
@@ -96,7 +114,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                                                     </h3>
                                                                     <form>
                                                                         <div class="card-body">
-                                                                            <input type="text" class="form-control" id="newalbumname" placeholder="New name">
+                                                                            <input type="text" class="form-control" id="newalbumname" placeholder="New name" required>
                                                                                 <button type="submit" class="btn btn-primary" title="Rename">Rename</button>
                                                                         </div>
                                                                     </form>
@@ -111,7 +129,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                                                     <form th:action="@{/new/song}">
                                                                         <div class="card-body">
                                                                             <input type="hidden" name="returnto" value="edit">
-                                                                                <input type="text" class="form-control" id="name" placeholder="Song name" th:name="name">
+                                                                                <input type="text" class="form-control" id="name" placeholder="Song name" th:name="name" required>
                                                                                     <button type="submit" class="btn btn-primary" title="Name">Create Song</button>
                                                                                     </div>
                                                                                     </form>

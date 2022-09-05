@@ -62,6 +62,10 @@ public class AlbumTrackerApplication {
         album.getIndex().addPhase("PHASE3");
         album.addTaskToSong(album.getSong("MORESONG"), "NEWPHASETASK");
         song.getTasks().get(1).addTask("SUBTASK");
+        song.getTasks().get(1).addTask("SUBTASK2");
+        song.addComment("comment comment spaff comment");
+        song.addComment("asfoijasiififi");
+        album.addComment("glorm");
         System.out.println("saving");
         savedAlbum = this.albumRepository.save(album);
         System.out.println("saved");

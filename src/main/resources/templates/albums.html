@@ -38,8 +38,8 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                                                 </h3>
                                                                     <div class="card-body">
                                                                         <input type="hidden" name="returnto" value=""/>
-                                                                        <input type="text" class="form-control" id="albumname" placeholder="Album name" th:name="name">                                                            
-                                                                            <input type="text" class="form-control" id="artistname" placeholder="Artist name" th:name="artist">
+                                                                        <input type="text" class="form-control" id="albumname" placeholder="Album name" th:name="name" required>                                                            
+                                                                            <input type="text" class="form-control" id="artistname" placeholder="Artist name" th:name="artist" required>
                                                                                 <button type="submit" class="btn btn-primary" title="Amend" th:name="id" th:value="${album.id}">Amend album</button>
                                                                                 </div>
                                                                                 </div>
@@ -71,8 +71,8 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                                                                             </h3>
                                                                                             <form>
                                                                                                 <div class="card-body">
-                                                                                                    <input type="text" class="form-control" id="albumname" placeholder="Album name" th:name="name">                                                            
-                                                                                                        <input type="text" class="form-control" id="artistname" placeholder="Artist name" th:name="artist">
+                                                                                                    <input type="text" class="form-control" id="albumname" placeholder="Album name" th:name="name" required>                                                            
+                                                                                                        <input type="text" class="form-control" id="artistname" placeholder="Artist name" th:name="artist" required>
                                                                                                             <button type="submit" class="btn btn-primary" title="Name">Create album</button>
                                                                                                             </div>
                                                                                                             </form>

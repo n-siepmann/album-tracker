@@ -7,6 +7,7 @@ package com.nicksiepmann.albumtracker;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.cloud.spring.data.datastore.core.convert.DatastoreCustomConversions;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,9 +25,11 @@ public class ConverterConfiguration {
         return new DatastoreCustomConversions(
                 Arrays.asList(
                         SONG_STRING_CONVERTER,
-                        STRING_SONG_CONVERTER));
+                        STRING_SONG_CONVERTER,
+                        COMMENT_STRING_CONVERTER,
+                        STRING_COMMENT_CONVERTER));
     }
-        static final Converter<Song, String> SONG_STRING_CONVERTER
+    static final Converter<Song, String> SONG_STRING_CONVERTER
             = new Converter<Song, String>() {
         @Override
         public String convert(Song song) {
@@ -60,4 +63,39 @@ public class ConverterConfiguration {
             return null;
         }
     };
+    static final Converter<Comment, String> COMMENT_STRING_CONVERTER
+            = new Converter<Comment, String>() {
+        @Override
+        public String convert(Comment comment) {
+            ObjectMapper mapper = new ObjectMapper();
+            try {
+                String json = mapper.writeValueAsString(comment);
+//                System.out.println("ResultingJSONstring = " + json);
+                return json;
+                //System.out.println(json);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+            return "";
+        }
+    };
+
+    //Converters to read custom Comment type
+    static final Converter<String, Comment> STRING_COMMENT_CONVERTER
+            = new Converter<String, Comment>() {
+        @Override
+        public Comment convert(String json) {
+            ObjectMapper mapper = new ObjectMapper();
+            try {
+                Comment comment = mapper.readValue(json, Comment.class);
+//                System.out.println("ConvertedSong = " + song.toString());
+                return comment;
+                //System.out.println(json);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+    };
+
 }

@@ -22,8 +22,8 @@ public class consoleUI {
 //        String albumName = scanner.nextLine();
         Album album = new Album("ALBUM", "ARTIST");
         album.addSong("SONG");
-        album.addSong("MORESONG");
-        album.addSong("THIRDSONG");
+//        album.addSong("MORESONG");
+//        album.addSong("THIRDSONG");
         Song song = album.getSong("SONG");
         album.getIndex().addPhase("PHASE");
         album.getIndex().createTask("TASK");
@@ -37,12 +37,26 @@ public class consoleUI {
         album.getIndex().addPhase("PHASE2");
         album.getIndex().createTask("NEWPHASETASK");
         album.addTaskToSong(song, "NEWPHASETASK");
-        album.addTaskToSong(album.getSong("MORESONG"), "NEWPHASETASK");
+        album.addTaskToSong(song, "NEWPHASETASK");
         song.getTasks().get(1).addTask("SUBTASK");
+        song.addComment("comment comment spaff comment");
+        song.addComment("asfoijasiififi");
 
         GridBuilder gridBuilder = new GridBuilder();
 
-        String[][] grid = gridBuilder.buildGrid(album, true);
+        String[][] grid = gridBuilder.buildGrid(album);
+
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[0].length; j++) {
+                if (grid[i][j] != null) {
+                    System.out.print(grid[i][j]);
+                }
+                System.out.print("\t");
+            }
+            System.out.println();
+        }
+
+        grid = gridBuilder.buildGrid(album, true, "SONG");
 
         for (int i = 0; i < grid.length; i++) {
             for (int j = 0; j < grid[0].length; j++) {

@@ -33,6 +33,7 @@ public class Task extends TaskContainer {
     @Override
     public void addTask(String name) {
         this.split = true;
+        this.done = false;
         super.addTask(name);
     }
 

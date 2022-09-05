@@ -11,6 +11,8 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.stream.Collectors;
 import com.google.cloud.spring.data.datastore.core.mapping.Entity;
+import java.time.LocalDateTime;
+import java.util.Collections;
 import org.springframework.data.annotation.Id;
 
 /**
@@ -27,6 +29,7 @@ public class Album {
     private String notes;
     private ArrayList<Song> songs;
     private Index index;
+    private ArrayList<Comment> comments;
 
     public Album() {
         this.songs = new ArrayList<>();
@@ -34,6 +37,7 @@ public class Album {
         this.notes = "";
         this.name = "";
         this.artist = "";
+        this.comments = new ArrayList<>();
     }
 
     public Album(String name, String artist) {
@@ -42,14 +46,16 @@ public class Album {
         this.notes = "";
         this.songs = new ArrayList<>();
         this.index = new Index();
+        this.comments = new ArrayList<>();
     }
 
-    public Album(String name, String artist, String notes, ArrayList<Song> songs, Index index) {
+    public Album(String name, String artist, String notes, ArrayList<Song> songs, Index index, ArrayList<Comment> comments) {
         this.name = name;
         this.artist = artist;
         this.notes = notes;
         this.songs = songs;
         this.index = index;
+        this.comments = new ArrayList<>();
     }
 
     public long getId() {
@@ -123,6 +129,28 @@ public class Album {
         } else {
             System.out.println("task not found in index");
         }
+    }
+
+    public void moveSong(String name, boolean increase) {
+        if (increase) {
+            if (this.songs.indexOf(this.getSong(name)) < this.songs.size() - 1) {
+                Collections.swap(songs, this.songs.indexOf(this.getSong(name)), this.songs.indexOf(this.getSong(name)) + 1);
+            }
+        } else {
+            if (this.songs.indexOf(this.getSong(name)) > 0) {
+                Collections.swap(songs, this.songs.indexOf(this.getSong(name)), this.songs.indexOf(this.getSong(name)) - 1);
+            }
+        }
+    }
+
+    public ArrayList<Comment> getComments() {
+        return this.comments;
+    }
+
+    public void addComment(String commentText) {
+        String userId = "defaultuser";
+        String timestamp = LocalDateTime.now().toString();        
+        this.comments.add(new Comment(userId, timestamp, commentText));
     }
 
     @Override

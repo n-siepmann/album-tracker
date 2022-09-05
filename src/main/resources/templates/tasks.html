@@ -84,7 +84,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                                         <button type="button" class="btn btn-outline-secondary btn-sm closebutton" title="Close" onclick="closeForm('addtaskform')">&#9932;</button><br>
                                                     </h3>
                                                     <div class="card-body">
-                                                        <input type="text" class="form-control" id="taskname" placeholder="Task name" th:name="name">                                                            
+                                                        <input type="text" class="form-control" id="taskname" placeholder="Task name" th:name="name" required>                                                            
                                                             <button type="submit" class="btn btn-primary" title="Create Task">Create Task</button>
                                                     </div>  
                                                 </form>                                                                              
@@ -113,7 +113,8 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                                                             <br>
                                                                         </h3>
                                                                         <div class="card-body">
-                                                                            <input type="text" class="form-control" id="phasename" placeholder="Phase name" th:name="newname">
+                                                                            <input type="hidden" name="songname" th:value="tasks" />
+                                                                            <input type="text" class="form-control" id="phasename" placeholder="Phase name" th:name="newname" required>
                                                                                 <button type="submit" class="btn btn-primary" title="Rename" th:name="phasenumber" th:value="${phaseStat.index}">Rename <span th:text="${phase}"></span></button>
                                                                         </div>
                                                                     </div>
@@ -139,7 +140,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                                 </div>
                                                 <form th:action="@{/new/phase}">
                                                     <div class="form-group">
-                                                        <input type="text" class="form-control" id="name" th:name="name" placeholder="New Phase">
+                                                        <input type="text" class="form-control" id="name" th:name="name" placeholder="New Phase" required>
                                                     </div>
                                                     <button type="submit" class="btn btn-info">Add Phase</button>
                                                 </form>

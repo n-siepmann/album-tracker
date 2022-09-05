@@ -51,12 +51,22 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                                             <span th:case="*">
                                                                 <span th:switch="${cellStat.index}">
                                                                     <span th:case="0" th:text="${cell}"></span>
+                                                                    <span th:case="1">                                                                
+                                                                        <form th:action="@{/reorder/song/up}">
+                                                                            <input type="hidden" name="returnto" value="index">
+                                                                                <button type="submit" class="btn btn-secondary btn-sm btn-reorder" title="Move Up" th:name="name" th:value="${row[0]}">&#9650;</button>        
+                                                                        </form>
+                                                                        <form th:action="@{/reorder/song/down}">
+                                                                            <input type="hidden" name="returnto" value="index">
+                                                                                <button type="submit" class="btn btn-secondary btn-sm  btn-reorder" title="Move Down" th:name="name" th:value="${row[0]}">&#9660;</button>        
+                                                                        </form>                                                                
+                                                                    </span>
                                                                     <form th:action="@{/song}">
                                                                         <button type="submit" class="btn btn-outline-dark btn-sm"  th:case="${cellStat.size - 1}" th:name="name" th:value="${row[0]}">More info</button>
                                                                     </form>
                                                                     <span th:case="*">
                                                                         <form th:action="@{/settaskstatus}">
-                                                                            <input type="hidden" name="returnto" value="" />
+                                                                            <input type="hidden" name="returnto" value="index" />
                                                                             <input type="hidden" name="songname" th:value="${row[0]}" />
                                                                             <input type="hidden" name="taskname" th:value="${grid[1][cellStat.index]}" />
                                                                             <span th:switch="${cell}">
@@ -85,7 +95,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                                                                         <button type="button" class="btn btn-outline-secondary btn-sm closebutton" title="Close" th:attr="onclick='closeForm(\'deletetaskform' + ${row[0]} + '_' + ${grid[1][cellStat.index]} + '\')'">&#9932;</button><br>
                                                                                     </h3>
                                                                                     <form th:action="@{/settaskstatus}">
-                                                                                        <input type="hidden" name="returnto" value=" "/>
+                                                                                        <input type="hidden" name="returnto" value="index"/>
                                                                                         <input type="hidden" name="songname" th:value="${row[0]}" />
                                                                                         <input type="hidden" name="taskname" th:value="${grid[1][cellStat.index]}" />
                                                                                         <div class="card-body">
@@ -97,14 +107,14 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                                                             <div class="card-body">
                                                                                 <div class="form-group" th:attr="id='table-subtaskform_' + ${row[0]} + '_' + ${grid[1][cellStat.index]}"></div>
                                                                                 <form th:action="@{/new/subtask}">
+                                                                                    <input type="hidden" name="returnto" th:value="index"/>
                                                                                     <input type="hidden" name="songname" th:value="${row[0]}" />
                                                                                     <input type="hidden" name="taskname" th:value="${grid[1][cellStat.index]}" />
                                                                                     <div class="form-group">
-                                                                                        <input type="text" class="form-control" name="subtaskname" id="subtaskname" placeholder="New subtask">
+                                                                                        <input type="text" class="form-control" name="subtaskname" id="subtaskname" placeholder="New subtask" required>
                                                                                     </div>
                                                                                     <button type="submit" class="btn btn-info">Add subtask</button>
                                                                                 </form>
-
                                                                             </div>
                                                                         </div>
                                                                     </span>
@@ -124,38 +134,38 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                             </h3>
                                             <form th:action="@{/new/song}">
                                                 <div class="card-body">
-                                                    <input type="hidden" name="returnto" value="">
-                                                    <input type="text" class="form-control" id="name" placeholder="Song name" th:name="name">
-                                                        <button type="submit" class="btn btn-primary" title="Name">Create Song</button>
-                                                </div>
-                                            </form>
-                                        </div>
+                                                    <input type="hidden" name="returnto" value="index">
+                                                        <input type="text" class="form-control" id="name" placeholder="Song name" th:name="name" required>
+                                                            <button type="submit" class="btn btn-primary" title="Name">Create Song</button>
+                                                            </div>
+                                                            </form>
+                                                            </div>
 
 
 
 
-                                        <script>
-                                            function openForm(name) {
-                                                document.getElementById(name).style.display = "block";
-                                            }
+                                                            <script>
+                                                                function openForm(name) {
+                                                                    document.getElementById(name).style.display = "block";
+                                                                }
 
-                                            function openAndGetForm(name) {
+                                                                function openAndGetForm(name) {
+                                                                    console.error(name);
+                                                                    $.get("/task/" + name).done(function (fragment) { // get from controller
+                                                                        $("#table-" + name).replaceWith(fragment); // update snippet of page
+                                                                    });
 
-                                                $.get("/task/" + name).done(function (fragment) { // get from controller
-                                                    $("#table-" + name).replaceWith(fragment); // update snippet of page
-                                                });
+                                                                    document.getElementById(name).style.display = "block";
+                                                                }
 
-                                                document.getElementById(name).style.display = "block";
-                                            }
+                                                                function closeForm(name) {
+                                                                    document.getElementById(name).style.display = "none";
+                                                                }
+                                                            </script>
 
-                                            function closeForm(name) {
-                                                document.getElementById(name).style.display = "none";
-                                            }
-                                        </script>
-
-                                    </main>
-                                    <footer>
-                                        <p>Nick Siepmann | 2022</p>
-                                    </footer>
-                                </body>
-                                </html>
+                                                            </main>
+                                                            <footer>
+                                                                <p>Nick Siepmann | 2022</p>
+                                                            </footer>
+                                                            </body>
+                                                            </html>

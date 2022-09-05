@@ -16,20 +16,25 @@ public class GridBuilder {
     public GridBuilder() {
     }
 
-    public String[][] buildGrid(Album album, boolean transposed) {
+    public String[][] buildGrid(Album album, boolean transposed, String songname) {
         String[][] grid = buildGrid(album);
-        String[][] transpGrid = new String[grid[0].length][grid.length];
-        for (int i = 0; i < transpGrid.length; i++) {
-            for (int j = 0; j < transpGrid[0].length; j++) {
-                transpGrid[i][j] = grid[j][i];
-
+        String[][] transpGrid = new String[grid[0].length - 2][3];
+        for (int i = 1; i < transpGrid.length + 1; i++) {
+            transpGrid[i - 1][0] = grid[0][i];
+            transpGrid[i - 1][1] = grid[1][i];
+            for (int j = 2; j < grid.length; j++) {
+                if (grid[j][0].equals(songname)) {
+                    transpGrid[i - 1][2] = grid[j][i];
+                }
             }
         }
+
+//        System.out.println(transpGrid.length);
         return transpGrid;
     }
 
     public String[][] buildGrid(Album album) {
-        String[][] grid = new String[album.getSongs().size() + 2][album.getIndex().getTaskIndex().keySet().size() + 2]; //extra column on the end for More Info button
+        String[][] grid = new String[album.getSongs().size() + 2][album.getIndex().getTaskIndex().keySet().size() + 3]; //extra columns for More Info and Move Song buttons
 
         for (int i = 0; i < album.getSongs().size(); i++) {
             grid[i + 2][0] = album.getSongs().get(i).getName();
@@ -40,11 +45,11 @@ public class GridBuilder {
         }).toArray();
 
         for (int i = 0; i < album.getIndex().getTaskIndex().keySet().size(); i++) {
-            grid[0][i + 1] = album.getIndex().getPhases().get(album.getIndex().getTaskIndex().get((String) sortedKeySet[i])[1]);
-            grid[1][i + 1] = (String) sortedKeySet[i];
+            grid[0][i + 2] = album.getIndex().getPhases().get(album.getIndex().getTaskIndex().get((String) sortedKeySet[i])[1]);
+            grid[1][i + 2] = (String) sortedKeySet[i];
         }
 
-        for (int i = 2; i < grid.length; i++) {
+        for (int i = 3; i < grid.length; i++) {
             for (int j = 1; j < grid[0].length - 1; j++) {
                 Task task = album.getSong(grid[i][0]).getTask(grid[1][j]);
                 if (task != null) {
