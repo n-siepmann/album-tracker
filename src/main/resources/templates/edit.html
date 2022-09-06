@@ -35,7 +35,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                     <main>
                                         <header>
                                             <h1>Edit Album</h1>
-                                            <h3><span th:text="${#strings.replace(album.name,'~',' ')}"></span> <small class="lead">(<span th:text="${#strings.replace(album.artist,'~',' ')}"></span>)</small></h3>                            
+                                            <h3><span th:text="${#strings.replace(album.name,'_',' ')}"></span> <small class="lead">(<span th:text="${#strings.replace(album.artist,'_',' ')}"></span>)</small></h3>                            
                                             <form  th:action="@{/albums/rename}">
                                                 <button type="button" class="btn btn-outline-primary btn-sm" title="Rename" onclick="openForm('renameform')">Change name/artist</button>
                                                 <div class="form-popup card mb-3" id="renameform">
@@ -56,7 +56,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                                                         <table class="table">
 
                                                                             <tr th:each="song : ${album.songs}">
-                                                                                <td class="table-light" th:text="${#strings.replace(song.name,'~',' ')}"></td>
+                                                                                <td class="table-light" th:text="${#strings.replace(song.name,'_',' ')}"></td>
                                                                                 <td>
                                                                                     <form th:action="@{/song}">
                                                                                         <button type="submit" class="btn btn-outline-dark btn-sm" th:name="name" th:value="${song.name}">More info</button>
@@ -75,7 +75,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                                                                 <td>
                                                                                     <button type="button" class="btn btn-danger btn-sm" th:attr="onclick='openForm(\'deletesongform' + ${songStat.index} + '\')'">Delete</button>
                                                                                     <div class="form-popup card mb-3 deleteform" th:attr="id='deletesongform' + ${songStat.index}">
-                                                                                        <h3 class="card-header">Delete <span th:text="${#strings.replace(song.name,'~',' ')}"></span>?
+                                                                                        <h3 class="card-header">Delete <span th:text="${#strings.replace(song.name,'_',' ')}"></span>?
                                                                                             <button type="button" class="btn btn-outline-secondary btn-sm closebutton" title="Close" th:attr="onclick='closeForm(\'deletesongform' + ${songStat.index} + '\')'">&#9932;</button><br>
                                                                                         </h3>
                                                                                         <form th:action="@{/delete/song}">

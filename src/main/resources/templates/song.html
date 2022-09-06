@@ -36,7 +36,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                     <main>
                                         <header>
                                             <h1>
-                                                <span th:text="${#strings.replace(song.name,'~',' ')}"></span>
+                                                <span th:text="${#strings.replace(song.name,'_',' ')}"></span>
                                                 <button type="button" class="btn btn-outline-primary btn-sm" title="Rename" onclick="openForm('renameform')">Change name</button>
                                             </h1>
                                         </header>
@@ -48,10 +48,10 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                                         <td th:each="cell : ${row}" th:attr="class=${cellStat.index == 0 ? 'table-light' : ''}">
                                                             <span th:switch="${cellStat.index}">
                                                                 <span th:case="0">
-                                                                    <span th:text="${#strings.replace(cell,'~',' ')}"></span>                                    
+                                                                    <span th:text="${#strings.replace(cell,'_',' ')}"></span>                                    
                                                                 </span>
                                                                 <span th:case="1">
-                                                                    <span th:text="${#strings.replace(cell,'~',' ')}"></span>                                     
+                                                                    <span th:text="${#strings.replace(cell,'_',' ')}"></span>                                     
                                                                 </span>
                                                                 <span th:case="2">
                                                                     <form th:action="@{/settaskstatus}">
@@ -63,7 +63,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                                                                 <button type="submit" class="btn btn-primary btn-sm" title="Incomplete" th:name="value" th:value="complete">&#10006;</button>
                                                                             </span>
                                                                             <span th:case="'S'">
-                                                                                <button type="button" class="btn btn-warning btn-sm" title="Contains subtasks" th:attr="onclick='openAndGetForm(\'subtaskform_' + ${song.name} + '_' + ${grid[rowStat.index][1]} + '\')'">&#10022;</button>
+                                                                                <button type="button" class="btn btn-warning btn-sm" title="Contains subtasks" th:attr="onclick='openAndGetForm(\'subtaskform̪QQQ' + ${song.name} + '̪QQQ' + ${grid[rowStat.index][1]} + '\')'">&#10022;</button>
                                                                             </span>
                                                                             <span th:case="'Y'">
                                                                                 <button type="submit" class="btn btn-success btn-sm" title="Complete" th:name="value" th:value="incomplete">&#10004;</button>
@@ -73,17 +73,17 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                                                             </span>
                                                                         </span>
                                                                     </form>
-                                                                    <button type="button" class="btn btn-secondary btn-sm" title="Task options" th:attr="onclick='openAndGetForm(\'subtaskform_' + ${song.name} + '_' + ${grid[rowStat.index][1]} + '\')'" th:if="${cell} == 'X' or ${cell} == 'S' or ${cell} == 'Y'" >&#10035;</button>
-                                                                    <div class="form-popup card mb-3 deleteform"  th:attr="id='subtaskform_' + ${song.name} + '_' + ${grid[rowStat.index][1]}">
-                                                                        <h3 class="card-header"><span th:text="${#strings.replace(grid[rowStat.index][1],'~',' ')}"></span> - <span class="text-muted" th:text="${#strings.replace(song.name,'~',' ')}"></span>
+                                                                    <button type="button" class="btn btn-secondary btn-sm" title="Task options" th:attr="onclick='openAndGetForm(\'subtaskform̪QQQ' + ${song.name} + '̪QQQ' + ${grid[rowStat.index][1]} + '\')'" th:if="${cell} == 'X' or ${cell} == 'S' or ${cell} == 'Y'" >&#10035;</button>
+                                                                    <div class="form-popup card mb-3 deleteform"  th:attr="id='subtaskform̪QQQ' + ${song.name} + '̪QQQ' + ${grid[rowStat.index][1]}">
+                                                                        <h3 class="card-header"><span th:text="${#strings.replace(grid[rowStat.index][1],'_',' ')}"></span> - <span class="text-muted" th:text="${#strings.replace(song.name,'_',' ')}"></span>
                                                                             <form th:action="@{/song}">
                                                                                 <input type="hidden" name="name" th:value="${song.name}" />
                                                                                 <button type="submit" class="btn btn-outline-secondary btn-sm closebutton" title="Close" >&#9932;</button>
                                                                             </form>
-                                                                            <button type="button" class="btn btn-danger btn-sm" th:attr="onclick='openForm(\'deletetaskform' + ${song.name} + '_' + ${grid[rowStat.index][1]} + '\')'">Delete task</button>
-                                                                            <div class="form-popup card mb-3 deleteform" th:attr="id='deletetaskform' + ${song.name} + '_' + ${grid[rowStat.index][1]}">
-                                                                                <h3 class="card-header">Delete <span th:text="${#strings.replace(grid[1][cellStat.index],'~',' ')}"></span>?
-                                                                                    <button type="button" class="btn btn-outline-secondary btn-sm closebutton" title="Close" th:attr="onclick='closeForm(\'deletetaskform' + ${song.name} + '_' + ${grid[rowStat.index][1]} + '\')'">&#9932;</button><br>
+                                                                            <button type="button" class="btn btn-danger btn-sm" th:attr="onclick='openForm(\'deletetaskform̪QQQ' + ${song.name} + '̪QQQ' + ${grid[rowStat.index][1]} + '\')'">Delete task</button>
+                                                                            <div class="form-popup card mb-3 deleteform" th:attr="id='deletetaskform̪QQQ' + ${song.name} + '̪QQQ' + ${grid[rowStat.index][1]}">
+                                                                                <h3 class="card-header">Delete <span th:text="${#strings.replace(grid[1][cellStat.index],'_',' ')}"></span>?
+                                                                                    <button type="button" class="btn btn-outline-secondary btn-sm closebutton" title="Close" th:attr="onclick='closeForm(\'deletetaskform̪QQQ' + ${song.name} + '̪QQQ' + ${grid[rowStat.index][1]} + '\')'">&#9932;</button><br>
                                                                                 </h3>
                                                                                 <form th:action="@{/settaskstatus}">
                                                                                     <input type="hidden" name="returnto" th:value="'song?name=' + ${song.name}"/>
@@ -96,7 +96,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                                                             </div>
                                                                         </h3>
                                                                         <div class="card-body">
-                                                                            <div class="form-group" th:attr="id='table-subtaskform_' + ${song.name} + '_' + ${grid[rowStat.index][1]}"></div>
+                                                                            <div class="form-group" th:attr="id='table-subtaskform̪QQQ' + ${song.name} + '̪QQQ' + ${grid[rowStat.index][1]}"></div>
                                                                             <form th:action="@{/new/subtask}">
                                                                                 <input type="hidden" name="songname" th:value="${song.name}" />
                                                                                 <input type="hidden" name="taskname" th:value="${grid[rowStat.index][1]}" />

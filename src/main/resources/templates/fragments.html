@@ -10,7 +10,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
         <div class="form-group" th:fragment="subtasktable" id="subtaskreplace">
             <table class="table">
                 <tr  th:each="item : ${task}">
-                    <td class="table-light" th:text="${#strings.replace(item.name,'~',' ')}"></td>
+                    <td class="table-light" th:text="${#strings.replace(item.name,'_',' ')}"></td>
                     <td>
                         <form class="form-container" th:action="@{/subtaskstatus}"> 
                             <input type="hidden" name="returnto" value=" "/>
@@ -28,7 +28,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
         <div class="form-group" th:fragment="subtasktablesong" id="subtaskreplacesong">
             <table class="table">
                 <tr  th:each="item : ${task}">
-                    <td class="table-light" th:text="${#strings.replace(item.name,'~',' ')}"></td>
+                    <td class="table-light" th:text="${#strings.replace(item.name,'_',' ')}"></td>
                     <td>
                         <form class="form-container" th:action="@{/subtaskstatus}"> 
                             <input type="hidden" name="returnto" th:value="'/song?name=' + ${songname}" />

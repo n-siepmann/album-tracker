@@ -24,7 +24,7 @@ public class TrackerController {
 
     private final AlbumRepository albumRepository;
     private Album album;
-    private GridBuilder gridBuilder;
+    private final GridBuilder gridBuilder;
 
     @Autowired
     public TrackerController(AlbumRepository albumRepository, GridBuilder gridBuilder) {
@@ -118,20 +118,22 @@ public class TrackerController {
 
     @RequestMapping(value = "/task/{taskId}", method = RequestMethod.GET)
     public String getTask(@PathVariable String taskId, Model model) {
-        ArrayList<Task> task = this.album.getSong(taskId.split("_")[1]).getTask(taskId.split("_")[2]).getTasks();
+        taskId = cleanString(taskId);
+        ArrayList<Task> task = this.album.getSong(taskId.split("̪QQQ")[1]).getTask(taskId.split("̪QQQ")[2]).getTasks();
         model.addAttribute("task", task);
-        model.addAttribute("songname", taskId.split("_")[1]);
-        model.addAttribute("taskname", taskId.split("_")[2]);
+        model.addAttribute("songname", taskId.split("̪QQQ")[1]);
+        model.addAttribute("taskname", taskId.split("̪QQQ")[2]);
 //        System.out.println("refreshing data with " + model.getAttribute("task"));
         return "fragments::subtasktable";
     }
 
     @RequestMapping(value = "/taskforsong/{taskId}", method = RequestMethod.GET)
     public String getTaskForSong(@PathVariable String taskId, Model model) {
-        ArrayList<Task> task = this.album.getSong(taskId.split("_")[1]).getTask(taskId.split("_")[2]).getTasks();
+        taskId = cleanString(taskId);
+        ArrayList<Task> task = this.album.getSong(taskId.split("̪QQQ")[1]).getTask(taskId.split("̪QQQ")[2]).getTasks();
         model.addAttribute("task", task);
-        model.addAttribute("songname", taskId.split("_")[1]);
-        model.addAttribute("taskname", taskId.split("_")[2]);
+        model.addAttribute("songname", taskId.split("̪QQQ")[1]);
+        model.addAttribute("taskname", taskId.split("̪QQQ")[2]);
 //        System.out.println("refreshing data with " + model.getAttribute("task"));
         return "fragments::subtasktablesong";
     }
@@ -168,6 +170,11 @@ public class TrackerController {
         name = cleanString(name);
         artist = cleanString(artist);
 
+        if (!this.albumRepository.findByNameAndArtist(name, artist).isEmpty()) {
+            model.addAttribute("error", "An album with this name and artist already exists!");
+            return "error";
+        }
+
         Album newalbum = new Album(name, artist);
         this.albumRepository.save(newalbum);
         model.addAttribute("album", newalbum);
@@ -179,6 +186,11 @@ public class TrackerController {
     public String renamePhase(@RequestParam(value = "phasenumber") String phasenumber, @RequestParam(value = "newname") String newname, Model model) {
 //        System.out.println(phasenumber);
         newname = cleanString(newname);
+
+        if (this.album.getIndex().getPhases().contains(newname)) {
+            model.addAttribute("error", "A phase by this name already exists!");
+            return "error";
+        }
         if (this.album != null) {
             this.album.getIndex().getPhases().set(Integer.valueOf(phasenumber), newname);
             this.albumRepository.save(album);
@@ -191,6 +203,12 @@ public class TrackerController {
     public String renameSong(@RequestParam(value = "oldname") String oldname, @RequestParam(value = "newname") String newname, @RequestParam(value = "returnto") String returnto, Model model) {
 //        System.out.println(phasenumber);
         newname = cleanString(newname);
+
+        if (this.album.getSongs().contains(new Song(newname))) {
+            model.addAttribute("error", "A song by this name already exists!");
+            return "error";
+        }
+
         if (this.album != null) {
             this.album.getSong(oldname).setName(newname);
             this.albumRepository.save(album);
@@ -210,6 +228,11 @@ public class TrackerController {
                 name = cleanString(name);
                 artist = cleanString(artist);
 
+                if (!this.albumRepository.findByNameAndArtist(name, artist).isEmpty()) {
+                    model.addAttribute("error", "An album with this name and artist already exists!");
+                    return "error";
+                }
+
                 Album foundalbum = optAlbum.get();
                 foundalbum.setName(name);
                 foundalbum.setArtist(artist);
@@ -227,6 +250,12 @@ public class TrackerController {
     @RequestMapping("/new/phase") //create new phase
     public String newPhase(@RequestParam(value = "name") String name, Model model) {
         name = cleanString(name);
+
+        if (this.album.getIndex().getPhases().contains(name)) {
+            model.addAttribute("error", "A phase by this name already exists!");
+            return "error";
+        }
+
         if (this.album != null) {
             this.album.getIndex().getPhases().add(name);
             this.albumRepository.save(album);
@@ -238,6 +267,12 @@ public class TrackerController {
     @RequestMapping("/new/task") //create new task
     public String newTask(@RequestParam(value = "name") String name, Model model) {
         name = cleanString(name);
+
+        if (this.album.getIndex().getTaskIndex().containsKey(name)) {
+            model.addAttribute("error", "A task by this name already exists!");
+            return "error";
+        }
+
         if (this.album != null) {
             this.album.getIndex().createTask(name);
             this.albumRepository.save(album);
@@ -252,6 +287,12 @@ public class TrackerController {
 
         if (this.album != null) {
             Task task = this.album.getSong(songname).getTask(taskname);
+
+            if (task.getTasks().contains(new Task(subtaskname))) {
+                model.addAttribute("error", "A subtask by this name already exists!");
+                return "error";
+            }
+
             task.addTask(subtaskname);
             this.albumRepository.save(album);
             model.addAttribute("task", task);
@@ -265,6 +306,12 @@ public class TrackerController {
     @RequestMapping("/new/song") //create new song
     public String newSong(@RequestParam(value = "name") String name, @RequestParam(value = "returnto") String returnto, Model model) {
         name = cleanString(name);
+
+        if (this.album.getSongs().contains(new Song(name))) {
+            model.addAttribute("error", "A song by this name already exists!");
+            return "error";
+        }
+
         if (this.album != null) {
             this.album.addSong(name);
             this.albumRepository.save(album);
@@ -323,7 +370,7 @@ public class TrackerController {
     public String setTaskPhase(@RequestParam(value = "value") String value, Model model) {
         if (this.album != null) {
 //            System.out.println("set task/phase" + value);
-            this.album.getIndex().setTaskPhase(value.split("_")[0], Integer.valueOf(value.split("_")[1]));
+            this.album.getIndex().setTaskPhase(value.split("̪QQQ")[0], Integer.valueOf(value.split("̪QQQ")[1]));
             this.albumRepository.save(album);
             return "redirect:/tasks";
         }
@@ -391,7 +438,7 @@ public class TrackerController {
     }
 
     @RequestMapping("/album/setnotes") //move song later in the order
-    public String updateAlbumNotes(@RequestParam(value = "notestext") String notesText, Model model) {
+    public String setAlbumNotes(@RequestParam(value = "notestext") String notesText, Model model) {
         if (this.album != null) {
             this.album.setNotes(notesText);
             this.albumRepository.save(album);
@@ -447,7 +494,7 @@ public class TrackerController {
     }
 
     public String cleanString(String input) {
-        String output = input.trim().replace("¬", "").replace(" ", "%20");
+        String output = input.trim().replace(" ", "_").replace("̪QQQ", "");
         return output;
     }
 

@@ -23,7 +23,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                         <section class="divide-halves">
                                                 <table class="table">
                                                     <tr th:each="album : ${albums}">
-                                                        <td class="table-light" th:text="${#strings.replace(album.name,'~',' ')} + ' (' + ${#strings.replace(album.artist,'~',' ')} + ')'"></td>
+                                                        <td class="table-light" th:text="${#strings.replace(album.name,'_',' ')} + ' (' + ${#strings.replace(album.artist,'_',' ')} + ')'"></td>
                                                         <td>
                                                             <form th:action="@{/index}">
                                                                 <button type="submit" class="btn btn-primary btn-sm" th:name="id" th:value="${album.id}">Open album</button>
@@ -49,7 +49,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                                                                     <form th:action="@{/delete/album}">
                                                                                         <button type="button" class="btn btn-danger btn-sm" title="Delete" th:attr="onclick='openForm(\'deleteform' + ${albumStat.index} + '\')'">Delete album</button>
                                                                                         <div class="form-popup card mb-3 deleteform"  th:attr="id='deleteform' + ${albumStat.index}">
-                                                                                            <h3 class="card-header">Delete <span th:text="${#strings.replace(album.name,'~',' ')}"></span>?
+                                                                                            <h3 class="card-header">Delete <span th:text="${#strings.replace(album.name,'_',' ')}"></span>?
                                                                                                 <button type="button" class="btn btn-outline-secondary btn-sm closebutton" title="Close" th:attr="onclick='closeForm(\'deleteform' + ${albumStat.index} + '\')'">&#9932;</button><br>
                                                                                             </h3>
                                                                                             <div class="card-body">

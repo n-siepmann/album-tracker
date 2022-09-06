@@ -34,7 +34,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                         </div>
                                     </nav>
                                     <main>
-                                        <header><h1><span th:text="${#strings.replace(album.name,'~',' ')}"></span> <small class="lead">(<span th:text="${#strings.replace(album.artist,'~',' ')}"></span>)</small></h1><br>
+                                        <header><h1><span th:text="${#strings.replace(album.name,'_',' ')}"></span> <small class="lead">(<span th:text="${#strings.replace(album.artist,'_',' ')}"></span>)</small></h1><br>
                                                 <button type="button" class="btn btn-info"  onclick="openForm('addsongform')">New Song</button>
                                         </header>
                                         <div>
@@ -43,14 +43,14 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                                     <td th:each="cell : ${row}">
                                                         <span th:switch="${rowStat.index}">
                                                             <span th:case="0">
-                                                                <span th:text="${#strings.replace(cell,'~',' ')}"></span>                                    
+                                                                <span th:text="${#strings.replace(cell,'_',' ')}"></span>                                    
                                                             </span>
                                                             <span th:case="1">
-                                                                <span th:text="${#strings.replace(cell,'~',' ')}"></span>                                     
+                                                                <span th:text="${#strings.replace(cell,'_',' ')}"></span>                                     
                                                             </span>
                                                             <span th:case="*">
                                                                 <span th:switch="${cellStat.index}">
-                                                                    <span th:case="0" th:text="${#strings.replace(cell,'~',' ')}"></span>
+                                                                    <span th:case="0" th:text="${#strings.replace(cell,'_',' ')}"></span>
                                                                     <span th:case="1">                                                                
                                                                         <form th:action="@{/reorder/song/up}">
                                                                             <input type="hidden" name="returnto" value="index">
@@ -74,7 +74,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                                                                     <button type="submit" class="btn btn-primary btn-sm" title="Incomplete" th:name="value" th:value="complete">&#10006;</button>
                                                                                 </span>
                                                                                 <span th:case="'S'">
-                                                                                    <button type="button" class="btn btn-warning btn-sm" title="Contains subtasks" th:attr="onclick='openAndGetForm(\'subtaskform_' + ${row[0]} + '_' + ${grid[1][cellStat.index]} + '\')'">&#10022;</button>
+                                                                                    <button type="button" class="btn btn-warning btn-sm" title="Contains subtasks" th:attr="onclick='openAndGetForm(\'subtaskform̪QQQ' + ${row[0]} + '̪QQQ' + ${grid[1][cellStat.index]} + '\')'">&#10022;</button>
                                                                                 </span>
                                                                                 <span th:case="'Y'">
                                                                                     <button type="submit" class="btn btn-success btn-sm" title="Complete" th:name="value" th:value="incomplete">&#10004;</button>
@@ -84,15 +84,15 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                                                                 </span>
                                                                             </span>
                                                                         </form>
-                                                                        <button type="button" class="btn btn-secondary btn-sm" title="Task options" th:attr="onclick='openAndGetForm(\'subtaskform_' + ${row[0]} + '_' + ${grid[1][cellStat.index]} + '\')'" th:if="${cell} == 'X' or ${cell} == 'S' or ${cell} == 'Y'" >&#10035;</button>
-                                                                        <div class="form-popup card mb-3 deleteform"  th:attr="id='subtaskform_' + ${row[0]} + '_' + ${grid[1][cellStat.index]}">
-                                                                            <h3 class="card-header"><span th:text="${#strings.replace(grid[1][cellStat.index],'~',' ')}"></span> - <span class="text-muted" th:text="${#strings.replace(row[0],'~',' ')}"></span>
+                                                                        <button type="button" class="btn btn-secondary btn-sm" title="Task options" th:attr="onclick='openAndGetForm(\'subtaskform̪QQQ' + ${row[0]} + '̪QQQ' + ${grid[1][cellStat.index]} + '\')'" th:if="${cell} == 'X' or ${cell} == 'S' or ${cell} == 'Y'" >&#10035;</button>
+                                                                        <div class="form-popup card mb-3 deleteform"  th:attr="id='subtaskform̪QQQ' + ${row[0]} + '̪QQQ' + ${grid[1][cellStat.index]}">
+                                                                            <h3 class="card-header"><span th:text="${#strings.replace(grid[1][cellStat.index],'_',' ')}"></span> - <span class="text-muted" th:text="${#strings.replace(row[0],'_',' ')}"></span>
                                                                                 <form th:action="@{/index}">
                                                                                     <button type="submit" class="btn btn-outline-secondary btn-sm closebutton" title="Close"  th:name="id" th:value="${album.id}">&#9932;</button></form>
-                                                                                <button type="button" class="btn btn-danger btn-sm" th:attr="onclick='openForm(\'deletetaskform' + ${row[0]} + '_' + ${grid[1][cellStat.index]} + '\')'">Delete task</button>
-                                                                                <div class="form-popup card mb-3 deleteform" th:attr="id='deletetaskform' + ${row[0]} + '_' + ${grid[1][cellStat.index]}">
-                                                                                    <h3 class="card-header">Delete <span th:text="${#strings.replace(grid[1][cellStat.index],'~',' ')}"></span>?
-                                                                                        <button type="button" class="btn btn-outline-secondary btn-sm closebutton" title="Close" th:attr="onclick='closeForm(\'deletetaskform' + ${row[0]} + '_' + ${grid[1][cellStat.index]} + '\')'">&#9932;</button><br>
+                                                                                <button type="button" class="btn btn-danger btn-sm" th:attr="onclick='openForm(\'deletetaskform̪QQQ' + ${row[0]} + '̪QQQ' + ${grid[1][cellStat.index]} + '\')'">Delete task</button>
+                                                                                <div class="form-popup card mb-3 deleteform" th:attr="id='deletetaskform̪QQQ' + ${row[0]} + '̪QQQ' + ${grid[1][cellStat.index]}">
+                                                                                    <h3 class="card-header">Delete <span th:text="${#strings.replace(grid[1][cellStat.index],'_',' ')}"></span>?
+                                                                                        <button type="button" class="btn btn-outline-secondary btn-sm closebutton" title="Close" th:attr="onclick='closeForm(\'deletetaskform̪QQQ' + ${row[0]} + '̪QQQ' + ${grid[1][cellStat.index]} + '\')'">&#9932;</button><br>
                                                                                     </h3>
                                                                                     <form th:action="@{/settaskstatus}">
                                                                                         <input type="hidden" name="returnto" value="index"/>
@@ -105,7 +105,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                                                                 </div>
                                                                             </h3>
                                                                             <div class="card-body">
-                                                                                <div class="form-group" th:attr="id='table-subtaskform_' + ${row[0]} + '_' + ${grid[1][cellStat.index]}"></div>
+                                                                                <div class="form-group" th:attr="id='table-subtaskform̪QQQ' + ${row[0]} + '̪QQQ' + ${grid[1][cellStat.index]}"></div>
                                                                                 <form th:action="@{/new/subtask}">
                                                                                     <input type="hidden" name="returnto" th:value="index"/>
                                                                                     <input type="hidden" name="songname" th:value="${row[0]}" />
@@ -140,15 +140,18 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                                             </div>
                                                             </form>
                                                             </div>
-                                        
+
                                                             <script>
                                                                 function openForm(name) {
                                                                     document.getElementById(name).style.display = "block";
                                                                 }
 
                                                                 function openAndGetForm(name) {
-                                                                    console.error(name);
+                                                                    //console.error("running");
+                                                                    //console.error(name);
+
                                                                     $.get("/task/" + name).done(function (fragment) { // get from controller
+                                                                        console.error(fragment);
                                                                         $("#table-" + name).replaceWith(fragment); // update snippet of page
                                                                     });
 
@@ -172,7 +175,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                                                                     headerCell = firstCell;
                                                                                 } else {
                                                                                     //console.error("checking " + headerCell.innerText);
-                                                                                    headerCell.colSpan++;
+                                                                                    headerCell.colSpan = headerCell.colSpan + firstCell.colSpan;
                                                                                     //console.error("adjusted colspan to " + headerCell.colSpan);
                                                                                     firstCell.remove();
                                                                                     changed = true;
@@ -182,7 +185,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                                                         //console.error("trying again")
                                                                     }
                                                                 }
-                                                                //window.onload = mergeHeaders;
+                                                                window.onload = mergeHeaders;
                                                             </script>
 
                                                             </main>
