@@ -2,12 +2,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.nicksiepmann.albumtracker;
+package com.nicksiepmann.albumtracker.domain;
 
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 import com.google.cloud.spring.data.datastore.core.mapping.Entity;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import org.springframework.data.annotation.Id;
 
@@ -26,6 +27,7 @@ public class Album {
     private ArrayList<Song> songs;
     private Index index;
     private ArrayList<Comment> comments;
+    private String creator;
 
     public Album() {
         this.songs = new ArrayList<>();
@@ -34,20 +36,23 @@ public class Album {
         this.name = "";
         this.artist = "";
         this.comments = new ArrayList<>();
+        this.creator = "";
     }
 
-    public Album(String name, String artist) {
+    public Album(String name, String artist, String creator) {
         this.name = name;
         this.artist = artist;
+        this.creator = creator;
         this.notes = "";
         this.songs = new ArrayList<>();
         this.index = new Index();
         this.comments = new ArrayList<>();
     }
 
-    public Album(String name, String artist, String notes, ArrayList<Song> songs, Index index, ArrayList<Comment> comments) {
+    public Album(String name, String artist, String creator, String notes, ArrayList<Song> songs, Index index, ArrayList<Comment> comments) {
         this.name = name;
         this.artist = artist;
+        this.creator = creator;
         this.notes = notes;
         this.songs = songs;
         this.index = index;
@@ -68,6 +73,14 @@ public class Album {
 
     public void setArtist(String artist) {
         this.artist = artist;
+    }
+
+    public String getCreator() {
+        return creator;
+    }
+
+    public void setCreator(String creator) {
+        this.creator = creator;
     }
 
     public String getName() {
@@ -143,9 +156,10 @@ public class Album {
         return this.comments;
     }
 
-    public void addComment(String commentText) {
-        String userId = "defaultuser";
-        String timestamp = LocalDateTime.now().toString();        
+    public void addComment(String commentText, String userId) {
+//        String userId = "defaultuser";
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        String timestamp = LocalDateTime.now().format(formatter);
         this.comments.add(new Comment(userId, timestamp, commentText));
     }
 

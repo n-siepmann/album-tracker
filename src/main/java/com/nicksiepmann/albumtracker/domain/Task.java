@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.nicksiepmann.albumtracker;
+package com.nicksiepmann.albumtracker.domain;
 
 import com.google.cloud.spring.data.datastore.core.mapping.Entity;
 import java.util.ArrayList;

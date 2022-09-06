@@ -2,10 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.nicksiepmann.albumtracker;
+package com.nicksiepmann.albumtracker.domain;
 
-import com.google.cloud.spring.data.datastore.core.mapping.Entity;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 /**
@@ -63,9 +63,10 @@ public class Song extends TaskContainer {
         return this.comments;
     }
 
-    public void addComment(String commentText){
-        String userId = "defaultuser";
-        String timestamp = LocalDateTime.now().toString();        
+    public void addComment(String commentText, String userId){
+//        String userId = "defaultuser";
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        String timestamp = LocalDateTime.now().format(formatter);     
         this.comments.add(new Comment(userId, timestamp, commentText));
     }
     

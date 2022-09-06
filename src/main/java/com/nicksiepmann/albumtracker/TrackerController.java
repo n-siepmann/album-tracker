@@ -8,9 +8,18 @@ package com.nicksiepmann.albumtracker;
  *
  * @author Nick.Siepmann
  */
+import com.nicksiepmann.albumtracker.domain.AlbumRepository;
+import com.nicksiepmann.albumtracker.domain.GridBuilder;
+import com.nicksiepmann.albumtracker.domain.Song;
+import com.nicksiepmann.albumtracker.domain.Task;
+import com.nicksiepmann.albumtracker.domain.Album;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.StreamSupport;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,31 +34,32 @@ public class TrackerController {
     private final AlbumRepository albumRepository;
     private Album album;
     private final GridBuilder gridBuilder;
+    private String username;
+    
 
     @Autowired
     public TrackerController(AlbumRepository albumRepository, GridBuilder gridBuilder) {
         this.albumRepository = albumRepository;
         this.gridBuilder = gridBuilder;
         this.album = null;
+        this.username = "";
     }
 
-    @GetMapping("/login")
-    public String logIn() {
-        return "login";
+    @GetMapping("/welcome")
+    public String welcome() {
+        return "welcome";
     }
 
-    @GetMapping("/logout")
-    public String logOut() {
-        return "redirect:/login";
-    }
-
-    @GetMapping("/home")
-    public String getHome(Model model) {
-        return "/";
-    }
+//    @GetMapping("/home")
+//    public String getHome(Model model) {
+//        return "/";
+//    }
 
     @GetMapping("/")
-    public String getIndex(Model model) {
+    public String getIndex(Model model, @AuthenticationPrincipal OAuth2User principal) {
+        if (this.username.isBlank()){
+            this.username = cleanString(principal.getAttribute("name"));
+        }
         if (this.album != null) {
             model.addAttribute("album", this.album);
             model.addAttribute("grid", gridBuilder.buildGrid(this.album));
@@ -62,6 +72,7 @@ public class TrackerController {
     public String getAlbumList(Model model) {
         this.album = null;
         if (this.albumRepository.count() > 0) {
+//            List<Album> myAlbums = StreamSupport.stream(this.albumRepository.findAll().spliterator(), false).filter(s -> s.getCreator().equals(this.username)).toList();
             model.addAttribute("albums", this.albumRepository.findAll());
         }
         return "albums";
@@ -118,7 +129,6 @@ public class TrackerController {
 
     @RequestMapping(value = "/task/{taskId}", method = RequestMethod.GET)
     public String getTask(@PathVariable String taskId, Model model) {
-        taskId = cleanString(taskId);
         ArrayList<Task> task = this.album.getSong(taskId.split("̪QQQ")[1]).getTask(taskId.split("̪QQQ")[2]).getTasks();
         model.addAttribute("task", task);
         model.addAttribute("songname", taskId.split("̪QQQ")[1]);
@@ -129,7 +139,6 @@ public class TrackerController {
 
     @RequestMapping(value = "/taskforsong/{taskId}", method = RequestMethod.GET)
     public String getTaskForSong(@PathVariable String taskId, Model model) {
-        taskId = cleanString(taskId);
         ArrayList<Task> task = this.album.getSong(taskId.split("̪QQQ")[1]).getTask(taskId.split("̪QQQ")[2]).getTasks();
         model.addAttribute("task", task);
         model.addAttribute("songname", taskId.split("̪QQQ")[1]);
@@ -175,7 +184,7 @@ public class TrackerController {
             return "error";
         }
 
-        Album newalbum = new Album(name, artist);
+        Album newalbum = new Album(name, artist, this.username);
         this.albumRepository.save(newalbum);
         model.addAttribute("album", newalbum);
         this.album = newalbum;
@@ -406,7 +415,7 @@ public class TrackerController {
     @RequestMapping("/song/addcomment") //move song later in the order
     public String addSongComment(@RequestParam(value = "songname") String songName, @RequestParam(value = "returnto") String returnto, @RequestParam(value = "commenttext") String commentText, Model model) {
         if (this.album != null) {
-            this.album.getSong(songName).addComment(commentText);
+            this.album.getSong(songName).addComment(commentText, this.username);
             this.albumRepository.save(album);
             String returnString = "redirect:/" + returnto.trim();
             returnString = returnString.replace("//", "/").replace("index", "");
@@ -418,7 +427,7 @@ public class TrackerController {
     @RequestMapping("/album/addcomment") //move song later in the order
     public String addAlbumComment(@RequestParam(value = "commenttext") String commentText, Model model) {
         if (this.album != null) {
-            this.album.addComment(commentText);
+            this.album.addComment(commentText, this.username);
             this.albumRepository.save(album);
             return "redirect:/edit";
         }

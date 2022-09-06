@@ -4,6 +4,8 @@
  */
 package com.nicksiepmann.albumtracker;
 
+import com.nicksiepmann.albumtracker.domain.Song;
+import com.nicksiepmann.albumtracker.domain.Comment;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.cloud.spring.data.datastore.core.convert.DatastoreCustomConversions;
