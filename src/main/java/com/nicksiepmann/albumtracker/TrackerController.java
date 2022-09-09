@@ -8,6 +8,8 @@ package com.nicksiepmann.albumtracker;
  *
  * @author Nick.Siepmann
  */
+import com.mailjet.client.errors.MailjetException;
+import com.mailjet.client.errors.MailjetSocketTimeoutException;
 import com.nicksiepmann.albumtracker.domain.AlbumRepository;
 import com.nicksiepmann.albumtracker.domain.GridBuilder;
 import com.nicksiepmann.albumtracker.domain.Song;
@@ -17,6 +19,8 @@ import com.nicksiepmann.albumtracker.domain.Album;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.StreamSupport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -36,11 +40,13 @@ public class TrackerController {
     private Album album;
     private final GridBuilder gridBuilder;
     private User user;
+    private final Emailer emailer;
 
     @Autowired
-    public TrackerController(AlbumRepository albumRepository, GridBuilder gridBuilder) {
+    public TrackerController(AlbumRepository albumRepository, GridBuilder gridBuilder, Emailer emailer) {
         this.albumRepository = albumRepository;
         this.gridBuilder = gridBuilder;
+        this.emailer = emailer;
         this.album = null;
         this.user = null;
     }
@@ -302,6 +308,16 @@ public class TrackerController {
     @RequestMapping("/editors/add") //add editors
     public String addEditor(@RequestParam(value = "email") String email, @RequestParam(value = "returnto") String returnto, Model model) {
         if (this.album != null) {
+
+            System.out.println("sending email");
+            try {
+                System.out.println(this.emailer.SendInvite(email, this.user.getName().replace("_", " ")).toString());
+            } catch (MailjetException ex) {
+                Logger.getLogger(TrackerController.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (MailjetSocketTimeoutException ex) {
+                Logger.getLogger(TrackerController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
             this.album.addEditor(new User(email));
             this.albumRepository.save(album);
             String returnString = "redirect:/" + returnto.trim();
