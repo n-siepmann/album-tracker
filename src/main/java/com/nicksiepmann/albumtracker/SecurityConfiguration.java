@@ -19,7 +19,7 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.authorizeRequests().antMatchers("/oauth2/authorization/google", "/error", "/welcome").permitAll().anyRequest().authenticated()
+        http.authorizeRequests().antMatchers("/oauth2/authorization/google", "/error", "/welcome", "/static/**", "/*.css").permitAll().anyRequest().authenticated()
                 .and().oauth2Login().loginPage("/welcome").defaultSuccessUrl("/", true);
         return http.build();
 
