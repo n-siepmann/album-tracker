@@ -5,6 +5,7 @@
 package com.nicksiepmann.albumtracker;
 
 import com.nicksiepmann.albumtracker.domain.Song;
+import com.nicksiepmann.albumtracker.domain.User;
 import com.nicksiepmann.albumtracker.domain.Comment;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -29,7 +30,9 @@ public class ConverterConfiguration {
                         SONG_STRING_CONVERTER,
                         STRING_SONG_CONVERTER,
                         COMMENT_STRING_CONVERTER,
-                        STRING_COMMENT_CONVERTER));
+                        STRING_COMMENT_CONVERTER,
+                        USER_STRING_CONVERTER,
+                        STRING_USER_CONVERTER));
     }
     static final Converter<Song, String> SONG_STRING_CONVERTER
             = new Converter<Song, String>() {
@@ -92,6 +95,40 @@ public class ConverterConfiguration {
                 Comment comment = mapper.readValue(json, Comment.class);
 //                System.out.println("ConvertedSong = " + song.toString());
                 return comment;
+                //System.out.println(json);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+    };
+    static final Converter<User, String> USER_STRING_CONVERTER
+            = new Converter<User, String>() {
+        @Override
+        public String convert(User user) {
+            ObjectMapper mapper = new ObjectMapper();
+            try {
+                String json = mapper.writeValueAsString(user);
+//                System.out.println("ResultingJSONstring = " + json);
+                return json;
+                //System.out.println(json);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+            return "";
+        }
+    };
+
+    //Converters to read custom Comment type
+    static final Converter<String, User> STRING_USER_CONVERTER
+            = new Converter<String, User>() {
+        @Override
+        public User convert(String json) {
+            ObjectMapper mapper = new ObjectMapper();
+            try {
+                User user = mapper.readValue(json, User.class);
+//                System.out.println("ConvertedSong = " + song.toString());
+                return user;
                 //System.out.println(json);
             } catch (JsonProcessingException e) {
                 e.printStackTrace();

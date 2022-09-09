@@ -11,6 +11,7 @@ package com.nicksiepmann.albumtracker;
 import com.nicksiepmann.albumtracker.domain.AlbumRepository;
 import com.nicksiepmann.albumtracker.domain.GridBuilder;
 import com.nicksiepmann.albumtracker.domain.Song;
+import com.nicksiepmann.albumtracker.domain.User;
 import com.nicksiepmann.albumtracker.domain.Task;
 import com.nicksiepmann.albumtracker.domain.Album;
 import java.util.ArrayList;
@@ -34,15 +35,14 @@ public class TrackerController {
     private final AlbumRepository albumRepository;
     private Album album;
     private final GridBuilder gridBuilder;
-    private String username;
-    
+    private User user;
 
     @Autowired
     public TrackerController(AlbumRepository albumRepository, GridBuilder gridBuilder) {
         this.albumRepository = albumRepository;
         this.gridBuilder = gridBuilder;
         this.album = null;
-        this.username = "";
+        this.user = null;
     }
 
     @GetMapping("/welcome")
@@ -50,16 +50,9 @@ public class TrackerController {
         return "welcome";
     }
 
-//    @GetMapping("/home")
-//    public String getHome(Model model) {
-//        return "/";
-//    }
-
     @GetMapping("/")
     public String getIndex(Model model, @AuthenticationPrincipal OAuth2User principal) {
-        if (this.username.isBlank()){
-            this.username = cleanString(principal.getAttribute("name"));
-        }
+        this.user = new User(cleanString(principal.getAttribute("name")), principal.getAttribute("email"));
         if (this.album != null) {
             model.addAttribute("album", this.album);
             model.addAttribute("grid", gridBuilder.buildGrid(this.album));
@@ -72,8 +65,9 @@ public class TrackerController {
     public String getAlbumList(Model model) {
         this.album = null;
         if (this.albumRepository.count() > 0) {
-//            List<Album> myAlbums = StreamSupport.stream(this.albumRepository.findAll().spliterator(), false).filter(s -> s.getCreator().equals(this.username)).toList();
-            model.addAttribute("albums", this.albumRepository.findAll());
+            List<Album> myAlbums = StreamSupport.stream(this.albumRepository.findAll().spliterator(), false).filter(s -> s.getEditors().contains(this.user)).toList();
+//            model.addAttribute("albums", this.albumRepository.findAll());
+            model.addAttribute("albums", myAlbums);
         }
         return "albums";
     }
@@ -108,6 +102,7 @@ public class TrackerController {
         }
 
         if (this.album != null) {
+            this.album.updateEditors(this.user);
             model.addAttribute("album", this.album);
             model.addAttribute("grid", gridBuilder.buildGrid(this.album));
             return "index";
@@ -147,33 +142,6 @@ public class TrackerController {
         return "fragments::subtasktablesong";
     }
 
-    @RequestMapping(value = "/subtaskstatus", method = RequestMethod.GET)
-    public String setSubtaskStatus(@RequestParam(value = "songname") String songname, @RequestParam(value = "taskname") String taskname, @RequestParam(value = "subtaskname") String subtaskname, @RequestParam(value = "value") String value, @RequestParam(value = "returnto") String returnto, Model model) {
-        Task task = this.album.getSong(songname).getTask(taskname).getTask(subtaskname);
-//        System.out.println("setting status of " + task.getName());
-        switch (value) {
-            case "complete":
-                task.setDone(true);
-                this.album.getSong(songname).getTask(taskname).setDone(true); // if all subtasks done, set parent task to done
-                break;
-            case "incomplete":
-                task.setDone(false);
-                break;
-            case "delete":
-                this.album.getSong(songname).getTask(taskname).removeTask(subtaskname);
-                if (this.album.getSong(songname).getTask(taskname).getTasks().isEmpty()) {
-                    this.album.getSong(songname).getTask(taskname).setDone(true); // if has task has subtasks and they're all done, set parent task to done
-                }
-                break;
-        }
-        this.albumRepository.save(album);
-
-        model.addAttribute("task", task);
-        String returnString = "redirect:/" + returnto.trim();
-        returnString = returnString.replace("//", "/").replace("index", "");
-        return returnString;
-    }
-
     @RequestMapping("/new/album") //create new album
     public String newAlbum(@RequestParam(value = "name") String name, @RequestParam(value = "artist") String artist, Model model) {
         name = cleanString(name);
@@ -184,7 +152,7 @@ public class TrackerController {
             return "error";
         }
 
-        Album newalbum = new Album(name, artist, this.username);
+        Album newalbum = new Album(name, artist, this.user);
         this.albumRepository.save(newalbum);
         model.addAttribute("album", newalbum);
         this.album = newalbum;
@@ -331,6 +299,33 @@ public class TrackerController {
         return "redirect:/albums";
     }
 
+    @RequestMapping("/editors/add") //add editors
+    public String addEditor(@RequestParam(value = "email") String email, @RequestParam(value = "returnto") String returnto, Model model) {
+        if (this.album != null) {
+            this.album.addEditor(new User(email));
+            this.albumRepository.save(album);
+            String returnString = "redirect:/" + returnto.trim();
+            returnString = returnString.replace("//", "/").replace("index", "");
+            return returnString;
+        }
+        return "redirect:/albums";
+    }
+
+    @RequestMapping("/editors/delete") //add editors
+    public String deleteEditor(@RequestParam(value = "email") String email, @RequestParam(value = "returnto") String returnto, Model model) {
+        if (this.album != null) {
+            this.album.removeEditor(new User(email));
+            this.albumRepository.save(album);
+            if (email.equals(this.user.getEmail())) {
+                return "redirect:/albums";
+            }
+            String returnString = "redirect:/" + returnto.trim();
+            returnString = returnString.replace("//", "/").replace("index", "");
+            return returnString;
+        }
+        return "redirect:/albums";
+    }
+
     @RequestMapping("/reorder/song/up") //move song earlier in the order
     public String moveSongUp(@RequestParam(value = "name") String name, @RequestParam(value = "returnto") String returnto, Model model) {
         if (this.album != null) {
@@ -412,10 +407,37 @@ public class TrackerController {
         return "redirect:/albums";
     }
 
+    @RequestMapping(value = "/subtaskstatus", method = RequestMethod.GET)
+    public String setSubtaskStatus(@RequestParam(value = "songname") String songname, @RequestParam(value = "taskname") String taskname, @RequestParam(value = "subtaskname") String subtaskname, @RequestParam(value = "value") String value, @RequestParam(value = "returnto") String returnto, Model model) {
+        Task task = this.album.getSong(songname).getTask(taskname).getTask(subtaskname);
+//        System.out.println("setting status of " + task.getName());
+        switch (value) {
+            case "complete":
+                task.setDone(true);
+                this.album.getSong(songname).getTask(taskname).setDone(true); // if all subtasks done, set parent task to done
+                break;
+            case "incomplete":
+                task.setDone(false);
+                break;
+            case "delete":
+                this.album.getSong(songname).getTask(taskname).removeTask(subtaskname);
+                if (this.album.getSong(songname).getTask(taskname).getTasks().isEmpty()) {
+                    this.album.getSong(songname).getTask(taskname).setDone(true); // if has task has subtasks and they're all done, set parent task to done
+                }
+                break;
+        }
+        this.albumRepository.save(album);
+
+        model.addAttribute("task", task);
+        String returnString = "redirect:/" + returnto.trim();
+        returnString = returnString.replace("//", "/").replace("index", "");
+        return returnString;
+    }
+
     @RequestMapping("/song/addcomment") //move song later in the order
     public String addSongComment(@RequestParam(value = "songname") String songName, @RequestParam(value = "returnto") String returnto, @RequestParam(value = "commenttext") String commentText, Model model) {
         if (this.album != null) {
-            this.album.getSong(songName).addComment(commentText, this.username);
+            this.album.getSong(songName).addComment(commentText, this.user);
             this.albumRepository.save(album);
             String returnString = "redirect:/" + returnto.trim();
             returnString = returnString.replace("//", "/").replace("index", "");
@@ -427,7 +449,7 @@ public class TrackerController {
     @RequestMapping("/album/addcomment") //move song later in the order
     public String addAlbumComment(@RequestParam(value = "commenttext") String commentText, Model model) {
         if (this.album != null) {
-            this.album.addComment(commentText, this.username);
+            this.album.addComment(commentText, this.user);
             this.albumRepository.save(album);
             return "redirect:/edit";
         }
@@ -463,8 +485,16 @@ public class TrackerController {
     public String deleteAlbum(@RequestParam(value = "id") String id, Model model) {
 //        System.out.println("deleting");
         if (this.albumRepository.count() > 0) {
-            this.albumRepository.deleteById(Long.valueOf(id));
-            return "redirect:/albums";
+            Optional<Album> toDelete = this.albumRepository.findById(Long.valueOf(id));
+            if (toDelete.isPresent()) {
+                if (toDelete.get().getOwner().equals(this.user)) {
+                    this.albumRepository.deleteById(Long.valueOf(id));
+                    return "redirect:/albums";
+                } else {
+                    model.addAttribute("error", "Only the owner can delete the album.");
+                    return "error";
+                }
+            }
         }
         System.out.println("delete failed: id was " + id);
         return "redirect:/albums";
@@ -473,11 +503,16 @@ public class TrackerController {
     @RequestMapping("/delete/song") //set specified album as current album
     public String deleteSong(@RequestParam(value = "song") String song, @RequestParam(value = "returnto") String returnto, Model model) {
         if (this.album != null) {
-            this.album.getSongs().remove(this.album.getSong(song));
-            this.albumRepository.save(album);
-            String returnString = "redirect:/" + returnto.trim();
-            returnString = returnString.replace("//", "/").replace("index", "");
-            return returnString;
+            if (this.album.getOwner().equals(this.user)) {
+                this.album.getSongs().remove(this.album.getSong(song));
+                this.albumRepository.save(album);
+                String returnString = "redirect:/" + returnto.trim();
+                returnString = returnString.replace("//", "/").replace("index", "");
+                return returnString;
+            } else {
+                model.addAttribute("error", "Only the owner can delete songs.");
+                return "error";
+            }
         }
         return "redirect:/albums";
     }
@@ -485,9 +520,14 @@ public class TrackerController {
     @RequestMapping("/delete/phase") //set specified album as current album
     public String deletePhase(@RequestParam(value = "phasenumber") String phasenumber, Model model) {
         if (this.album != null) {
-            this.album.getIndex().deletePhase(Integer.valueOf(phasenumber));
-            this.albumRepository.save(album);
-            return "redirect:/tasks";
+            if (this.album.getOwner().equals(this.user)) {
+                this.album.getIndex().deletePhase(Integer.valueOf(phasenumber));
+                this.albumRepository.save(album);
+                return "redirect:/tasks";
+            } else {
+                model.addAttribute("error", "Only the owner can delete phases.");
+                return "error";
+            }
         }
         return "redirect:/albums";
     }
@@ -495,10 +535,16 @@ public class TrackerController {
     @RequestMapping("/delete/task") //set specified album as current album
     public String deleteTask(@RequestParam(value = "task") String task, Model model) {
         if (this.album != null) {
-            this.album.getIndex().deleteTask(task);
-            this.albumRepository.save(album);
-            return "redirect:/tasks";
+            if (this.album.getOwner().equals(this.user)) {
+                this.album.getIndex().deleteTask(task);
+                this.albumRepository.save(album);
+                return "redirect:/tasks";
+            } else {
+                model.addAttribute("error", "Only the owner can delete tasks.");
+                return "error";
+            }
         }
+
         return "redirect:/albums";
     }
 

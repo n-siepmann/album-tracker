@@ -38,6 +38,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                             <h3><span th:text="${#strings.replace(album.name,'_',' ')}"></span> <small class="lead">(<span th:text="${#strings.replace(album.artist,'_',' ')}"></span>)</small></h3>                            
                                             <form  th:action="@{/albums/rename}">
                                                 <button type="button" class="btn btn-outline-primary btn-sm" title="Rename" onclick="openForm('renameform')">Change name/artist</button>
+                                                <button type="button" class="btn btn-outline-primary btn-sm" title="Set editors" onclick="openForm('editorsform')">Set editors</button>
                                                 <div class="form-popup card mb-3" id="renameform">
                                                     <h3 class="card-header">Rename album
                                                         <button type="button" class="btn btn-outline-secondary btn-sm closebutton" title="Close" onclick="closeForm('renameform')">&#9932;</button><br>
@@ -49,7 +50,36 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                                                 <button type="submit" class="btn btn-primary" title="Amend" th:name="id" th:value="${album.id}">Amend album</button>
                                                                 </div>
                                                                 </div>
-                                                                </form></h3>
+                                                                </form>
+
+
+
+                                                                <div class="form-popup card mb-3" id="editorsform">
+                                                                    <h3 class="card-header">Set editors
+                                                                        <button type="button" class="btn btn-outline-secondary btn-sm closebutton" title="Close" onclick="closeForm('editorsform')">&#9932;</button><br>
+                                                                    </h3>
+                                                                    <div class="card-body">
+
+                                                                        <table class="table">
+                                                                            <tr th:each="editor : ${album.editors}">
+                                                                                <td class="table-light" th:text="${editor.email}"></td>
+                                                                                <td><span th:text="${#strings.replace(editor.name,'_',' ')}"></span><span class="text-danger" th:if="${editor.name == ''}">Pending</span></td>
+                                                                                <td>                                                     
+                                                                                    <form  th:action="@{/editors/delete}">
+                                                                                        <input type="hidden" name="returnto" value="edit"/>
+                                                                                        <button type="submit" class="btn btn-danger btn-sm" title="Remove editor" th:if="${!editor.owner}" name="email" th:value="${editor.email}">Remove</button>
+                                                                                    </form></td>
+                                                                            </tr>
+                                                                        </table>
+
+                                                                        <form  th:action="@{/editors/add}">
+                                                                            <input type="hidden" name="returnto" value="edit"/>
+                                                                            <input type="text" class="form-control" id="email" placeholder="Editor email" th:name="email" required>
+                                                                                <button type="submit" class="btn btn-primary" title="Add editor">Add editor</button>
+                                                                        </form>
+                                                                    </div>
+                                                                </div>
+
                                                                 </header>
                                                                 <div>
                                                                     <section class="divide-thirds">
@@ -92,7 +122,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                                                     </section>
                                                                     <section class="divide-thirds">
                                                                         <h2>Comments</h2>
-                                                                        <table class="table-light"><tr th:each="comment : ${album.comments}"><td th:text="${comment.userId}"></td><td th:text="${comment.timestamp}"></td><td th:text="${comment.commentText}"></td></tr></table>
+                                                                        <table class="table"><tr th:each="comment : ${album.comments}"><td th:text="${#strings.replace(comment.user.name,'_',' ')}"></td><td th:text="${comment.timestamp}"></td><td th:text="${comment.commentText}"></td></tr></table>
                                                                         <form th:action="@{/album/addcomment}">
                                                                             <label for="newcomment">Add comment:</label>
                                                                             <input class="form-control" id="commenttext" name="commenttext" type="text" required>

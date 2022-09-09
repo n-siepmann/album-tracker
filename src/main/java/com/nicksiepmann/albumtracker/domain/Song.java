@@ -63,11 +63,11 @@ public class Song extends TaskContainer {
         return this.comments;
     }
 
-    public void addComment(String commentText, String userId){
+    public void addComment(String commentText, User user){
 //        String userId = "defaultuser";
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         String timestamp = LocalDateTime.now().format(formatter);     
-        this.comments.add(new Comment(userId, timestamp, commentText));
+        this.comments.add(new Comment(user, timestamp, commentText));
     }
     
     @Override

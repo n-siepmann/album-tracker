@@ -65,7 +65,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                                                         <button type="submit" class="btn btn-outline-dark btn-sm"  th:case="${cellStat.size - 1}" th:name="name" th:value="${row[0]}">More info</button>
                                                                     </form>
                                                                     <span th:case="*">
-                                                                        <form th:action="@{/settaskstatus}">
+                                                                        <form class="form-inline" th:action="@{/settaskstatus}">
                                                                             <input type="hidden" name="returnto" value="index" />
                                                                             <input type="hidden" name="songname" th:value="${row[0]}" />
                                                                             <input type="hidden" name="taskname" th:value="${grid[1][cellStat.index]}" />

@@ -12,31 +12,35 @@ import java.util.Objects;
  */
 public class Comment {
 
-    private String userId;
+    private User user;
     private String timestamp;
     private String commentText;
 
-    public Comment(String userId, String timestamp, String commentText) {
-        this.userId = userId;
+    public Comment(User user, String timestamp, String commentText) {
+        this.user = user;
         this.timestamp = timestamp;
         this.commentText = commentText;
     }
 
     public Comment() {
-        this.userId = "";
+        this.user = null;
         this.timestamp = "";
         this.commentText = "";
     }
 
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     @Override
     public String toString() {
-        return "Comment{" + "userId=" + userId + ", timestamp=" + timestamp + ", commentText=" + commentText + '}';
+        return "Comment{" + "user=" + user + ", timestamp=" + timestamp + ", commentText=" + commentText + '}';
     }
 
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 97 * hash + Objects.hashCode(this.userId);
+        hash = 97 * hash + Objects.hashCode(this.user.getEmail());
         hash = 97 * hash + Objects.hashCode(this.timestamp);
         return hash;
     }
@@ -53,7 +57,7 @@ public class Comment {
             return false;
         }
         final Comment other = (Comment) obj;
-        if (!Objects.equals(this.userId, other.userId)) {
+        if (!Objects.equals(this.user, other.user)) {
             return false;
         }
         if (!Objects.equals(this.commentText, other.commentText)) {
@@ -62,8 +66,8 @@ public class Comment {
         return Objects.equals(this.timestamp, other.timestamp);
     }
 
-    public String getUserId() {
-        return userId;
+    public User getUser() {
+        return user;
     }
 
     public String getTimestamp() {

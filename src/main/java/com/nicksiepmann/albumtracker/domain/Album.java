@@ -27,7 +27,7 @@ public class Album {
     private ArrayList<Song> songs;
     private Index index;
     private ArrayList<Comment> comments;
-    private String creator;
+    private ArrayList<User> editors;
 
     public Album() {
         this.songs = new ArrayList<>();
@@ -36,23 +36,27 @@ public class Album {
         this.name = "";
         this.artist = "";
         this.comments = new ArrayList<>();
-        this.creator = "";
+        this.editors = new ArrayList<>();
     }
 
-    public Album(String name, String artist, String creator) {
+    public Album(String name, String artist, User creator) {
         this.name = name;
         this.artist = artist;
-        this.creator = creator;
+        this.editors = new ArrayList<>();
+        creator.setOwner(true);
+        this.editors.add(creator);
         this.notes = "";
         this.songs = new ArrayList<>();
         this.index = new Index();
         this.comments = new ArrayList<>();
     }
 
-    public Album(String name, String artist, String creator, String notes, ArrayList<Song> songs, Index index, ArrayList<Comment> comments) {
+    public Album(String name, String artist, User creator, String notes, ArrayList<Song> songs, Index index, ArrayList<Comment> comments) {
         this.name = name;
         this.artist = artist;
-        this.creator = creator;
+        this.editors = new ArrayList<>();
+        creator.setOwner(true);
+        this.editors.add(creator);
         this.notes = notes;
         this.songs = songs;
         this.index = index;
@@ -75,12 +79,30 @@ public class Album {
         this.artist = artist;
     }
 
-    public String getCreator() {
-        return creator;
+    public ArrayList<User> getEditors() {
+        return editors;
     }
 
-    public void setCreator(String creator) {
-        this.creator = creator;
+    public void addEditor(User user) {
+        if (this.editors.isEmpty() && !this.editors.contains(user)) {
+            user.setOwner(true);
+        }
+        this.editors.add(user);
+    }
+
+    public void removeEditor(User user) {
+        if (!this.editors.isEmpty() && !user.equals(this.getOwner())) {
+            this.editors.remove(user);
+        }
+    }
+
+    public User getOwner() {
+        for (User user : this.getEditors()) {
+            if (user.isOwner()) {
+                return user;
+            }
+        }
+        return null;
     }
 
     public String getName() {
@@ -156,16 +178,37 @@ public class Album {
         return this.comments;
     }
 
-    public void addComment(String commentText, String userId) {
+    public void setComments(ArrayList<Comment> comments) {
+        this.comments = comments;
+    }
+
+    public void setEditors(ArrayList<User> editors) {
+        this.editors = editors;
+    }
+
+    public void addComment(String commentText, User user) {
 //        String userId = "defaultuser";
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         String timestamp = LocalDateTime.now().format(formatter);
-        this.comments.add(new Comment(userId, timestamp, commentText));
+        this.comments.add(new Comment(user, timestamp, commentText));
     }
 
     @Override
     public String toString() {
         return "Album{" + "id=" + this.id + "name=" + name + ", notes=" + notes + ", songs=" + songs + ", " + "taskIndex=" + index.getTaskIndex().keySet().stream().map(s -> s + " " + index.getTaskIndex().get(s)[0] + "/" + index.getTaskIndex().get(s)[1]).collect(Collectors.joining(";")) + '}';
+    }
+
+    public void updateEditors(User user) { //updates user Name field in case display name has changed and to denote that the user invite has been picked up
+        if (!this.editors.get(this.editors.indexOf(user)).getName().equals(user.getName())) {
+            this.editors.get(this.editors.indexOf(user)).setName(user.getName());
+            for (Song song : this.songs) {
+                for (Comment comment : song.getComments()) {
+                    if (comment.getUser().equals(user)) {
+                        comment.setUser(user);
+                    }
+                }
+            }
+        }
     }
 
 }

@@ -2,10 +2,8 @@ package com.nicksiepmann.albumtracker;
 
 import com.nicksiepmann.albumtracker.domain.AlbumRepository;
 import com.nicksiepmann.albumtracker.domain.Song;
+import com.nicksiepmann.albumtracker.domain.User;
 import com.nicksiepmann.albumtracker.domain.Album;
-import com.google.common.collect.Lists;
-import java.util.List;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -33,8 +31,9 @@ public class AlbumTrackerApplication {
 
 
     @ShellMethod
-    public String saveAlbumTest(@AuthenticationPrincipal OAuth2User principal) {
-        Album album = new Album("name", "artist", "OTHER_USER");
+    public String saveAlbumTest() {
+        User user = new User("Nick_Siepmann", "devilfish101@gmail.com");
+        Album album = new Album("name", "artist", user);
         Album savedAlbum = this.albumRepository.save(album);
         System.out.println(savedAlbum.toString());
 
@@ -64,9 +63,9 @@ public class AlbumTrackerApplication {
         album.addTaskToSong(album.getSong("MORESONG"), "NEWPHASETASK");
         song.getTasks().get(1).addTask("SUBTASK");
         song.getTasks().get(1).addTask("SUBTASK2");
-        song.addComment("comment comment spaff comment", "Nick_Siepmann");
-        song.addComment("asfoijasiififi", "Nick_Siepmann");
-        album.addComment("glorm", "Nick_Siepmann");
+        song.addComment("comment comment spaff comment", user);
+        song.addComment("asfoijasiififi", user);
+        album.addComment("glorm", user);
         System.out.println("saving");
         savedAlbum = this.albumRepository.save(album);
         System.out.println("saved");

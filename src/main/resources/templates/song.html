@@ -54,7 +54,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                                                     <span th:text="${#strings.replace(cell,'_',' ')}"></span>                                     
                                                                 </span>
                                                                 <span th:case="2">
-                                                                    <form th:action="@{/settaskstatus}">
+                                                                    <form class="form-inline" th:action="@{/settaskstatus}">
                                                                         <input type="hidden" name="returnto" th:value="'/song?name=' + ${song.name}" />
                                                                         <input type="hidden" name="songname" th:value="${song.name}" />
                                                                         <input type="hidden" name="taskname" th:value="${grid[rowStat.index][1]}" />
@@ -85,10 +85,10 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                                                                 <h3 class="card-header">Delete <span th:text="${#strings.replace(grid[1][cellStat.index],'_',' ')}"></span>?
                                                                                     <button type="button" class="btn btn-outline-secondary btn-sm closebutton" title="Close" th:attr="onclick='closeForm(\'deletetaskform̪QQQ' + ${song.name} + '̪QQQ' + ${grid[rowStat.index][1]} + '\')'">&#9932;</button><br>
                                                                                 </h3>
-                                                                                <form th:action="@{/settaskstatus}">
-                                                                                    <input type="hidden" name="returnto" th:value="'song?name=' + ${song.name}"/>
-                                                                                    <input type="hidden" name="songname" th:value="${song.name}" />
-                                                                                    <input type="hidden" name="taskname" th:value="${grid[rowStat.index][1]}" />
+                                                                                <formth:action="@{/settaskstatus}">
+                                                                                    <input type="hidden" name="returnto" th:value="'song?name=' + ${song.name}">
+                                                                                    <input type="hidden" name="songname" th:value="${song.name}">
+                                                                                    <input type="hidden" name="taskname" th:value="${grid[rowStat.index][1]}">
                                                                                     <div class="card-body">
                                                                                         <button type="submit" class="btn btn-danger" title="Delete" th:name="value" th:value="delete">Delete</button>
                                                                                     </div>
@@ -117,7 +117,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                             </section>
                                             <section class="divide-thirds">
                                                 <h2>Comments</h2>
-                                                <table class="table-light"><tr th:each="comment : ${song.comments}"><td th:text="${comment.userId}"></td><td th:text="${comment.timestamp}"></td><td th:text="${comment.commentText}"></td></tr></table>
+                                                <table class="table"><tr th:each="comment : ${song.comments}"><td th:text="${#strings.replace(comment.user.name,'_',' ')}"></td><td th:text="${comment.timestamp}"></td><td th:text="${comment.commentText}"></td></tr></table>
                                                 <form th:action="@{/song/addcomment}">
                                                     <label for="newcomment">Add comment:</label>
                                                     <input type="hidden" name="songname" th:value="${song.name}" />
