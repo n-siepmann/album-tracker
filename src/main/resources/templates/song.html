@@ -12,188 +12,192 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                     <link rel="stylesheet" href="../static/styles.css">-->
                 <link rel="stylesheet" href="bootstrap.min.css">
                     <link rel="stylesheet" href="styles.css">
-                        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
-                        </head>
-                        <body>
-                            <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-                                <div class="container-fluid">
-                                    <a class="navbar-brand" href="/albums">Album Tracker</a>
-                                    <div class="collapse navbar-collapse show" id="navbarColor01">
-                                        <ul class="navbar-nav me-auto">
-                                            <li class="nav-item">
-                                                <a class="nav-link" href="/">Overview</a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link" href="/edit">Edit</a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link" href="/tasks">Tasks</a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </nav>
-                            <main>
-                                <header>
-                                    <h1>
-                                        <span th:text="${#strings.replace(song.name,'_',' ')}"></span>
-                                        <button type="button" class="btn btn-outline-primary btn-sm" title="Rename" onclick="openForm('renameform')">Change name</button>
-                                    </h1>
-                                </header>
-                                <div>
-                                    <section class="divide-thirds">
+                        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+                            <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+                                <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+                                    <link rel="manifest" href="/site.webmanifest">
+                                        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+                                        </head>
+                                        <body>
+                                            <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+                                                <div class="container-fluid">
+                                                    <a class="navbar-brand" href="/albums">Album Tracker</a>
+                                                    <div class="collapse navbar-collapse show" id="navbarColor01">
+                                                        <ul class="navbar-nav me-auto">
+                                                            <li class="nav-item">
+                                                                <a class="nav-link" href="/">Overview</a>
+                                                            </li>
+                                                            <li class="nav-item">
+                                                                <a class="nav-link" href="/edit">Edit</a>
+                                                            </li>
+                                                            <li class="nav-item">
+                                                                <a class="nav-link" href="/tasks">Tasks</a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </nav>
+                                            <main>
+                                                <header>
+                                                    <h1>
+                                                        <span th:text="${#strings.replace(song.name,'_',' ')}"></span>
+                                                        <button type="button" class="btn btn-outline-primary btn-sm" title="Rename" onclick="openForm('renameform')">Change name</button>
+                                                    </h1>
+                                                </header>
+                                                <div>
+                                                    <section class="divide-thirds">
 
-                                        <table class="table table-song" id="songgrid">
-                                            <tr th:each="row : ${grid}">
-                                                <td th:each="cell : ${row}" th:attr="class=${cellStat.index == 0 ? 'table-light' : ''}">
-                                                    <span th:switch="${cellStat.index}">
-                                                        <span th:case="0">
-                                                            <span th:text="${#strings.replace(cell,'_',' ')}"></span>                                    
-                                                        </span>
-                                                        <span th:case="1">
-                                                            <span th:text="${#strings.replace(cell,'_',' ')}"></span>                                     
-                                                        </span>
-                                                        <span th:case="2">
-                                                            <form class="form-inline" th:action="@{/settaskstatus}">
-                                                                <input type="hidden" name="returnto" th:value="'/song?name=' + ${song.name}" />
-                                                                <input type="hidden" name="songname" th:value="${song.name}" />
-                                                                <input type="hidden" name="taskname" th:value="${grid[rowStat.index][1]}" />
-                                                                <span th:switch="${cell}">
-                                                                    <span th:case="'X'">
-                                                                        <button type="submit" class="btn btn-primary btn-sm" title="Incomplete" th:name="value" th:value="complete">&#10006;</button>
-                                                                    </span>
-                                                                    <span th:case="'S'">
-                                                                        <button type="button" class="btn btn-warning btn-sm" title="Contains subtasks" th:attr="onclick='openAndGetForm(\'subtaskform̪QQQ' + ${song.name} + '̪QQQ' + ${grid[rowStat.index][1]} + '\')'">&#10022;</button>
-                                                                    </span>
-                                                                    <span th:case="'Y'">
-                                                                        <button type="submit" class="btn btn-success btn-sm" title="Complete" th:name="value" th:value="incomplete">&#10004;</button>
-                                                                    </span>
-                                                                    <span th:case="*">
-                                                                        <button type="submit" class="btn btn-info btn-sm" title="Add Task" th:name="value" th:value="add"><b>+</b></button>
-                                                                    </span>
-                                                                </span>
-                                                            </form>
-                                                            <button type="button" class="btn btn-secondary btn-sm" title="Task options" th:attr="onclick='openAndGetForm(\'subtaskform̪QQQ' + ${song.name} + '̪QQQ' + ${grid[rowStat.index][1]} + '\')'" th:if="${cell} == 'X' or ${cell} == 'S' or ${cell} == 'Y'" >&#10035;</button>
-                                                            <div class="form-popup card mb-3"  th:attr="id='subtaskform̪QQQ' + ${song.name} + '̪QQQ' + ${grid[rowStat.index][1]}">
-                                                                <h3 class="card-header">
-                                                                    <table class="deleteheader"><tr><td>
-                                                                                <span th:text="${#strings.replace(grid[rowStat.index][1],'_',' ')}"></span> - <span class="text-muted" th:text="${#strings.replace(song.name,'_',' ')}"></span><br>
-                                                                                <button type="button" class="btn btn-danger btn-sm" th:attr="onclick='openForm(\'deletetaskform̪QQQ' + ${song.name} + '̪QQQ' + ${grid[rowStat.index][1]} + '\')'">Delete task</button>
-                                                                            </td><td>
-                                                                                <form th:action="@{/song}">
-                                                                                    <input type="hidden" name="name" th:value="${song.name}" />
-                                                                                    <button type="submit" class="btn btn-outline-secondary btn-sm closebutton" title="Close" >&#9932;</button>
-                                                                                </form>
-                                                                            </td></tr></table>
-                                                                    <div class="form-popup card mb-3 deleteform" th:attr="id='deletetaskform̪QQQ' + ${song.name} + '̪QQQ' + ${grid[rowStat.index][1]}">
-                                                                        <h3 class="card-header"><table class="deleteheader"><tr><td>Delete <span th:text="${#strings.replace(grid[rowStat.index][1],'_',' ')}"></span>?</td><td>
-                                                                                        <button type="button" class="btn btn-outline-secondary btn-sm closebutton" title="Close" th:attr="onclick='closeForm(\'deletetaskform̪QQQ' + ${song.name} + '̪QQQ' + ${grid[rowStat.index][1]} + '\')'">&#9932;</button>
-                                                                                    </td></tr></table></h3>
+                                                        <table class="table table-song" id="songgrid">
+                                                            <tr th:each="row : ${grid}">
+                                                                <td th:each="cell : ${row}" th:attr="class=${cellStat.index == 0 ? 'table-light' : ''}">
+                                                                    <span th:switch="${cellStat.index}">
+                                                                        <span th:case="0">
+                                                                            <span th:text="${#strings.replace(cell,'_',' ')}"></span>                                    
+                                                                        </span>
+                                                                        <span th:case="1">
+                                                                            <span th:text="${#strings.replace(cell,'_',' ')}"></span>                                     
+                                                                        </span>
+                                                                        <span th:case="2">
+                                                                            <form class="form-inline" th:action="@{/settaskstatus}">
+                                                                                <input type="hidden" name="returnto" th:value="'/song?name=' + ${song.name}" />
+                                                                                <input type="hidden" name="songname" th:value="${song.name}" />
+                                                                                <input type="hidden" name="taskname" th:value="${grid[rowStat.index][1]}" />
+                                                                                <span th:switch="${cell}">
+                                                                                    <span th:case="'X'">
+                                                                                        <button type="submit" class="btn btn-primary btn-sm" title="Incomplete" th:name="value" th:value="complete">&#10006;</button>
+                                                                                    </span>
+                                                                                    <span th:case="'S'">
+                                                                                        <button type="button" class="btn btn-warning btn-sm" title="Contains subtasks" th:attr="onclick='openAndGetForm(\'subtaskform̪QQQ' + ${song.name} + '̪QQQ' + ${grid[rowStat.index][1]} + '\')'">&#10022;</button>
+                                                                                    </span>
+                                                                                    <span th:case="'Y'">
+                                                                                        <button type="submit" class="btn btn-success btn-sm" title="Complete" th:name="value" th:value="incomplete">&#10004;</button>
+                                                                                    </span>
+                                                                                    <span th:case="*">
+                                                                                        <button type="submit" class="btn btn-info btn-sm" title="Add Task" th:name="value" th:value="add"><b>+</b></button>
+                                                                                    </span>
+                                                                                </span>
+                                                                            </form>
+                                                                            <button type="button" class="btn btn-secondary btn-sm" title="Task options" th:attr="onclick='openAndGetForm(\'subtaskform̪QQQ' + ${song.name} + '̪QQQ' + ${grid[rowStat.index][1]} + '\')'" th:if="${cell} == 'X' or ${cell} == 'S' or ${cell} == 'Y'" >&#10035;</button>
+                                                                            <div class="form-popup card mb-3"  th:attr="id='subtaskform̪QQQ' + ${song.name} + '̪QQQ' + ${grid[rowStat.index][1]}">
+                                                                                <h3 class="card-header">
+                                                                                    <table class="deleteheader"><tr><td>
+                                                                                                <span th:text="${#strings.replace(grid[rowStat.index][1],'_',' ')}"></span> - <span class="text-muted" th:text="${#strings.replace(song.name,'_',' ')}"></span><br>
+                                                                                                    <button type="button" class="btn btn-danger btn-sm" th:attr="onclick='openForm(\'deletetaskform̪QQQ' + ${song.name} + '̪QQQ' + ${grid[rowStat.index][1]} + '\')'">Delete task</button>
+                                                                                            </td><td>
+                                                                                                <form th:action="@{/song}">
+                                                                                                    <input type="hidden" name="name" th:value="${song.name}" />
+                                                                                                    <button type="submit" class="btn btn-outline-secondary btn-sm closebutton" title="Close" >&#9932;</button>
+                                                                                                </form>
+                                                                                            </td></tr></table>
+                                                                                    <div class="form-popup card mb-3 deleteform" th:attr="id='deletetaskform̪QQQ' + ${song.name} + '̪QQQ' + ${grid[rowStat.index][1]}">
+                                                                                        <h3 class="card-header"><table class="deleteheader"><tr><td>Delete <span th:text="${#strings.replace(grid[rowStat.index][1],'_',' ')}"></span>?</td><td>
+                                                                                                        <button type="button" class="btn btn-outline-secondary btn-sm closebutton" title="Close" th:attr="onclick='closeForm(\'deletetaskform̪QQQ' + ${song.name} + '̪QQQ' + ${grid[rowStat.index][1]} + '\')'">&#9932;</button>
+                                                                                                    </td></tr></table></h3>
 
-                                                                        <form th:action="@{/settaskstatus}">
-                                                                            <input type="hidden" name="returnto" th:value="'song?name=' + ${song.name}">
-                                                                                <input type="hidden" name="songname" th:value="${song.name}">
-                                                                                    <input type="hidden" name="taskname" th:value="${grid[rowStat.index][1]}">
-                                                                                        <div class="card-body">
-                                                                                            <button type="submit" class="btn btn-danger" title="Delete" th:name="value" th:value="delete">Delete</button>
-                                                                                        </div>
-                                                                                        </form>
-                                                                                        </div>
-                                                                                        </h3>
-                                                                                        <div class="card-body">
-                                                                                            <div class="form-group" th:attr="id='table-subtaskform̪QQQ' + ${song.name} + '̪QQQ' + ${grid[rowStat.index][1]}"></div>
-                                                                                            <form th:action="@{/new/subtask}">
-                                                                                                <input type="hidden" name="songname" th:value="${song.name}" />
-                                                                                                <input type="hidden" name="taskname" th:value="${grid[rowStat.index][1]}" />
-                                                                                                <input type="hidden" name="returnto" th:value="'song?name=' + ${song.name}"/>
-                                                                                                <div class="form-group">
-                                                                                                    <input type="text" class="form-control" name="subtaskname" id="subtaskname" placeholder="New subtask" required>
-                                                                                                </div>
-                                                                                                <button type="submit" class="btn btn-info">Add subtask</button>
-                                                                                            </form>
+                                                                                        <form th:action="@{/settaskstatus}">
+                                                                                            <input type="hidden" name="returnto" th:value="'song?name=' + ${song.name}">
+                                                                                                <input type="hidden" name="songname" th:value="${song.name}">
+                                                                                                    <input type="hidden" name="taskname" th:value="${grid[rowStat.index][1]}">
+                                                                                                        <div class="card-body">
+                                                                                                            <button type="submit" class="btn btn-danger" title="Delete" th:name="value" th:value="delete">Delete</button>
+                                                                                                        </div>
+                                                                                                        </form>
+                                                                                                        </div>
+                                                                                                        </h3>
+                                                                                                        <div class="card-body">
+                                                                                                            <div class="form-group" th:attr="id='table-subtaskform̪QQQ' + ${song.name} + '̪QQQ' + ${grid[rowStat.index][1]}"></div>
+                                                                                                            <form th:action="@{/new/subtask}">
+                                                                                                                <input type="hidden" name="songname" th:value="${song.name}" />
+                                                                                                                <input type="hidden" name="taskname" th:value="${grid[rowStat.index][1]}" />
+                                                                                                                <input type="hidden" name="returnto" th:value="'song?name=' + ${song.name}"/>
+                                                                                                                <div class="form-group">
+                                                                                                                    <input type="text" class="form-control" name="subtaskname" id="subtaskname" placeholder="New subtask" required>
+                                                                                                                </div>
+                                                                                                                <button type="submit" class="btn btn-info">Add subtask</button>
+                                                                                                            </form>
 
-                                                                                        </div>
-                                                                                        </div>
-                                                                                        </span>
-                                                                                        </span>
-                                                                                        </td>                
-                                                                                        </tr>
-                                                                                        </table>
-                                                                                        </section>
-                                                                                        <section class="divide-thirds">
-                                                                                            <h2>Comments</h2>
-                                                                                            <table class="table table-comments"><tr th:each="comment : ${song.comments}"><td th:text="${#strings.replace(comment.user.name,'_',' ')}"></td><td th:text="${comment.timestamp}"></td><td th:text="${comment.commentText}"></td></tr></table>
-                                                                                            <form th:action="@{/song/addcomment}">
-                                                                                                <label for="newcomment">Add comment:</label>
-                                                                                                <input type="hidden" name="songname" th:value="${song.name}" />
-                                                                                                <input type="hidden" name="returnto" th:value="'song?name=' + ${song.name}"/>
-                                                                                                <input class="form-control" id="commenttext" name="commenttext" type="text" required>
-                                                                                                    <button type="submit" class="btn btn-primary" title="Add comment">Add comment</button>
-                                                                                            </form>
-                                                                                        </section>
-                                                                                        <section class="divide-thirds">
-                                                                                            <h2>Notes</h2>
-                                                                                            <form th:action="@{/song/setnotes}">
-                                                                                                <input type="hidden" name="songname" th:value="${song.name}" />
-                                                                                                <input type="hidden" name="returnto" th:value="'song?name=' + ${song.name}"/>
-                                                                                                <textarea class="form-control" rows="4" id="notestext" name="notestext" th:text="${song.notes}"></textarea>
-                                                                                                <button type="submit" class="btn btn-primary" title="Update notes">Update notes</button>
-                                                                                            </form>
-                                                                                        </section>
-                                                                                        </div>
+                                                                                                        </div>
+                                                                                                        </div>
+                                                                                                        </span>
+                                                                                                        </span>
+                                                                                                        </td>                
+                                                                                                        </tr>
+                                                                                                        </table>
+                                                                                                        </section>
+                                                                                                        <section class="divide-thirds">
+                                                                                                            <h2>Comments</h2>
+                                                                                                            <table class="table table-comments"><tr th:each="comment : ${song.comments}"><td th:text="${#strings.replace(comment.user.name,'_',' ')}"></td><td th:text="${comment.timestamp}"></td><td th:text="${comment.commentText}"></td></tr></table>
+                                                                                                            <form th:action="@{/song/addcomment}">
+                                                                                                                <label for="newcomment">Add comment:</label>
+                                                                                                                <input type="hidden" name="songname" th:value="${song.name}" />
+                                                                                                                <input type="hidden" name="returnto" th:value="'song?name=' + ${song.name}"/>
+                                                                                                                <input class="form-control" id="commenttext" name="commenttext" type="text" required>
+                                                                                                                    <button type="submit" class="btn btn-primary" title="Add comment">Add comment</button>
+                                                                                                            </form>
+                                                                                                        </section>
+                                                                                                        <section class="divide-thirds">
+                                                                                                            <h2>Notes</h2>
+                                                                                                            <form th:action="@{/song/setnotes}">
+                                                                                                                <input type="hidden" name="songname" th:value="${song.name}" />
+                                                                                                                <input type="hidden" name="returnto" th:value="'song?name=' + ${song.name}"/>
+                                                                                                                <textarea class="form-control" rows="4" id="notestext" name="notestext" th:text="${song.notes}"></textarea>
+                                                                                                                <button type="submit" class="btn btn-primary" title="Update notes">Update notes</button>
+                                                                                                            </form>
+                                                                                                        </section>
+                                                                                                        </div>
 
 
-                                                                                        <div class="form-popup card mb-3" id="renameform">
-                                                                                            <h3 class="card-header"><table class="deleteheader"><tr><td>Rename song</td><td>
-                                                                                                            <button type="button" class="btn btn-outline-secondary btn-sm closebutton" title="Close subtask menu" onclick="closeForm('renameform')">&#9932;</button></td></tr></table>
-                                                                                            </h3>
-                                                                                            <form th:action="@{/rename/song}">
-                                                                                                <div class="card-body">
-                                                                                                    <input type="hidden" name="songname" th:value="${song.name}" />
-                                                                                                    <input type="hidden" name="oldname" th:value="${song.name}"/>
-                                                                                                    <input type="text" class="form-control" id="newname" name="newname" placeholder="Song name" required>
-                                                                                                        <input type="hidden" name="returnto" th:value="index"/>
-                                                                                                        <button type="submit" class="btn btn-primary" title="Rename">Rename</button>
-                                                                                                </div>
-                                                                                            </form>
-                                                                                        </div>
+                                                                                                        <div class="form-popup card mb-3" id="renameform">
+                                                                                                            <h3 class="card-header"><table class="deleteheader"><tr><td>Rename song</td><td>
+                                                                                                                            <button type="button" class="btn btn-outline-secondary btn-sm closebutton" title="Close subtask menu" onclick="closeForm('renameform')">&#9932;</button></td></tr></table>
+                                                                                                            </h3>
+                                                                                                            <form th:action="@{/rename/song}">
+                                                                                                                <div class="card-body">
+                                                                                                                    <input type="hidden" name="songname" th:value="${song.name}" />
+                                                                                                                    <input type="hidden" name="oldname" th:value="${song.name}"/>
+                                                                                                                    <input type="text" class="form-control" id="newname" name="newname" placeholder="Song name" required>
+                                                                                                                        <input type="hidden" name="returnto" th:value="index"/>
+                                                                                                                        <button type="submit" class="btn btn-primary" title="Rename">Rename</button>
+                                                                                                                </div>
+                                                                                                            </form>
+                                                                                                        </div>
 
-                                                                                        <script>
-                                                                                            function openForm(name) {
-                                                                                                document.getElementById(name).style.display = "block";
-                                                                                            }
-                                                                                            function openAndGetForm(name) {
-                                                                                                $.get("/taskforsong/" + name).done(function (fragment) { // get from controller
-                                                                                                    $("#table-" + name).replaceWith(fragment); // update snippet of page
-                                                                                                });
+                                                                                                        <script>
+                                                                                                            function openForm(name) {
+                                                                                                                document.getElementById(name).style.display = "block";
+                                                                                                            }
+                                                                                                            function openAndGetForm(name) {
+                                                                                                                $.get("/taskforsong/" + name).done(function (fragment) { // get from controller
+                                                                                                                    $("#table-" + name).replaceWith(fragment); // update snippet of page
+                                                                                                                });
 
-                                                                                                document.getElementById(name).style.display = "block";
-                                                                                            }
-                                                                                            function closeForm(name) {
-                                                                                                document.getElementById(name).style.display = "none";
-                                                                                            }
+                                                                                                                document.getElementById(name).style.display = "block";
+                                                                                                            }
+                                                                                                            function closeForm(name) {
+                                                                                                                document.getElementById(name).style.display = "none";
+                                                                                                            }
 
-                                                                                            function mergeHeaders() {
-                                                                                                const table = document.getElementById("songgrid");
+                                                                                                            function mergeHeaders() {
+                                                                                                                const table = document.getElementById("songgrid");
 
-                                                                                                let headerCell = null;
+                                                                                                                let headerCell = null;
 
-                                                                                                for (let row of table.rows) {
-                                                                                                    const firstCell = row.cells[0];
-                                                                                                    if (headerCell === null || firstCell.innerText !== headerCell.innerText) {
-                                                                                                        headerCell = firstCell;
-                                                                                                    } else {
-                                                                                                        headerCell.rowSpan++;
-                                                                                                        firstCell.remove();
-                                                                                                    }
-                                                                                                }
-                                                                                            }
-                                                                                            window.onload = mergeHeaders;
-                                                                                        </script>
+                                                                                                                for (let row of table.rows) {
+                                                                                                                    const firstCell = row.cells[0];
+                                                                                                                    if (headerCell === null || firstCell.innerText !== headerCell.innerText) {
+                                                                                                                        headerCell = firstCell;
+                                                                                                                    } else {
+                                                                                                                        headerCell.rowSpan++;
+                                                                                                                        firstCell.remove();
+                                                                                                                    }
+                                                                                                                }
+                                                                                                            }
+                                                                                                            window.onload = mergeHeaders;
+                                                                                                        </script>
 
-                                                                                        </main>
-                                                                                        <footer>
-                                                                                            <p>Nick Siepmann | 2022</p>
-                                                                                        </footer>
-                                                                                        </body>
-                                                                                        </html>
+                                                                                                        </main><div class="clear"></div>
+                                                                                                        <footer>
+                                                                                                            <p>Nick Siepmann | 2022</p>
+                                                                                                        </footer>
+                                                                                                        </body>
+                                                                                                        </html>

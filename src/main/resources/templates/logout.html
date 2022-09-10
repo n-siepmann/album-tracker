@@ -10,47 +10,51 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
                 <!--<link rel="stylesheet" href="../static/bootstrap.min.css">
                     <link rel="stylesheet" href="../static/styles.css">-->
-                        <link rel="stylesheet" href="bootstrap.min.css">
-                            <link rel="stylesheet" href="styles.css">
-                </head>
-                <body>
-                    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-                        <div class="container-fluid">
-                            <a class="navbar-brand">Album Tracker</a>
-                        </div>
-                    </nav>
-                    <main>
-                        <section class="center-float">
-                            <div class="card mb-3">
-                                <h3 class="card-header">Log In</h3>
-                                <div th:if="${param.error}">
-                                    Invalid username and password.</div>
-                                <div th:if="${param.logout}">
-                                    You have been logged out.</div>
-                                <div class="card-body"> 
-                                    <!--
-                                    <form method="post" th:action="@{/login}">
-                                        <div class="form-group">
-                                            <label for="exampleInputEmail1" class="form-label mt-4">Email address</label>
-                                            <input type="text" class="form-control" id="username" name="username" aria-describedby="emailHelp" placeholder="Enter email" required>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="exampleInputPassword1" class="form-label mt-4">Password</label>
-                                            <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
-                                        </div>
-                                        <button type="submit" class="btn btn-primary">Submit</button>
-                                    </form>
-                                    -->
-                                    <form method="post" action="/oauth2/authorization/google">
-                                        <button type="submit" class="btn btn-primary">Login with Google</button>
-                                    </form>
-                                </div>
+                <link rel="stylesheet" href="bootstrap.min.css">
+                    <link rel="stylesheet" href="styles.css">
+                        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+                            <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+                                <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+                                    <link rel="manifest" href="/site.webmanifest">
+                                        </head>
+                                        <body>
+                                            <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+                                                <div class="container-fluid">
+                                                    <a class="navbar-brand">Album Tracker</a>
+                                                </div>
+                                            </nav>
+                                            <main>
+                                                <section class="center-float">
+                                                    <div class="card mb-3">
+                                                        <h3 class="card-header">Log In</h3>
+                                                        <div th:if="${param.error}">
+                                                            Invalid username and password.</div>
+                                                        <div th:if="${param.logout}">
+                                                            You have been logged out.</div>
+                                                        <div class="card-body"> 
+                                                            <!--
+                                                            <form method="post" th:action="@{/login}">
+                                                                <div class="form-group">
+                                                                    <label for="exampleInputEmail1" class="form-label mt-4">Email address</label>
+                                                                    <input type="text" class="form-control" id="username" name="username" aria-describedby="emailHelp" placeholder="Enter email" required>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label for="exampleInputPassword1" class="form-label mt-4">Password</label>
+                                                                    <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
+                                                                </div>
+                                                                <button type="submit" class="btn btn-primary">Submit</button>
+                                                            </form>
+                                                            -->
+                                                            <form method="post" action="/oauth2/authorization/google">
+                                                                <button type="submit" class="btn btn-primary">Login with Google</button>
+                                                            </form>
+                                                        </div>
 
-                            </div>
-                        </section>
-                    </main>
-                    <footer>
-                        <p>Nick Siepmann | 2022</p>
-                    </footer>
-                </body>
-                </html>
+                                                    </div>
+                                                </section>
+                                            </main><div class="clear"></div>
+                                            <footer>
+                                                <p>Nick Siepmann | 2022</p>
+                                            </footer>
+                                        </body>
+                                        </html>

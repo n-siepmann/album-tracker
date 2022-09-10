@@ -12,155 +12,159 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                     <link rel="stylesheet" href="../static/styles.css">-->
                 <link rel="stylesheet" href="bootstrap.min.css">
                     <link rel="stylesheet" href="styles.css">
-                        </head>
-                        <body>
-                            <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-                                <div class="container-fluid">
-                                    <a class="navbar-brand" href="/albums">Album Tracker</a>
-                                    <div class="collapse navbar-collapse show" id="navbarColor01">
-                                        <ul class="navbar-nav me-auto">
-                                            <li class="nav-item">
-                                                <a class="nav-link" href="/">Overview</a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link" href="/edit">Edit</a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link" href="/tasks">Tasks</a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </nav>
-                            <header>
-                                <h1>Edit Tasks</h1>
-                                <h3><span th:text="${#strings.replace(album.name,'_',' ')}"></span> <small class="lead">(<span th:text="${#strings.replace(album.artist,'_',' ')}"></span>)</small></h3> 
-                                <button type="button" class="btn btn-outline-primary btn-sm" title="Phases" onclick="openForm('phasesform')">Edit Phases</button>                                                                              
-                            </header>
-                            <main>
-
-                                <div>
-                                    <table class="table table-tasks">
-                                        <tr class="table-light">
-                                            <td>Tasks</td>
-                                            <td/>
-                                            <td th:each="phase : ${phases}"><span th:text="${#strings.replace(phase,'_',' ')}"></span></td>
-                                            <td/>
-                                        </tr>
-                                        <tr th:each="task : ${tasks}">
-                                            <td th:text="${#strings.replace(task[0],'_',' ')}"></td>  
-
-                                            <td>
-                                                <form th:action="@{/reorder/task/up}">
-                                                    <button type="submit" class="btn btn-secondary btn-sm btn-reorder" title="Move Up" th:name="name" th:value="${task[0]}">&#9650;</button>        
-                                                </form>
-                                                <form th:action="@{/reorder/task/down}">
-                                                    <button type="submit" class="btn btn-secondary btn-sm  btn-reorder" title="Move Down" th:name="name" th:value="${task[0]}">&#9660;</button>        
-                                                </form>
-                                            </td>
-                                            <td th:each="phase : ${phases}">
-                                                <form th:action="@{/task/setphase}">
-                                                    <input type="hidden" name="value" th:value="${task[0]} + '̪QQQ' + ${phaseStat.index}" />
-                                                    <input type="radio" th:name="${task[0]}" th:value="${task[0]} + '̪QQQ' + ${phaseStat.index}" th:checked="${task[1]} == ${phaseStat.index}" th:onclick="this.form.submit()">
-                                                </form>
-                                            </td>
-                                            <td><button type="button" class="btn btn-danger btn-sm" th:attr="onclick='openForm(\'deletetaskform' + ${taskStat.index} + '\')'">Delete</button>
-                                                <div class="form-popup card mb-3 deleteform" th:attr="id='deletetaskform' + ${taskStat.index}">
-                                                    <h3 class="card-header"><table class="deleteheader"><tr><td>Delete <span th:text="${#strings.replace(task[0],'_',' ')}"></span>?</td><td>
-                                                        <button type="button" class="btn btn-outline-secondary btn-sm closebutton" title="Close" th:attr="onclick='closeForm(\'deletetaskform' + ${taskStat.index} + '\')'">&#9932;</button>
-                                                                </td></tr></table>
-                                                    </h3>
-                                                    <form th:action="@{/delete/task}">
-                                                        <div class="card-body">
-                                                            <button type="submit" class="btn btn-danger" title="Delete" th:name="task" th:value="${task[0]}">Delete</button>
-                                                        </div>
-                                                    </form>
+                        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+                            <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+                                <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+                                    <link rel="manifest" href="/site.webmanifest">
+                                        </head>
+                                        <body>
+                                            <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+                                                <div class="container-fluid">
+                                                    <a class="navbar-brand" href="/albums">Album Tracker</a>
+                                                    <div class="collapse navbar-collapse show" id="navbarColor01">
+                                                        <ul class="navbar-nav me-auto">
+                                                            <li class="nav-item">
+                                                                <a class="nav-link" href="/">Overview</a>
+                                                            </li>
+                                                            <li class="nav-item">
+                                                                <a class="nav-link" href="/edit">Edit</a>
+                                                            </li>
+                                                            <li class="nav-item">
+                                                                <a class="nav-link" href="/tasks">Tasks</a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
                                                 </div>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                    <button type="button" class="btn btn-info btn-indent"  onclick="openForm('addtaskform')">Add Task</button>
-                                    <div class="form-popup card mb-3" id="addtaskform">
-                                        <form  th:action="@{/new/task}">
-                                            <h3 class="card-header"><table class="deleteheader"><tr><td>New task</td><td>
-                                                            <button type="button" class="btn btn-outline-secondary btn-sm closebutton" title="Close" onclick="closeForm('addtaskform')">&#9932;</button></td></tr></table>
-                                            </h3>
-                                            <div class="card-body">
-                                                <input type="text" class="form-control" id="taskname" placeholder="Task name" th:name="name" required>                                                            
-                                                    <button type="submit" class="btn btn-primary" title="Create Task">Create Task</button>
-                                            </div>  
-                                        </form>                                                                              
-                                    </div> 
-                                </div>
+                                            </nav>
+                                            <header>
+                                                <h1>Edit Tasks</h1>
+                                                <h3><span th:text="${#strings.replace(album.name,'_',' ')}"></span> <small class="lead">(<span th:text="${#strings.replace(album.artist,'_',' ')}"></span>)</small></h3> 
+                                                <button type="button" class="btn btn-outline-primary btn-sm" title="Phases" onclick="openForm('phasesform')">Edit Phases</button>                                                                              
+                                            </header>
+                                            <main>
 
+                                                <div>
+                                                    <table class="table table-tasks">
+                                                        <tr class="table-light">
+                                                            <td>Tasks</td>
+                                                            <td/>
+                                                            <td th:each="phase : ${phases}"><span th:text="${#strings.replace(phase,'_',' ')}"></span></td>
+                                                            <td/>
+                                                        </tr>
+                                                        <tr th:each="task : ${tasks}">
+                                                            <td th:text="${#strings.replace(task[0],'_',' ')}"></td>  
 
-
-
-
-
-                                <div class="form-popup card mb-3 phaseform" id="phasesform">
-                                    <h3 class="card-header"><table class="deleteheader"><tr><td>Phases</td><td>
-                                                    <button type="button" class="btn btn-outline-secondary btn-sm closebutton" title="Close" onclick="closeForm('phasesform')">&#9932;</button></td></tr></table></h3>
-                                    <div class="card-body">
-                                        <div class="form-group">
-                                            <table class="table table-phases">
-                                                <tr th:each="phase : ${phases}">
-                                                    <td class="table-light" th:text="${#strings.replace(phase,'_',' ')}"></td>
-                                                    <td>
-                                                        <form th:action="@{/rename/phase}">
-                                                            <button type="button" class="btn btn-outline-primary btn-sm" title="Rename" th:attr="onclick='openForm(\'renamephaseform' + ${phaseStat.index} + '\')'">Rename</button>
-                                                            <div class="form-popup card mb-3" th:attr="id='renamephaseform' + ${phaseStat.index}">
-                                                                <h3 class="card-header"><table class="deleteheader"><tr><td>Rename</td><td>
-                                                                                <button type="button" class="btn btn-outline-secondary btn-sm closebutton" title="Close menu" th:attr="onclick='closeForm(\'renamephaseform' + ${phaseStat.index} + '\')'">&#9932;</button>
-                                                                            </td></tr></table>
-                                                                </h3>
-                                                                <div class="card-body">
-                                                                    <input type="hidden" name="songname" th:value="tasks" />
-                                                                    <input type="text" class="form-control" id="phasename" placeholder="Phase name" th:name="newname" required>
-                                                                        <button type="submit" class="btn btn-primary" title="Rename" th:name="phasenumber" th:value="${phaseStat.index}">Rename <span th:text="${phase}"></span></button>
+                                                            <td>
+                                                                <form th:action="@{/reorder/task/up}">
+                                                                    <button type="submit" class="btn btn-secondary btn-sm btn-reorder" title="Move Up" th:name="name" th:value="${task[0]}">&#9650;</button>        
+                                                                </form>
+                                                                <form th:action="@{/reorder/task/down}">
+                                                                    <button type="submit" class="btn btn-secondary btn-sm  btn-reorder" title="Move Down" th:name="name" th:value="${task[0]}">&#9660;</button>        
+                                                                </form>
+                                                            </td>
+                                                            <td th:each="phase : ${phases}">
+                                                                <form th:action="@{/task/setphase}">
+                                                                    <input type="hidden" name="value" th:value="${task[0]} + '̪QQQ' + ${phaseStat.index}" />
+                                                                    <input type="radio" th:name="${task[0]}" th:value="${task[0]} + '̪QQQ' + ${phaseStat.index}" th:checked="${task[1]} == ${phaseStat.index}" th:onclick="this.form.submit()">
+                                                                </form>
+                                                            </td>
+                                                            <td><button type="button" class="btn btn-danger btn-sm" th:attr="onclick='openForm(\'deletetaskform' + ${taskStat.index} + '\')'">Delete</button>
+                                                                <div class="form-popup card mb-3 deleteform" th:attr="id='deletetaskform' + ${taskStat.index}">
+                                                                    <h3 class="card-header"><table class="deleteheader"><tr><td>Delete <span th:text="${#strings.replace(task[0],'_',' ')}"></span>?</td><td>
+                                                                                    <button type="button" class="btn btn-outline-secondary btn-sm closebutton" title="Close" th:attr="onclick='closeForm(\'deletetaskform' + ${taskStat.index} + '\')'">&#9932;</button>
+                                                                                </td></tr></table>
+                                                                    </h3>
+                                                                    <form th:action="@{/delete/task}">
+                                                                        <div class="card-body">
+                                                                            <button type="submit" class="btn btn-danger" title="Delete" th:name="task" th:value="${task[0]}">Delete</button>
+                                                                        </div>
+                                                                    </form>
                                                                 </div>
-                                                            </div>
-                                                        </form>
-                                                    </td>
-                                                    <td>
-                                                        <form th:action="@{/delete/phase}">
-                                                            <button type="button" class="btn btn-danger btn-sm" title="Delete" th:attr="onclick='openForm(\'deletephaseform' + ${phaseStat.index} + '\')'">Delete</button>
-                                                        </form>
-                                                        <div class="form-popup card mb-3 deleteform" th:attr="id='deletephaseform' + ${phaseStat.index}">
-                                                            <h3 class="card-header"><table class="deleteheader"><tr><td>Delete <span th:text="${#strings.replace(phase,'_',' ')}"></span>?</td><td>
-                                                                            <button type="button" class="btn btn-outline-secondary btn-sm closebutton" title="Close" th:attr="onclick='closeForm(\'deletephaseform' + ${phaseStat.index} + '\')'">&#9932;</button><br>
-                                                                        </td></tr></table></h3>
-                                                            <form  th:action="@{/delete/phase}">
-                                                                <div class="card-body">
-                                                                    <button type="submit" class="btn btn-danger" title="Delete" th:name="phasenumber" th:value="${phaseStat.index}">Delete</button>
-                                                                </div>
-                                                            </form>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                    <button type="button" class="btn btn-info btn-indent"  onclick="openForm('addtaskform')">Add Task</button>
+                                                    <div class="form-popup card mb-3" id="addtaskform">
+                                                        <form  th:action="@{/new/task}">
+                                                            <h3 class="card-header"><table class="deleteheader"><tr><td>New task</td><td>
+                                                                            <button type="button" class="btn btn-outline-secondary btn-sm closebutton" title="Close" onclick="closeForm('addtaskform')">&#9932;</button></td></tr></table>
+                                                            </h3>
+                                                            <div class="card-body">
+                                                                <input type="text" class="form-control" id="taskname" placeholder="Task name" th:name="name" required>                                                            
+                                                                    <button type="submit" class="btn btn-primary" title="Create Task">Create Task</button>
+                                                            </div>  
+                                                        </form>                                                                              
+                                                    </div> 
+                                                </div>
+
+
+
+
+
+
+                                                <div class="form-popup card mb-3 phaseform" id="phasesform">
+                                                    <h3 class="card-header"><table class="deleteheader"><tr><td>Phases</td><td>
+                                                                    <button type="button" class="btn btn-outline-secondary btn-sm closebutton" title="Close" onclick="closeForm('phasesform')">&#9932;</button></td></tr></table></h3>
+                                                    <div class="card-body">
+                                                        <div class="form-group">
+                                                            <table class="table table-phases">
+                                                                <tr th:each="phase : ${phases}">
+                                                                    <td class="table-light" th:text="${#strings.replace(phase,'_',' ')}"></td>
+                                                                    <td>
+                                                                        <form th:action="@{/rename/phase}">
+                                                                            <button type="button" class="btn btn-outline-primary btn-sm" title="Rename" th:attr="onclick='openForm(\'renamephaseform' + ${phaseStat.index} + '\')'">Rename</button>
+                                                                            <div class="form-popup card mb-3" th:attr="id='renamephaseform' + ${phaseStat.index}">
+                                                                                <h3 class="card-header"><table class="deleteheader"><tr><td>Rename</td><td>
+                                                                                                <button type="button" class="btn btn-outline-secondary btn-sm closebutton" title="Close menu" th:attr="onclick='closeForm(\'renamephaseform' + ${phaseStat.index} + '\')'">&#9932;</button>
+                                                                                            </td></tr></table>
+                                                                                </h3>
+                                                                                <div class="card-body">
+                                                                                    <input type="hidden" name="songname" th:value="tasks" />
+                                                                                    <input type="text" class="form-control" id="phasename" placeholder="Phase name" th:name="newname" required>
+                                                                                        <button type="submit" class="btn btn-primary" title="Rename" th:name="phasenumber" th:value="${phaseStat.index}">Rename <span th:text="${phase}"></span></button>
+                                                                                </div>
+                                                                            </div>
+                                                                        </form>
+                                                                    </td>
+                                                                    <td>
+                                                                        <form th:action="@{/delete/phase}">
+                                                                            <button type="button" class="btn btn-danger btn-sm" title="Delete" th:attr="onclick='openForm(\'deletephaseform' + ${phaseStat.index} + '\')'">Delete</button>
+                                                                        </form>
+                                                                        <div class="form-popup card mb-3 deleteform" th:attr="id='deletephaseform' + ${phaseStat.index}">
+                                                                            <h3 class="card-header"><table class="deleteheader"><tr><td>Delete <span th:text="${#strings.replace(phase,'_',' ')}"></span>?</td><td>
+                                                                                            <button type="button" class="btn btn-outline-secondary btn-sm closebutton" title="Close" th:attr="onclick='closeForm(\'deletephaseform' + ${phaseStat.index} + '\')'">&#9932;</button><br>
+                                                                                        </td></tr></table></h3>
+                                                                            <form  th:action="@{/delete/phase}">
+                                                                                <div class="card-body">
+                                                                                    <button type="submit" class="btn btn-danger" title="Delete" th:name="phasenumber" th:value="${phaseStat.index}">Delete</button>
+                                                                                </div>
+                                                                            </form>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
                                                         </div>
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                        </div>
-                                        <form th:action="@{/new/phase}">
-                                            <div class="form-group">
-                                                <input type="text" class="form-control" id="name" th:name="name" placeholder="New Phase" required>
-                                            </div>
-                                            <button type="submit" class="btn btn-info">Add Phase</button>
-                                        </form>
-                                    </div>
-                                </div>
+                                                        <form th:action="@{/new/phase}">
+                                                            <div class="form-group">
+                                                                <input type="text" class="form-control" id="name" th:name="name" placeholder="New Phase" required>
+                                                            </div>
+                                                            <button type="submit" class="btn btn-info">Add Phase</button>
+                                                        </form>
+                                                    </div>
+                                                </div>
 
-                                <script>
-                                    function openForm(name) {
-                                        document.getElementById(name).style.display = "block";
-                                    }
+                                                <script>
+                                                    function openForm(name) {
+                                                        document.getElementById(name).style.display = "block";
+                                                    }
 
-                                    function closeForm(name) {
-                                        document.getElementById(name).style.display = "none";
-                                    }
-                                </script>
-                            </main>
-                            <footer>
-                                <p>Nick Siepmann | 2022</p>
-                            </footer>
-                        </body>
-                        </html>
+                                                    function closeForm(name) {
+                                                        document.getElementById(name).style.display = "none";
+                                                    }
+                                                </script>
+                                            </main><div class="clear"></div>
+                                            <footer>
+                                                <p>Nick Siepmann | 2022</p>
+                                            </footer>
+                                        </body>
+                                        </html>

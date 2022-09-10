@@ -12,174 +12,179 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                     <link rel="stylesheet" href="../static/styles.css">-->
                 <link rel="stylesheet" href="bootstrap.min.css">
                     <link rel="stylesheet" href="styles.css">
-                        </head>
-                        <body>
-                            <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-                                <div class="container-fluid">
-                                    <a class="navbar-brand" href="/albums">Album Tracker</a>
-                                    <div class="collapse navbar-collapse show" id="navbarColor01">
-                                        <ul class="navbar-nav me-auto">
-                                            <li class="nav-item">
-                                                <a class="nav-link" href="/">Overview</a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link" href="/edit">Edit</a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link" href="/tasks">Tasks</a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </nav>
-                            <main>
-                                <header>
-                                    <h1>Edit Album</h1>
-                                    <h3><span th:text="${#strings.replace(album.name,'_',' ')}"></span> <small class="lead">(<span th:text="${#strings.replace(album.artist,'_',' ')}"></span>)</small></h3>                            
-                                    <form  th:action="@{/albums/rename}">
-                                        <button type="button" class="btn btn-outline-primary btn-sm" title="Rename" onclick="openForm('renameform')">Change name/artist</button>
-                                        <button type="button" class="btn btn-outline-primary btn-sm" title="Set editors" onclick="openForm('editorsform')">Set editors</button>
-                                        <div class="form-popup card mb-3" id="renameform">
-                                            <h3 class="card-header"><table class="deleteheader"><tr><td>Rename album</td><td>
-                                                            <button type="button" class="btn btn-outline-secondary btn-sm closebutton" title="Close" onclick="closeForm('renameform')">&#9932;</button></td></tr></table>
-                                            </h3>
-                                            <div class="card-body">
-                                                <input type="hidden" name="returnto" value="edit"/>
-                                                <input type="text" class="form-control" id="albumname" placeholder="Album name" th:name="name" required>                                                            
-                                                    <input type="text" class="form-control" id="artistname" placeholder="Artist name" th:name="artist" required>
-                                                        <button type="submit" class="btn btn-primary" title="Amend" th:name="id" th:value="${album.id}">Amend album</button>
-                                                        </div>
-                                                        </div>
-                                                        </form>
-
-
-
-                                                        <div class="form-popup card mb-3" id="editorsform">
-
-                                                            <h3 class="card-header"><table class="deleteheader"><tr><td>Set editors</td><td>
-                                                                            <button type="button" class="btn btn-outline-secondary btn-sm closebutton" title="Close" onclick="closeForm('editorsform')">&#9932;</button></td></tr></table>
+                        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+                            <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+                                <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+                                    <link rel="manifest" href="/site.webmanifest">
+                                        </head>
+                                        <body>
+                                            <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+                                                <div class="container-fluid">
+                                                    <a class="navbar-brand" href="/albums">Album Tracker</a>
+                                                    <div class="collapse navbar-collapse show" id="navbarColor01">
+                                                        <ul class="navbar-nav me-auto">
+                                                            <li class="nav-item">
+                                                                <a class="nav-link" href="/">Overview</a>
+                                                            </li>
+                                                            <li class="nav-item">
+                                                                <a class="nav-link" href="/edit">Edit</a>
+                                                            </li>
+                                                            <li class="nav-item">
+                                                                <a class="nav-link" href="/tasks">Tasks</a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </nav>
+                                            <main>
+                                                <header>
+                                                    <h1>Edit Album</h1>
+                                                    <h3><span th:text="${#strings.replace(album.name,'_',' ')}"></span> <small class="lead">(<span th:text="${#strings.replace(album.artist,'_',' ')}"></span>)</small></h3>                            
+                                                    <form  th:action="@{/albums/rename}">
+                                                        <button type="button" class="btn btn-outline-primary btn-sm" title="Rename" onclick="openForm('renameform')">Change name/artist</button>
+                                                        <button type="button" class="btn btn-outline-primary btn-sm" title="Set editors" onclick="openForm('editorsform')">Set editors</button>
+                                                        <div class="form-popup card mb-3" id="renameform">
+                                                            <h3 class="card-header"><table class="deleteheader"><tr><td>Rename album</td><td>
+                                                                            <button type="button" class="btn btn-outline-secondary btn-sm closebutton" title="Close" onclick="closeForm('renameform')">&#9932;</button></td></tr></table>
                                                             </h3>
                                                             <div class="card-body">
+                                                                <input type="hidden" name="returnto" value="edit"/>
+                                                                <input type="text" class="form-control" id="albumname" placeholder="Album name" th:name="name" required>                                                            
+                                                                    <input type="text" class="form-control" id="artistname" placeholder="Artist name" th:name="artist" required>
+                                                                        <button type="submit" class="btn btn-primary" title="Amend" th:name="id" th:value="${album.id}">Amend album</button>
+                                                                        </div>
+                                                                        </div>
+                                                                        </form>
 
-                                                                <table class="table">
-                                                                    <tr th:each="editor : ${album.editors}">
-                                                                        <td class="table-light" th:text="${editor.email}"></td>
-                                                                        <td><span th:text="${#strings.replace(editor.name,'_',' ')}"></span><span class="text-danger" th:if="${editor.name == ''}">Pending</span></td>
-                                                                        <td>                                                     
-                                                                            <form  th:action="@{/editors/delete}">
-                                                                                <input type="hidden" name="returnto" value="edit"/>
-                                                                                <button type="submit" class="btn btn-danger btn-sm" title="Remove editor" th:if="${!editor.owner}" name="email" th:value="${editor.email}">Remove</button>
-                                                                            </form></td>
-                                                                    </tr>
-                                                                </table>
 
-                                                                <form  th:action="@{/editors/add}">
-                                                                    <input type="hidden" name="returnto" value="edit"/>
-                                                                    <input type="text" class="form-control" id="email" placeholder="Editor email" th:name="email" required>
-                                                                        <button type="submit" class="btn btn-primary" title="Add editor">Add editor</button>
-                                                                </form>
-                                                            </div>
-                                                        </div>
 
-                                                        </header>
-                                                        <div>
-                                                            <section class="divide-thirds">
-                                                                <table class="table table-edit">
+                                                                        <div class="form-popup card mb-3" id="editorsform">
 
-                                                                    <tr th:each="song : ${album.songs}">
-                                                                        <td class="table-light" th:text="${#strings.replace(song.name,'_',' ')}"></td>
-                                                                        <td>
-                                                                            <form th:action="@{/song}">
-                                                                                <button type="submit" class="btn btn-outline-dark btn-sm" th:name="name" th:value="${song.name}">More info</button>
-                                                                            </form>
-                                                                        </td>
-                                                                        <td>
-                                                                            <form th:action="@{/reorder/song/up}">
-                                                                                <input type="hidden" name="returnto" value="edit">
-                                                                                    <button type="submit" class="btn btn-secondary btn-sm btn-reorder" title="Move Up" th:name="name" th:value="${song.name}">&#9650;</button>        
-                                                                            </form>
-                                                                            <form th:action="@{/reorder/song/down}">
-                                                                                <input type="hidden" name="returnto" value="edit">
-                                                                                    <button type="submit" class="btn btn-secondary btn-sm  btn-reorder" title="Move Down" th:name="name" th:value="${song.name}">&#9660;</button>        
-                                                                            </form>
-                                                                        </td>
-                                                                        <td>
-                                                                            <button type="button" class="btn btn-danger btn-sm" th:attr="onclick='openForm(\'deletesongform' + ${songStat.index} + '\')'">Delete</button>
-                                                                            <div class="form-popup card mb-3 deleteform" th:attr="id='deletesongform' + ${songStat.index}">
+                                                                            <h3 class="card-header"><table class="deleteheader"><tr><td>Set editors</td><td>
+                                                                                            <button type="button" class="btn btn-outline-secondary btn-sm closebutton" title="Close" onclick="closeForm('editorsform')">&#9932;</button></td></tr></table>
+                                                                            </h3>
+                                                                            <div class="card-body">
 
-                                                                                <h3 class="card-header"><table class="deleteheader"><tr><td>Delete <span th:text="${#strings.replace(song.name,'_',' ')}"></span>?</td><td>
-                                                                                                <button type="button" class="btn btn-outline-secondary btn-sm closebutton" title="Close" th:attr="onclick='closeForm(\'deletesongform' + ${songStat.index} + '\')'">&#9932;</button>
-                                                                                            </td></tr></table></h3>
-                                                                                <form th:action="@{/delete/song}">
-                                                                                    <input type="hidden" name="returnto" value="edit">
-                                                                                        <div class="card-body">
-                                                                                            <button type="submit" class="btn btn-danger" title="Delete" th:name="song" th:value="${song.name}">Delete</button>
-                                                                                        </div>
+                                                                                <table class="table">
+                                                                                    <tr th:each="editor : ${album.editors}">
+                                                                                        <td class="table-light" th:text="${editor.email}"></td>
+                                                                                        <td><span th:text="${#strings.replace(editor.name,'_',' ')}"></span><span class="text-danger" th:if="${editor.name == ''}">Pending</span></td>
+                                                                                        <td>                                                     
+                                                                                            <form  th:action="@{/editors/delete}">
+                                                                                                <input type="hidden" name="returnto" value="edit"/>
+                                                                                                <button type="submit" class="btn btn-danger btn-sm" title="Remove editor" th:if="${!editor.owner}" name="email" th:value="${editor.email}">Remove</button>
+                                                                                            </form></td>
+                                                                                    </tr>
+                                                                                </table>
+
+                                                                                <form  th:action="@{/editors/add}">
+                                                                                    <input type="hidden" name="returnto" value="edit"/>
+                                                                                    <input type="text" class="form-control" id="email" placeholder="Editor email" th:name="email" required>
+                                                                                        <button type="submit" class="btn btn-primary" title="Add editor">Add editor</button>
                                                                                 </form>
-                                                                            </div>                                                        </td>
-                                                                    </tr>
-
-                                                                </table>
-                                                                <form>
-                                                                    <button type="button" class="btn btn-info"  onclick="openForm('addsongform')">New Song</button></form>
-                                                            </section>
-                                                            <section class="divide-thirds">
-                                                                <h2>Comments</h2>
-                                                                <table class="table table-comments"><tr th:each="comment : ${album.comments}"><td th:text="${#strings.replace(comment.user.name,'_',' ')}"></td><td th:text="${comment.timestamp}"></td><td th:text="${comment.commentText}"></td></tr></table>
-                                                                <form th:action="@{/album/addcomment}">
-                                                                    <label for="newcomment">Add comment:</label>
-                                                                    <input class="form-control" id="commenttext" name="commenttext" type="text" required>
-                                                                        <button type="submit" class="btn btn-primary" title="Add comment">Add comment</button>
-                                                                </form>
-                                                            </section>
-                                                            <section class="divide-thirds">
-                                                                <h2>Notes</h2>
-                                                                <form th:action="@{/album/setnotes}">
-                                                                    <textarea class="form-control" rows="4" id="notestext" name="notestext" th:text="${album.notes}"></textarea>
-                                                                    <button type="submit" class="btn btn-primary" title="Update notes">Update notes</button>
-                                                                </form>
-                                                            </section>
-                                                        </div>
-
-                                                        <div class="form-popup card mb-3" id="renameform">
-                                                            <h3 class="card-header">Rename album
-                                                                <button type="button" class="btn btn-outline-secondary btn-sm closebutton" title="Close subtask menu" onclick="closeForm('renameform')">&#9932;</button><br>
-                                                            </h3>
-                                                            <form>
-                                                                <div class="card-body">
-                                                                    <input type="text" class="form-control" id="newalbumname" placeholder="New name" required>
-                                                                        <button type="submit" class="btn btn-primary" title="Rename">Rename</button>
-                                                                </div>
-                                                            </form>
-                                                        </div>
-
-
-                                                        <div class="form-popup card mb-3" id="addsongform">
-                                                            <h3 class="card-header"><table class="deleteheader"><tr><td>Song name</td><td>
-                                                                            <button type="button" class="btn btn-outline-secondary btn-sm closebutton" title="Close menu" onclick="closeForm('addsongform')">&#9932;</button>
-                                                                        </td></tr></table>
-                                                            </h3>
-                                                            <form th:action="@{/new/song}">
-                                                                <div class="card-body">
-                                                                    <input type="hidden" name="returnto" value="edit">
-                                                                        <input type="text" class="form-control" id="name" placeholder="Song name" th:name="name" required>
-                                                                            <button type="submit" class="btn btn-primary" title="Name">Create Song</button>
                                                                             </div>
+                                                                        </div>
+
+                                                                        </header>
+                                                                        <div>
+                                                                            <section class="divide-thirds">
+                                                                                <table class="table table-edit">
+
+                                                                                    <tr th:each="song : ${album.songs}">
+                                                                                        <td class="table-light" th:text="${#strings.replace(song.name,'_',' ')}"></td>
+                                                                                        <td>
+                                                                                            <form th:action="@{/song}">
+                                                                                                <button type="submit" class="btn btn-outline-dark btn-sm" th:name="name" th:value="${song.name}">More info</button>
+                                                                                            </form>
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            <form th:action="@{/reorder/song/up}">
+                                                                                                <input type="hidden" name="returnto" value="edit">
+                                                                                                    <button type="submit" class="btn btn-secondary btn-sm btn-reorder" title="Move Up" th:name="name" th:value="${song.name}">&#9650;</button>        
+                                                                                            </form>
+                                                                                            <form th:action="@{/reorder/song/down}">
+                                                                                                <input type="hidden" name="returnto" value="edit">
+                                                                                                    <button type="submit" class="btn btn-secondary btn-sm  btn-reorder" title="Move Down" th:name="name" th:value="${song.name}">&#9660;</button>        
+                                                                                            </form>
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            <button type="button" class="btn btn-danger btn-sm" th:attr="onclick='openForm(\'deletesongform' + ${songStat.index} + '\')'">Delete</button>
+                                                                                            <div class="form-popup card mb-3 deleteform" th:attr="id='deletesongform' + ${songStat.index}">
+
+                                                                                                <h3 class="card-header"><table class="deleteheader"><tr><td>Delete <span th:text="${#strings.replace(song.name,'_',' ')}"></span>?</td><td>
+                                                                                                                <button type="button" class="btn btn-outline-secondary btn-sm closebutton" title="Close" th:attr="onclick='closeForm(\'deletesongform' + ${songStat.index} + '\')'">&#9932;</button>
+                                                                                                            </td></tr></table></h3>
+                                                                                                <form th:action="@{/delete/song}">
+                                                                                                    <input type="hidden" name="returnto" value="edit">
+                                                                                                        <div class="card-body">
+                                                                                                            <button type="submit" class="btn btn-danger" title="Delete" th:name="song" th:value="${song.name}">Delete</button>
+                                                                                                        </div>
+                                                                                                </form>
+                                                                                            </div>                                                        </td>
+                                                                                    </tr>
+
+                                                                                </table>
+                                                                                <form>
+                                                                                    <button type="button" class="btn btn-info"  onclick="openForm('addsongform')">New Song</button></form>
+                                                                            </section>
+                                                                            <section class="divide-thirds">
+                                                                                <h2>Comments</h2>
+                                                                                <table class="table table-comments"><tr th:each="comment : ${album.comments}"><td th:text="${#strings.replace(comment.user.name,'_',' ')}"></td><td th:text="${comment.timestamp}"></td><td th:text="${comment.commentText}"></td></tr></table>
+                                                                                <form th:action="@{/album/addcomment}">
+                                                                                    <label for="newcomment">Add comment:</label>
+                                                                                    <input class="form-control" id="commenttext" name="commenttext" type="text" required>
+                                                                                        <button type="submit" class="btn btn-primary" title="Add comment">Add comment</button>
+                                                                                </form>
+                                                                            </section>
+                                                                            <section class="divide-thirds">
+                                                                                <h2>Notes</h2>
+                                                                                <form th:action="@{/album/setnotes}">
+                                                                                    <textarea class="form-control" rows="4" id="notestext" name="notestext" th:text="${album.notes}"></textarea>
+                                                                                    <button type="submit" class="btn btn-primary" title="Update notes">Update notes</button>
+                                                                                </form>
+                                                                            </section>
+                                                                        </div>
+
+                                                                        <div class="form-popup card mb-3" id="renameform">
+                                                                            <h3 class="card-header">Rename album
+                                                                                <button type="button" class="btn btn-outline-secondary btn-sm closebutton" title="Close subtask menu" onclick="closeForm('renameform')">&#9932;</button><br>
+                                                                            </h3>
+                                                                            <form>
+                                                                                <div class="card-body">
+                                                                                    <input type="text" class="form-control" id="newalbumname" placeholder="New name" required>
+                                                                                        <button type="submit" class="btn btn-primary" title="Rename">Rename</button>
+                                                                                </div>
                                                                             </form>
-                                                                            </div>
+                                                                        </div>
 
-                                                                            <script>
-                                                                                function openForm(name) {
-                                                                                    document.getElementById(name).style.display = "block";
-                                                                                }
 
-                                                                                function closeForm(name) {
-                                                                                    document.getElementById(name).style.display = "none";
-                                                                                }
-                                                                            </script>
-                                                                            </main>
-                                                                            <footer>
-                                                                                <p>Nick Siepmann | 2022</p>
-                                                                            </footer>
-                                                                            </body>
-                                                                            </html>
+                                                                        <div class="form-popup card mb-3" id="addsongform">
+                                                                            <h3 class="card-header"><table class="deleteheader"><tr><td>Song name</td><td>
+                                                                                            <button type="button" class="btn btn-outline-secondary btn-sm closebutton" title="Close menu" onclick="closeForm('addsongform')">&#9932;</button>
+                                                                                        </td></tr></table>
+                                                                            </h3>
+                                                                            <form th:action="@{/new/song}">
+                                                                                <div class="card-body">
+                                                                                    <input type="hidden" name="returnto" value="edit">
+                                                                                        <input type="text" class="form-control" id="name" placeholder="Song name" th:name="name" required>
+                                                                                            <button type="submit" class="btn btn-primary" title="Name">Create Song</button>
+                                                                                            </div>
+                                                                                            </form>
+                                                                                            </div>
+
+                                                                                            <script>
+                                                                                                function openForm(name) {
+                                                                                                    document.getElementById(name).style.display = "block";
+                                                                                                }
+
+                                                                                                function closeForm(name) {
+                                                                                                    document.getElementById(name).style.display = "none";
+                                                                                                }
+                                                                                            </script>
+                                                                                            </main>
+                                            <div class="clear"></div>
+                                                                                            <footer>
+                                                                                                <p>Nick Siepmann | 2022</p>
+                                                                                            </footer>
+                                                                                            </body>
+                                                                                            </html>
