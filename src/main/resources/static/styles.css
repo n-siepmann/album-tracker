@@ -9,6 +9,7 @@ section.divide-thirds{
     height: 100%;
     padding: 10px 10px 10px 10px;
 }
+
 section.center-float{
     width: 33%;
     min-width:300px;
@@ -84,16 +85,7 @@ footer{
     margin-top: 10px;
 }
 
-.closebutton {
-    margin-left: 20px;
-    position: absolute;
-    font-size: 0.6rem;
-    vertical-align: top;
-    margin-top: 5px;
-    margin-left: auto;
-    margin-right: auto;
-    right: 10px;
-}
+
 
 .btn-reorder {
     padding-left: 0.4rem;
@@ -104,10 +96,266 @@ footer{
 }
 
 .form-inline {
-  display: inline; important
-  flex-flow: row wrap;
-  align-items: center;
+    display: inline;
+    flex-flow: row wrap;
+    align-items: center;
 }
+
+.loginform button{
+    margin: 7px 7px 7px 7px;
+}
+.mb-3 .btn-sm{
+    margin: 2px 2px 2px 2px;
+}
+.mb-3 {
+    text-align: left;
+}
+
+.divide-halves .btn-lg {
+    min-width: 150px;
+}
+
+header .btn{
+    margin-left:0px;
+    margin-top:5px;
+    margin-right:7px;
+}
+
+.btn-indent{
+    margin-left: 10px;
+}
+
+input {
+    margin-bottom:10px;
+}
+textarea{
+    margin-bottom:10px;
+}
+
+.table-albumlist{
+    table-layout: fixed;
+}
+.table-albumlist td:nth-child(2){
+    width: 120px;
+    text-align: center;
+}
+.table-albumlist td:nth-child(3){
+    width: 145px;
+    text-align: center;
+}
+.table-albumlist td:nth-child(4){
+    width: 120px;
+    text-align: center;
+}
+.table-albumlist .btn{
+    margin-top: 5px;
+    margin-bottom:5px;
+}
+
+.table-album{
+    table-layout: fixed;
+    text-align:center;
+}
+.table-album tr:first-child td:nth-child(2n+3){
+    background-color:var(--bs-gray-200);
+}
+.table-album tr td:first-child{
+    text-align: left;
+}
+.table-album tr:first-child td:first-child{
+    min-width: 300px;
+}
+.table-album tr:first-child td:nth-child(2){
+    width: 50px;
+    text-align: center;
+}
+.table-album tr:first-child td:last-child{
+    width: 120px;
+    text-align: right;
+}
+.table-album tr td:last-child .btn-outline-dark {
+    width: 100%;
+}
+
+.table-comments{
+    table-layout: fixed;
+    vertical-align: top;
+}
+.table-comments tr td:first-child{
+    background-color:var(--bs-gray-200);
+}
+.table-comments tr:first-child td:first-child{
+    width: 140px;
+}
+.table-comments tr:first-child td:nth-child(2){
+    width: 150px;
+}
+
+
+
+.table-song{
+    table-layout: fixed;
+}
+.table-song tr td:last-child {
+    text-align:center;
+}
+.table-song tr:first-child td:first-child{
+    width: 180px;
+}
+.table-song tr:first-child td:last-child{
+    width: 100px;
+}
+
+.table-tasks{
+    table-layout: fixed;
+    text-align:center;
+}
+.table-tasks tr td:first-child{
+    text-align: left;
+}
+.table-tasks tr:first-child td:first-child{
+    min-width: 300px;
+}
+.table-tasks tr:first-child td:nth-child(2){
+    width: 50px;
+    text-align: center;
+}
+.table-tasks tr:first-child td:last-child{
+    width: 120px;
+    text-align: right;
+}
+.table-tasks tr td:last-child .btn {
+    width: 100%;
+}
+
+
+.table-edit{
+    table-layout: fixed;
+    text-align:center;
+}
+.table-edit tr td:first-child{
+    text-align: left;
+}
+.table-edit tr:first-child td:first-child{
+    width: 250px;
+}
+.table-edit tr:first-child td:nth-child(3){
+    width: 50px;
+}
+.table-edit tr td:nth-child(2) .btn{
+    width: 100%;
+}
+.table-edit tr td:last-child .btn{
+    width: 100%;
+}
+
+
+.table-subtasks{
+    table-layout: auto;
+    text-align: center;
+}
+.table-subtasks tr:first-child td:first-child{
+    width: 200px;
+    min-width: 200px;
+}
+.table-subtasks tr td:first-child{
+    text-align:left;
+}
+.table-subtasks tr:first-child td:last-child{
+    width: auto;
+    text-align:center;
+}
+.table-subtasks tr td:last-child{
+    text-align:center;
+}
+
+.table-phases{
+    table-layout: auto;
+    text-align: center;
+    width: auto;
+}
+.table-phases tr td:first-child{
+    text-align:left;
+    width: 200px;
+}
+
+.deleteform .btn{
+    width: 100%;
+}
+.closebutton {
+    width: auto !important;
+    margin-right:0px;
+    margin-left: auto;
+    font-size: 0.6rem;
+    margin-top: 0px;
+}
+
+.deleteheader{
+    vertical-align: top;
+    width: 100%;
+}
+.deleteheader tr td:last-child{
+    text-align: right;
+}
+
+.deleteheader tr:first-child td:first-child{
+    width: auto;
+}
+
+.deleteheader tr:first-child td:last-child{
+    text-align: right;
+    width:40px;
+    vertical-align: top;
+}
+.deleteheader .btn-sm{
+    margin-left: 0px;
+    margin-top: 7px;
+}
+.deleteheader .closebutton{
+    margin-top: 0px;
+}
+
+.mb-3 h3{
+    margin-top:0px;
+}
+
+.mb-3 .closebutton{
+    margin-top: 0px;
+}
+
+/* The popup form - hidden by default */
+.form-popup {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 3px solid #f1f1f1;
+    z-index: 9;
+    min-width: 300px;
+}
+
+/* Add styles to the form container */
+.form-container {
+    max-width: 400px;
+    padding: 10px;
+    background-color: white;
+}
+
+.deleteform{
+    z-index: 10;
+}
+
+
+
+
+
+
+
+
+
+
+
 
 @media screen and (max-width: 991px){
     section.divide-thirds{
@@ -126,24 +374,7 @@ footer{
 }
 
 
-/* The popup form - hidden by default */
-.form-popup {
-    display: none;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    border: 3px solid #f1f1f1;
-    z-index: 9;
-}
 
-/* Add styles to the form container */
-.form-container {
-    max-width: 400px;
-    padding: 10px;
-    background-color: white;
-}
 
-.deleteform{
-    z-index: 10;
-}
+
+

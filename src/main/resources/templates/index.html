@@ -10,187 +10,199 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
                 <!--<link rel="stylesheet" href="../static/bootstrap.min.css">
                     <link rel="stylesheet" href="../static/styles.css">-->
-                        <link rel="stylesheet" href="bootstrap.min.css">
-                            <link rel="stylesheet" href="styles.css">
-                                <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
-                                </head>
-                                <body>
-                                    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-                                        <div class="container-fluid">
-                                            <a class="navbar-brand" href="/albums">Album Tracker</a>
-                                            <div class="collapse navbar-collapse show" id="navbarColor01">
-                                                <ul class="navbar-nav me-auto">
-                                                    <li class="nav-item">
-                                                        <a class="nav-link" href="/">Overview</a>
-                                                    </li>
-                                                    <li class="nav-item">
-                                                        <a class="nav-link" href="/edit">Edit</a>
-                                                    </li>
-                                                    <li class="nav-item">
-                                                        <a class="nav-link" href="/tasks">Tasks</a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </nav>
-                                    <main>
-                                        <header><h1><span th:text="${#strings.replace(album.name,'_',' ')}"></span> <small class="lead">(<span th:text="${#strings.replace(album.artist,'_',' ')}"></span>)</small></h1><br>
-                                                <button type="button" class="btn btn-info"  onclick="openForm('addsongform')">New Song</button>
-                                        </header>
-                                        <div>
-                                            <table class="table" id="albumgrid">
-                                                <tr th:each="row : ${grid}" th:attr="class=${rowStat.index < 2 ? 'table-light' : ''}">
-                                                    <td th:each="cell : ${row}">
-                                                        <span th:switch="${rowStat.index}">
-                                                            <span th:case="0">
-                                                                <span th:text="${#strings.replace(cell,'_',' ')}"></span>                                    
+                <link rel="stylesheet" href="bootstrap.min.css">
+                    <link rel="stylesheet" href="styles.css">
+                        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+                        </head>
+                        <body>
+                            <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+                                <div class="container-fluid">
+                                    <a class="navbar-brand" href="/albums">Album Tracker</a>
+                                    <div class="collapse navbar-collapse show" id="navbarColor01">
+                                        <ul class="navbar-nav me-auto">
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="/">Overview</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="/edit">Edit</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="/tasks">Tasks</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </nav>                                        
+                            <header><h1><span th:text="${#strings.replace(album.name,'_',' ')}"></span> <small class="lead">(<span th:text="${#strings.replace(album.artist,'_',' ')}"></span>)</small></h1><br>
+                                    <button type="button" class="btn btn-info"  onclick="openForm('addsongform')">New Song</button>
+                            </header>
+                            <main>
+                                <div>
+                                    <table class="table table-album" id="albumgrid">
+                                        <tr th:each="row : ${grid}" th:attr="class=${rowStat.index < 2 ? 'table-light' : ''}">
+                                            <td th:each="cell : ${row}">
+                                                <span th:switch="${rowStat.index}">
+                                                    <span th:case="0">
+                                                        <span th:text="${#strings.replace(cell,'_',' ')}"></span>                                    
+                                                    </span>
+                                                    <span th:case="1">
+                                                        <span th:text="${#strings.replace(cell,'_',' ')}"></span>                                     
+                                                    </span>
+                                                    <span th:case="*">
+                                                        <span th:switch="${cellStat.index}">
+                                                            <span th:case="0" th:text="${#strings.replace(cell,'_',' ')}"></span>
+                                                            <span th:case="1">                                                                
+                                                                <form th:action="@{/reorder/song/up}">
+                                                                    <input type="hidden" name="returnto" value="index">
+                                                                        <button type="submit" class="btn btn-secondary btn-sm btn-reorder" title="Move Up" th:name="name" th:value="${row[0]}">&#9650;</button>        
+                                                                </form>
+                                                                <form th:action="@{/reorder/song/down}">
+                                                                    <input type="hidden" name="returnto" value="index">
+                                                                        <button type="submit" class="btn btn-secondary btn-sm  btn-reorder" title="Move Down" th:name="name" th:value="${row[0]}">&#9660;</button>        
+                                                                </form>                                                                
                                                             </span>
-                                                            <span th:case="1">
-                                                                <span th:text="${#strings.replace(cell,'_',' ')}"></span>                                     
-                                                            </span>
+                                                            <form th:action="@{/song}">
+                                                                <button type="submit" class="btn btn-outline-dark btn-sm"  th:case="${cellStat.size - 1}" th:name="name" th:value="${row[0]}">More info</button>
+                                                            </form>
                                                             <span th:case="*">
-                                                                <span th:switch="${cellStat.index}">
-                                                                    <span th:case="0" th:text="${#strings.replace(cell,'_',' ')}"></span>
-                                                                    <span th:case="1">                                                                
-                                                                        <form th:action="@{/reorder/song/up}">
-                                                                            <input type="hidden" name="returnto" value="index">
-                                                                                <button type="submit" class="btn btn-secondary btn-sm btn-reorder" title="Move Up" th:name="name" th:value="${row[0]}">&#9650;</button>        
-                                                                        </form>
-                                                                        <form th:action="@{/reorder/song/down}">
-                                                                            <input type="hidden" name="returnto" value="index">
-                                                                                <button type="submit" class="btn btn-secondary btn-sm  btn-reorder" title="Move Down" th:name="name" th:value="${row[0]}">&#9660;</button>        
-                                                                        </form>                                                                
+                                                                <form class="form-inline" th:action="@{/settaskstatus}">
+                                                                    <input type="hidden" name="returnto" value="index" />
+                                                                    <input type="hidden" name="songname" th:value="${row[0]}" />
+                                                                    <input type="hidden" name="taskname" th:value="${grid[1][cellStat.index]}" />
+                                                                    <span th:switch="${cell}">
+                                                                        <span th:case="'X'">
+                                                                            <button type="submit" class="btn btn-primary btn-sm" title="Incomplete" th:name="value" th:value="complete">&#10006;</button>
+                                                                        </span>
+                                                                        <span th:case="'S'">
+                                                                            <button type="button" class="btn btn-warning btn-sm" title="Contains subtasks" th:attr="onclick='openAndGetForm(\'subtaskform̪QQQ' + ${row[0]} + '̪QQQ' + ${grid[1][cellStat.index]} + '\')'">&#10022;</button>
+                                                                        </span>
+                                                                        <span th:case="'Y'">
+                                                                            <button type="submit" class="btn btn-success btn-sm" title="Complete" th:name="value" th:value="incomplete">&#10004;</button>
+                                                                        </span>
+                                                                        <span th:case="*">
+                                                                            <button type="submit" class="btn btn-info btn-sm" title="Add Task" th:name="value" th:value="add"><b>+</b></button>
+                                                                        </span>
                                                                     </span>
-                                                                    <form th:action="@{/song}">
-                                                                        <button type="submit" class="btn btn-outline-dark btn-sm"  th:case="${cellStat.size - 1}" th:name="name" th:value="${row[0]}">More info</button>
-                                                                    </form>
-                                                                    <span th:case="*">
-                                                                        <form class="form-inline" th:action="@{/settaskstatus}">
-                                                                            <input type="hidden" name="returnto" value="index" />
+                                                                </form>
+                                                                <button type="button" class="btn btn-secondary btn-sm" title="Task options" th:attr="onclick='openAndGetForm(\'subtaskform̪QQQ' + ${row[0]} + '̪QQQ' + ${grid[1][cellStat.index]} + '\')'" th:if="${cell} == 'X' or ${cell} == 'S' or ${cell} == 'Y'" >&#10035;</button>
+                                                                <div class="form-popup card mb-3"  th:attr="id='subtaskform̪QQQ' + ${row[0]} + '̪QQQ' + ${grid[1][cellStat.index]}">
+                                                                    <h3 class="card-header">
+                                                                        <table class="deleteheader"><tr><td>
+                                                                                    <span th:text="${#strings.replace(grid[1][cellStat.index],'_',' ')}"></span> - <span class="text-muted" th:text="${#strings.replace(row[0],'_',' ')}"></span><br>
+
+                                                                                    <button type="button" class="btn btn-danger btn-sm" th:attr="onclick='openForm(\'deletetaskform̪QQQ' + ${row[0]} + '̪QQQ' + ${grid[1][cellStat.index]} + '\')'">Delete task</button>
+
+                                                                                    <div class="form-popup card mb-3 deleteform" th:attr="id='deletetaskform̪QQQ' + ${row[0]} + '̪QQQ' + ${grid[1][cellStat.index]}">
+
+
+
+                                                                                        <h3 class="card-header"><table class="deleteheader"><tr><td>Delete <span th:text="${#strings.replace(grid[1][cellStat.index],'_',' ')}"></span>?</td><td>
+                                                                                                        <button type="button" class="btn btn-outline-secondary btn-sm closebutton" title="Close" th:attr="onclick='closeForm(\'deletetaskform̪QQQ' + ${row[0]} + '̪QQQ' + ${grid[1][cellStat.index]} + '\')'">&#9932;</button><br>
+                                                                                                    </td></tr></table></h3>
+                                                                                        <form th:action="@{/settaskstatus}">
+                                                                                            <input type="hidden" name="returnto" value="index"/>
+                                                                                            <input type="hidden" name="songname" th:value="${row[0]}" />
+                                                                                            <input type="hidden" name="taskname" th:value="${grid[1][cellStat.index]}" />
+                                                                                            <div class="card-body">
+                                                                                                <button type="submit" class="btn btn-danger" title="Delete" th:name="value" th:value="delete">Delete</button>
+                                                                                            </div>
+                                                                                        </form>
+                                                                                    </div>
+
+
+                                                                                </td><td>
+                                                                                    <form th:action="@{/index}">
+                                                                                        <button type="submit" class="btn btn-outline-secondary btn-sm closebutton" title="Close"  th:name="id" th:value="${album.id}">&#9932;</button></form>
+
+
+                                                                                </td></tr></table></h3>
+                                                                    <div class="card-body">
+                                                                        <div class="form-group" th:attr="id='table-subtaskform̪QQQ' + ${row[0]} + '̪QQQ' + ${grid[1][cellStat.index]}"></div>
+                                                                        <form th:action="@{/new/subtask}">
+                                                                            <input type="hidden" name="returnto" th:value="index"/>
                                                                             <input type="hidden" name="songname" th:value="${row[0]}" />
                                                                             <input type="hidden" name="taskname" th:value="${grid[1][cellStat.index]}" />
-                                                                            <span th:switch="${cell}">
-                                                                                <span th:case="'X'">
-                                                                                    <button type="submit" class="btn btn-primary btn-sm" title="Incomplete" th:name="value" th:value="complete">&#10006;</button>
-                                                                                </span>
-                                                                                <span th:case="'S'">
-                                                                                    <button type="button" class="btn btn-warning btn-sm" title="Contains subtasks" th:attr="onclick='openAndGetForm(\'subtaskform̪QQQ' + ${row[0]} + '̪QQQ' + ${grid[1][cellStat.index]} + '\')'">&#10022;</button>
-                                                                                </span>
-                                                                                <span th:case="'Y'">
-                                                                                    <button type="submit" class="btn btn-success btn-sm" title="Complete" th:name="value" th:value="incomplete">&#10004;</button>
-                                                                                </span>
-                                                                                <span th:case="*">
-                                                                                    <button type="submit" class="btn btn-info btn-sm" title="Add Task" th:name="value" th:value="add"><b>+</b></button>
-                                                                                </span>
-                                                                            </span>
-                                                                        </form>
-                                                                        <button type="button" class="btn btn-secondary btn-sm" title="Task options" th:attr="onclick='openAndGetForm(\'subtaskform̪QQQ' + ${row[0]} + '̪QQQ' + ${grid[1][cellStat.index]} + '\')'" th:if="${cell} == 'X' or ${cell} == 'S' or ${cell} == 'Y'" >&#10035;</button>
-                                                                        <div class="form-popup card mb-3 deleteform"  th:attr="id='subtaskform̪QQQ' + ${row[0]} + '̪QQQ' + ${grid[1][cellStat.index]}">
-                                                                            <h3 class="card-header"><span th:text="${#strings.replace(grid[1][cellStat.index],'_',' ')}"></span> - <span class="text-muted" th:text="${#strings.replace(row[0],'_',' ')}"></span>
-                                                                                <form th:action="@{/index}">
-                                                                                    <button type="submit" class="btn btn-outline-secondary btn-sm closebutton" title="Close"  th:name="id" th:value="${album.id}">&#9932;</button></form>
-                                                                                <button type="button" class="btn btn-danger btn-sm" th:attr="onclick='openForm(\'deletetaskform̪QQQ' + ${row[0]} + '̪QQQ' + ${grid[1][cellStat.index]} + '\')'">Delete task</button>
-                                                                                <div class="form-popup card mb-3 deleteform" th:attr="id='deletetaskform̪QQQ' + ${row[0]} + '̪QQQ' + ${grid[1][cellStat.index]}">
-                                                                                    <h3 class="card-header">Delete <span th:text="${#strings.replace(grid[1][cellStat.index],'_',' ')}"></span>?
-                                                                                        <button type="button" class="btn btn-outline-secondary btn-sm closebutton" title="Close" th:attr="onclick='closeForm(\'deletetaskform̪QQQ' + ${row[0]} + '̪QQQ' + ${grid[1][cellStat.index]} + '\')'">&#9932;</button><br>
-                                                                                    </h3>
-                                                                                    <form th:action="@{/settaskstatus}">
-                                                                                        <input type="hidden" name="returnto" value="index"/>
-                                                                                        <input type="hidden" name="songname" th:value="${row[0]}" />
-                                                                                        <input type="hidden" name="taskname" th:value="${grid[1][cellStat.index]}" />
-                                                                                        <div class="card-body">
-                                                                                            <button type="submit" class="btn btn-danger" title="Delete" th:name="value" th:value="delete">Delete</button>
-                                                                                        </div>
-                                                                                    </form>
-                                                                                </div>
-                                                                            </h3>
-                                                                            <div class="card-body">
-                                                                                <div class="form-group" th:attr="id='table-subtaskform̪QQQ' + ${row[0]} + '̪QQQ' + ${grid[1][cellStat.index]}"></div>
-                                                                                <form th:action="@{/new/subtask}">
-                                                                                    <input type="hidden" name="returnto" th:value="index"/>
-                                                                                    <input type="hidden" name="songname" th:value="${row[0]}" />
-                                                                                    <input type="hidden" name="taskname" th:value="${grid[1][cellStat.index]}" />
-                                                                                    <div class="form-group">
-                                                                                        <input type="text" class="form-control" name="subtaskname" id="subtaskname" placeholder="New subtask" required>
-                                                                                    </div>
-                                                                                    <button type="submit" class="btn btn-info">Add subtask</button>
-                                                                                </form>
+                                                                            <div class="form-group">
+                                                                                <input type="text" class="form-control" name="subtaskname" id="subtaskname" placeholder="New subtask" required>
                                                                             </div>
-                                                                        </div>
-                                                                    </span>
-                                                                </span>
+                                                                            <button type="submit" class="btn btn-info">Add subtask</button>
+                                                                        </form>
+                                                                    </div>
+                                                                </div>
                                                             </span>
-                                                        </span></td>
-                                                </tr>
+                                                        </span>
+                                                    </span>
+                                                </span></td>
+                                        </tr>
 
-                                            </table>
+                                    </table>
 
-                                        </div>
+                                </div>
 
-                                        <div class="form-popup card mb-3" id="addsongform">
-                                            <h3 class="card-header">Song name
-                                                <button type="button" class="btn btn-outline-secondary btn-sm closebutton" title="Close menu" onclick="closeForm('addsongform')">&#9932;</button>
-                                                <br>
-                                            </h3>
-                                            <form th:action="@{/new/song}">
-                                                <div class="card-body">
-                                                    <input type="hidden" name="returnto" value="index">
-                                                        <input type="text" class="form-control" id="name" placeholder="Song name" th:name="name" required>
-                                                            <button type="submit" class="btn btn-primary" title="Name">Create Song</button>
-                                                            </div>
-                                                            </form>
-                                                            </div>
+                                <div class="form-popup card mb-3" id="addsongform">
+                                    <h3 class="card-header"><table class="deleteheader"><tr><td>Song name</td><td>
+                                        <button type="button" class="btn btn-outline-secondary btn-sm closebutton" title="Close menu" onclick="closeForm('addsongform')">&#9932;</button>
+                                                </td></tr></table>
+                                    </h3>
+                                    <form th:action="@{/new/song}">
+                                        <div class="card-body">
+                                            <input type="hidden" name="returnto" value="index">
+                                                <input type="text" class="form-control" id="name" placeholder="Song name" th:name="name" required>
+                                                    <button type="submit" class="btn btn-primary" title="Name">Create Song</button>
+                                                    </div>
+                                                    </form>
+                                                    </div>
 
-                                                            <script>
-                                                                function openForm(name) {
-                                                                    document.getElementById(name).style.display = "block";
-                                                                }
+                                                    <script>
+                                                        function openForm(name) {
+                                                            document.getElementById(name).style.display = "block";
+                                                        }
 
-                                                                function openAndGetForm(name) {
-                                                                    //console.error("running");
-                                                                    //console.error(name);
+                                                        function openAndGetForm(name) {
+                                                            //console.error("running");
+                                                            //console.error(name);
 
-                                                                    $.get("/task/" + name).done(function (fragment) { // get from controller
-                                                                        console.error(fragment);
-                                                                        $("#table-" + name).replaceWith(fragment); // update snippet of page
-                                                                    });
+                                                            $.get("/task/" + name).done(function (fragment) { // get from controller
+                                                                console.error(fragment);
+                                                                $("#table-" + name).replaceWith(fragment); // update snippet of page
+                                                            });
 
-                                                                    document.getElementById(name).style.display = "block";
-                                                                }
+                                                            document.getElementById(name).style.display = "block";
+                                                        }
 
-                                                                function closeForm(name) {
-                                                                    document.getElementById(name).style.display = "none";
-                                                                }
+                                                        function closeForm(name) {
+                                                            document.getElementById(name).style.display = "none";
+                                                        }
 
-                                                                function mergeHeaders() {
-                                                                    const table = document.getElementById("albumgrid");
-                                                                    let headerCell = null;
-                                                                    var changed = true;
-                                                                    while (changed) {
-                                                                        changed = false;
-                                                                        for (let cell of table.rows[0].cells) {
-                                                                            if (cell.innerText !== "") {
-                                                                                const firstCell = cell;
-                                                                                if (headerCell === null || firstCell.innerText !== headerCell.innerText) {
-                                                                                    headerCell = firstCell;
-                                                                                } else {
-                                                                                    //console.error("checking " + headerCell.innerText);
-                                                                                    headerCell.colSpan = headerCell.colSpan + firstCell.colSpan;
-                                                                                    //console.error("adjusted colspan to " + headerCell.colSpan);
-                                                                                    firstCell.remove();
-                                                                                    changed = true;
-                                                                                }
-                                                                            }
+                                                        function mergeHeaders() {
+                                                            const table = document.getElementById("albumgrid");
+                                                            let headerCell = null;
+                                                            var changed = true;
+                                                            while (changed) {
+                                                                changed = false;
+                                                                for (let cell of table.rows[0].cells) {
+                                                                    if (cell.innerText !== "") {
+                                                                        const firstCell = cell;
+                                                                        if (headerCell === null || firstCell.innerText !== headerCell.innerText) {
+                                                                            headerCell = firstCell;
+                                                                        } else {
+                                                                            //console.error("checking " + headerCell.innerText);
+                                                                            headerCell.colSpan = headerCell.colSpan + firstCell.colSpan;
+                                                                            //console.error("adjusted colspan to " + headerCell.colSpan);
+                                                                            firstCell.remove();
+                                                                            changed = true;
                                                                         }
-                                                                        //console.error("trying again")
                                                                     }
                                                                 }
-                                                                window.onload = mergeHeaders;
-                                                            </script>
+                                                                //console.error("trying again")
+                                                            }
+                                                        }
+                                                        window.onload = mergeHeaders;
+                                                    </script>
 
-                                                            </main>
-                                                            <footer>
-                                                                <p>Nick Siepmann | 2022</p>
-                                                            </footer>
-                                                            </body>
-                                                            </html>
+                                                    </main>
+                                                    <footer>
+                                                        <p>Nick Siepmann | 2022</p>
+                                                    </footer>
+                                                    </body>
+                                                    </html>
