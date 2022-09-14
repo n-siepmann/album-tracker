@@ -40,14 +40,14 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                             <main>
                                                 <header>
                                                     <h1>
-                                                        <span th:text="${#strings.replace(song.name,'_',' ')}"></span>
+                                                        <div th:text="${#strings.replace(song.name,'_',' ')}"></div>
                                                         <button type="button" class="btn btn-outline-primary btn-sm" title="Rename" onclick="openForm('renameform')">Change name</button>
                                                     </h1>
                                                 </header>
                                                 <div>
                                                     <section class="divide-thirds">
-
-                                                        <table class="table table-song" id="songgrid">
+                                                        <h3 class="userguidance" th:if="${notasks}">No Tasks set up - go to <a href="/tasks">Tasks</a> to set up your first Task</h3>
+                                                        <table class="table table-song" id="songgrid" th:if="!${notasks}">
                                                             <tr th:each="row : ${grid}">
                                                                 <td th:each="cell : ${row}" th:attr="class=${cellStat.index == 0 ? 'table-light' : ''}">
                                                                     <span th:switch="${cellStat.index}">

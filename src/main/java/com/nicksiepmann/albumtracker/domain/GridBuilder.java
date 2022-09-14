@@ -42,10 +42,12 @@ public class GridBuilder {
             return album.getIndex().getTaskIndex().get(p1)[0] - album.getIndex().getTaskIndex().get(p2)[0];
         }).toArray();
 
-        for (int i = 0; i < album.getIndex().getTaskIndex().keySet().size(); i++) {
-            String key = (String) sortedKeySet[i];
-            grid[0][i + 2] = album.getIndex().getPhases().get(album.getIndex().getTaskIndex().get(key)[1]);
-            grid[1][i + 2] = key;
+        if (!album.getIndex().getPhases().isEmpty()) {
+            for (int i = 0; i < album.getIndex().getTaskIndex().keySet().size(); i++) {
+                String key = (String) sortedKeySet[i];
+                grid[0][i + 2] = album.getIndex().getPhases().get(album.getIndex().getTaskIndex().get(key)[1]);
+                grid[1][i + 2] = key;
+            }
         }
 
         for (int i = 2; i < grid.length; i++) {

@@ -61,7 +61,11 @@ public class TrackerController {
         this.user = new User(cleanString(principal.getAttribute("name")), principal.getAttribute("email"));
         if (this.album != null) {
             model.addAttribute("album", this.album);
-            model.addAttribute("grid", gridBuilder.buildGrid(this.album));
+            if (!this.album.getSongs().isEmpty()) {
+                model.addAttribute("grid", gridBuilder.buildGrid(this.album));
+            }
+            model.addAttribute("nosongs", this.album.getSongs().isEmpty());
+            model.addAttribute("notasks", this.album.getIndex().getTaskIndex().keySet().isEmpty() | this.album.getIndex().getPhases().isEmpty());
             return "index";
         }
         return "redirect:/albums";
@@ -93,6 +97,9 @@ public class TrackerController {
             model.addAttribute("album", this.album);
             model.addAttribute("tasks", this.album.getIndex().getTasksAndPhases());
             model.addAttribute("phases", this.album.getIndex().getPhases());
+            model.addAttribute("notasks", this.album.getIndex().getTaskIndex().keySet().isEmpty());
+            model.addAttribute("nophases", this.album.getIndex().getPhases().isEmpty());
+
             return "tasks";
         }
         return "redirect:/albums";
@@ -110,7 +117,11 @@ public class TrackerController {
         if (this.album != null) {
             this.album.updateEditors(this.user);
             model.addAttribute("album", this.album);
-            model.addAttribute("grid", gridBuilder.buildGrid(this.album));
+            if (!this.album.getSongs().isEmpty()) {
+                model.addAttribute("grid", gridBuilder.buildGrid(this.album));
+            }
+            model.addAttribute("nosongs", this.album.getSongs().isEmpty());
+            model.addAttribute("notasks", this.album.getIndex().getTaskIndex().keySet().isEmpty() | this.album.getIndex().getPhases().isEmpty());
             return "index";
         }
 
@@ -123,6 +134,7 @@ public class TrackerController {
         if (this.album != null) {
             model.addAttribute("song", this.album.getSong(name));
             model.addAttribute("grid", gridBuilder.buildGrid(this.album, true, name));
+            model.addAttribute("notasks", this.album.getIndex().getTaskIndex().keySet().isEmpty() | this.album.getIndex().getPhases().isEmpty());
             return "song";
         }
         return "redirect:/albums";
@@ -317,7 +329,7 @@ public class TrackerController {
             } catch (MailjetSocketTimeoutException ex) {
                 Logger.getLogger(TrackerController.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
+
             this.album.addEditor(new User(email));
             this.albumRepository.save(album);
             String returnString = "redirect:/" + returnto.trim();

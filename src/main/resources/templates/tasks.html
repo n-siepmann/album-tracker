@@ -39,12 +39,13 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                             <header>
                                                 <h1>Edit Tasks</h1>
                                                 <h3><span th:text="${#strings.replace(album.name,'_',' ')}"></span> <small class="lead">(<span th:text="${#strings.replace(album.artist,'_',' ')}"></span>)</small></h3> 
-                                                <button type="button" class="btn btn-outline-primary btn-sm" title="Phases" onclick="openForm('phasesform')">Edit Phases</button>                                                                              
+                                                <button th:if="!${nophases}" type="button" class="btn btn-outline-primary btn-sm" title="Phases" onclick="openForm('phasesform')">Edit Phases</button> 
+                                                <button th:if="${nophases}" type="button" class="btn btn-primary btn-sm" title="Phases" onclick="openForm('phasesform')">Create New Phase</button>                                                                              
                                             </header>
                                             <main>
 
                                                 <div>
-                                                    <table class="table table-tasks">
+                                                    <table th:if="!${notasks} and !${nophases}" class="table table-tasks">
                                                         <tr class="table-light">
                                                             <td>Tasks</td>
                                                             <td/>
@@ -83,7 +84,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                                             </td>
                                                         </tr>
                                                     </table>
-                                                    <button type="button" class="btn btn-info btn-indent"  onclick="openForm('addtaskform')">Add Task</button>
+                                                    <button th:if="!${nophases}" type="button" class="btn btn-info btn-indent"  onclick="openForm('addtaskform')">Add Task</button>
                                                     <div class="form-popup card mb-3" id="addtaskform">
                                                         <form  th:action="@{/new/task}">
                                                             <h3 class="card-header"><table class="deleteheader"><tr><td>New task</td><td>

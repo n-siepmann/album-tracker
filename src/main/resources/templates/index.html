@@ -41,16 +41,18 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                                     <button type="button" class="btn btn-info"  onclick="openForm('addsongform')">New Song</button>
                                             </header>
                                             <main>
-                                                <div>
+                                                <div th:if="!${nosongs}">
                                                     <table class="table table-album" id="albumgrid">
                                                         <tr th:each="row : ${grid}" th:attr="class=${rowStat.index < 2 ? 'table-light' : ''}">
                                                             <td th:each="cell : ${row}">
                                                                 <span th:switch="${rowStat.index}">
                                                                     <span th:case="0">
-                                                                        <span th:text="${#strings.replace(cell,'_',' ')}"></span>                                    
+                                                                        <span th:text="${#strings.replace(cell,'_',' ')}"></span>  
+                                                                        <span th:if="${notasks} and ${cellStat.index == 0}">No Tasks/Phases set up</span>
                                                                     </span>
                                                                     <span th:case="1">
-                                                                        <span th:text="${#strings.replace(cell,'_',' ')}"></span>                                     
+                                                                        <span th:text="${#strings.replace(cell,'_',' ')}"></span>  
+                                                                        <span th:if="${notasks} and ${cellStat.index == 0}"><b>Go to <a href="/tasks">Tasks</a> to set up your first Task</b></span>
                                                                     </span>
                                                                     <span th:case="*">
                                                                         <span th:switch="${cellStat.index}">
@@ -69,7 +71,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                                                                 <button type="submit" class="btn btn-outline-dark btn-sm"  th:case="${cellStat.size - 1}" th:name="name" th:value="${row[0]}">More info</button>
                                                                             </form>
                                                                             <span th:case="*">
-                                                                                <form class="form-inline" th:action="@{/settaskstatus}">
+                                                                                <form class="form-inline" th:action="@{/settaskstatus}" th:if="!${notasks}">
                                                                                     <input type="hidden" name="returnto" value="index" />
                                                                                     <input type="hidden" name="songname" th:value="${row[0]}" />
                                                                                     <input type="hidden" name="taskname" th:value="${grid[1][cellStat.index]}" />
