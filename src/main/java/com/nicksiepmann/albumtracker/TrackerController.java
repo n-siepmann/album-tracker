@@ -23,6 +23,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.StreamSupport;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
@@ -41,6 +42,8 @@ public class TrackerController {
     private final GridBuilder gridBuilder;
     private User user;
     private final Emailer emailer;
+    @Value("${mailjet.secret}")
+    private String secret;
 
     @Autowired
     public TrackerController(AlbumRepository albumRepository, GridBuilder gridBuilder, Emailer emailer) {
@@ -53,6 +56,7 @@ public class TrackerController {
 
     @GetMapping("/welcome")
     public String welcome() {
+        System.out.println(this.secret);
         return "welcome";
     }
 

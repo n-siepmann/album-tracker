@@ -9,16 +9,24 @@ import com.mailjet.client.ClientOptions;
 import com.mailjet.client.resource.Emailv31;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
 public class Emailer {
 
+    @Value("${mailjet.key}")
+    private String key;
+    @Value("${mailjet.secret}")
+    private String secret;
+
     public JSONArray SendInvite(String recipient, String sender) throws MailjetException, MailjetSocketTimeoutException {
         MailjetClient client;
         MailjetRequest request;
         MailjetResponse response;
-        client = new MailjetClient("b889c863c2c4f80069b79c6a7ae4e9f4", "78d46af94de3b619eacca82bbc59b1ec", new ClientOptions("v3.1"));
+        client = new MailjetClient(key, secret, new ClientOptions("v3.1"));
+
+//        client = new MailjetClient("b889c863c2c4f80069b79c6a7ae4e9f4", "78d46af94de3b619eacca82bbc59b1ec", new ClientOptions("v3.1"));
         request = new MailjetRequest(Emailv31.resource)
                 .property(Emailv31.MESSAGES, new JSONArray()
                         .put(new JSONObject()
