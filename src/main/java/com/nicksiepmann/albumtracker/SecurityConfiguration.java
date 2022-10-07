@@ -4,7 +4,6 @@
  */
 package com.nicksiepmann.albumtracker;
 
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.web.SecurityFilterChain;
@@ -19,7 +18,8 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.authorizeRequests().antMatchers("/oauth2/authorization/google", "/error", "/welcome", "/static/**", "/*.css", "/favicon*.png", "/android*.png").permitAll().anyRequest().authenticated()
+        http.authorizeRequests().antMatchers("/oauth2/**", "/error", "/welcome", "/static/**", "/*.css", "/favicon*.png", "/android*.png").permitAll()
+                .anyRequest().authenticated()
                 .and().oauth2Login().loginPage("/welcome").defaultSuccessUrl("/", true);
         return http.build();
 

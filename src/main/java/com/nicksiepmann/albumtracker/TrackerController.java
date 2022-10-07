@@ -56,7 +56,7 @@ public class TrackerController {
 
     @GetMapping("/welcome")
     public String welcome() {
-        System.out.println(this.secret);
+//        System.out.println(this.secret);
         return "welcome";
     }
 
@@ -129,7 +129,7 @@ public class TrackerController {
             return "index";
         }
 
-        System.out.println("id was " + id);
+//        System.out.println("id was " + id);
         return "albums";
     }
 
