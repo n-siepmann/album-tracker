@@ -7,8 +7,6 @@ import com.nicksiepmann.albumtracker.domain.Album;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 
@@ -22,13 +20,6 @@ public class AlbumTrackerApplication {
     public static void main(String[] args) {
         SpringApplication.run(AlbumTrackerApplication.class, args);
     }
-
-//    @ShellMethod("Saves an album: save-album <name> <artist>")
-//    public String saveAlbum(String name, String artist) {
-//        Album savedAlbum = this.albumRepository.save(new Album(name, artist));
-//        return savedAlbum.toString();
-//    }
-
 
     @ShellMethod
     public String saveAlbumTest() {
@@ -101,5 +92,4 @@ public class AlbumTrackerApplication {
 //    public void removeAllAlbums() {
 //        this.albumRepository.deleteAll();
 //    }
-
 }
