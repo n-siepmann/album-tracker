@@ -19,7 +19,6 @@ import lombok.Setter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.annotation.SessionScope;
 
 /**
  *
@@ -27,7 +26,7 @@ import org.springframework.web.context.annotation.SessionScope;
  */
 @Service
 @Getter
-public class AlbumService {
+public class TrackerService {
 
     private final AlbumRepository albumRepository;
     @Setter
@@ -38,7 +37,7 @@ public class AlbumService {
     @Value("${mailjet.secret}")
     private String secret;
 
-    public AlbumService(AlbumRepository albumRepository, GridBuilder gridBuilder, Emailer emailer) {
+    public TrackerService(AlbumRepository albumRepository, GridBuilder gridBuilder, Emailer emailer) {
         this.albumRepository = albumRepository;
         this.gridBuilder = gridBuilder;
         this.emailer = emailer;
@@ -47,10 +46,10 @@ public class AlbumService {
     }
 
     void newUser(OAuth2User principal) {
-        this.user = new User(cleanString(principal.getAttribute("name")), principal.getAttribute("email"));
+        this.user = new User(principal.getAttribute("name"), principal.getAttribute("email"));
     }
 
-    public String cleanString(String input) {
+    public String cleanString(String input) { //only required for Songs and Tasks because those strings may include delimiters
         String output = input.trim().replace(" ", "_").replace("̪QQQ", "");
         return output;
     }
@@ -88,7 +87,7 @@ public class AlbumService {
         return gridBuilder.buildGrid(this.album, true, name);
     }
 
-    ArrayList<Task> getTask(String taskId) {
+    ArrayList<Task> getSubtasks(String taskId) {
         return this.album.getSong(taskId.split("̪QQQ")[1]).getTask(taskId.split("̪QQQ")[2]).getTasks();
     }
 
@@ -109,7 +108,7 @@ public class AlbumService {
     }
 
     void renameSong(String oldname, String newname) {
-        this.album.getSong(oldname).setName(newname);
+        this.album.getSong(oldname).setName(cleanString(newname));
         this.albumRepository.save(this.album);
     }
 
@@ -127,18 +126,18 @@ public class AlbumService {
     }
 
     void newTask(String name) {
-        this.album.getIndex().createTask(name);
+        this.album.getIndex().createTask(cleanString(name));
         this.albumRepository.save(this.album);
     }
 
     void addSubtask(String songname, String taskname, String subtaskname) {
         Task task = this.album.getSong(songname).getTask(taskname);
-        task.addTask(subtaskname);
+        task.addTask(cleanString(subtaskname));
         this.albumRepository.save(this.album);
     }
 
     void addSong(String name) {
-        this.album.addSong(name);
+        this.album.addSong(cleanString(name));
         this.albumRepository.save(this.album);
     }
 
@@ -158,7 +157,7 @@ public class AlbumService {
     }
 
     void moveTask(String name, boolean increase) {
-        this.album.getIndex().moveTask(name, false);
+        this.album.getIndex().moveTask(name, increase);
         this.albumRepository.save(this.album);
     }
 
@@ -168,6 +167,7 @@ public class AlbumService {
     }
 
     void setTaskStatus(String songName, String taskName, String value) {
+        
         switch (value) {
             case "complete":
                 this.album.getSong(songName).getTask(taskName).setDone(true);
@@ -188,7 +188,6 @@ public class AlbumService {
 
     void setSubtaskStatus(String songname, String taskname, String subtaskname, String value) {
         Task task = this.album.getSong(songname).getTask(taskname).getTask(subtaskname);
-//        System.out.println("setting status of " + task.getName());
 
         switch (value) {
             case "complete":

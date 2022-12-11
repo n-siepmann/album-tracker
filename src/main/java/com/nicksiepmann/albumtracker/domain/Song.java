@@ -7,11 +7,13 @@ package com.nicksiepmann.albumtracker.domain;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import lombok.Data;
 
 /**
  *
  * @author Nick.Siepmann
  */
+@Data
 public class Song extends TaskContainer {
 
     private String name;
@@ -33,22 +35,6 @@ public class Song extends TaskContainer {
         this.name = name;
         this.notes = notes;
         this.comments = comments;
-    }    
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getNotes() {
-        return notes;
-    }
-
-    public void setNotes(String notes) {
-        this.notes = notes;
     }
 
     public void addNotes(String notes) {
@@ -58,23 +44,12 @@ public class Song extends TaskContainer {
             this.notes = this.notes + System.lineSeparator() + notes;
         }
     }
-    
-    public ArrayList<Comment> getComments(){
-        return this.comments;
-    }
 
-    public void addComment(String commentText, User user){
+    public void addComment(String commentText, User user) {
 //        String userId = "defaultuser";
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        String timestamp = LocalDateTime.now().format(formatter);     
+        String timestamp = LocalDateTime.now().format(formatter);
         this.comments.add(new Comment(user, timestamp, commentText));
-    }
-    
-    @Override
-    public String toString() {
-        return "Song{" + "name=" + name + ", notes=" + notes + ", tasks=" + super.getTasks().toString() + '}';
-//        return name + "~" + notes + "~" + super.getTasks().toString();
-
     }
 
 }

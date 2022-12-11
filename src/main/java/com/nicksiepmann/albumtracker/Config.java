@@ -32,8 +32,8 @@ public class Config {
     @Bean
     @Autowired
     @SessionScope
-    public AlbumService service(AlbumRepository albumRepository, GridBuilder gridBuilder, Emailer emailer) {
-        return new AlbumService(albumRepository, gridBuilder, emailer);
+    public TrackerService service(AlbumRepository albumRepository, GridBuilder gridBuilder, Emailer emailer) {
+        return new TrackerService(albumRepository, gridBuilder, emailer);
     }
 
 }

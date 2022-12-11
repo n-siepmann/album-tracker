@@ -7,11 +7,13 @@ package com.nicksiepmann.albumtracker.domain;
 import com.google.cloud.spring.data.datastore.core.mapping.Entity;
 import java.util.ArrayList;
 import java.util.Objects;
+import lombok.Data;
 
 /**
  *
  * @author Nick.Siepmann
  */
+@Data
 public class Task extends TaskContainer {
 
     private String name;
@@ -39,18 +41,6 @@ public class Task extends TaskContainer {
         }
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public boolean isDone() {
-        return done;
-    }
-
     public void setDone(boolean done) {
         if (done) {
             if (super.allDone(super.getTasks())) {
@@ -59,14 +49,6 @@ public class Task extends TaskContainer {
         } else {
             this.done = false;
         }
-    }
-
-    public boolean isSplit() {
-        return split;
-    }
-
-    public void setSplit(boolean split) {
-        this.split = split;
     }
 
     @Override
@@ -97,11 +79,6 @@ public class Task extends TaskContainer {
         }
         final Task other = (Task) obj;
         return Objects.equals(this.name, other.name);
-    }
-
-    @Override
-    public String toString() {
-        return "Task{" + "name=" + name + ", done=" + done + ", split=" + split + ", subtasks=" + super.getTasks().toString() + '}';
     }
 
 }

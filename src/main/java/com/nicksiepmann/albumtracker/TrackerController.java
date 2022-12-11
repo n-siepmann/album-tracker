@@ -34,16 +34,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class TrackerController {
 
-    private AlbumService service;
+    private TrackerService service;
 
     @Autowired
-    public TrackerController(AlbumService service) {
+    public TrackerController(TrackerService service) {
         this.service = service;
     }
 
     @GetMapping("/welcome")
     public String welcome() {
-//        System.out.println(this.secret);
         return "welcome";
     }
 
@@ -112,8 +111,6 @@ public class TrackerController {
             model.addAttribute("notasks", this.service.getAlbum().getIndex().getTaskIndex().keySet().isEmpty() | this.service.getAlbum().getIndex().getPhases().isEmpty());
             return "index";
         }
-
-//        System.out.println("id was " + id);
         return "albums";
     }
 
@@ -129,29 +126,25 @@ public class TrackerController {
     }
 
     @RequestMapping(value = "/task/{taskId}", method = RequestMethod.GET)
-    public String getTask(@PathVariable String taskId, Model model) {
-        ArrayList<Task> task = this.service.getTask(taskId);
+    public String getSubtasksForSong(@PathVariable String taskId, Model model) {
+        ArrayList<Task> task = this.service.getSubtasks(taskId);
         model.addAttribute("task", task);
         model.addAttribute("songname", taskId.split("̪QQQ")[1]);
         model.addAttribute("taskname", taskId.split("̪QQQ")[2]);
-//        System.out.println("refreshing data with " + model.getAttribute("task"));
         return "fragments::subtasktable";
     }
 
     @RequestMapping(value = "/taskforsong/{taskId}", method = RequestMethod.GET)
     public String getTaskForSong(@PathVariable String taskId, Model model) {
-        ArrayList<Task> task = this.service.getTask(taskId);
+        ArrayList<Task> task = this.service.getSubtasks(taskId);
         model.addAttribute("task", task);
         model.addAttribute("songname", taskId.split("̪QQQ")[1]);
         model.addAttribute("taskname", taskId.split("̪QQQ")[2]);
-//        System.out.println("refreshing data with " + model.getAttribute("task"));
         return "fragments::subtasktablesong";
     }
 
     @RequestMapping("/new/album") //create new album
     public String newAlbum(@RequestParam(value = "name") String name, @RequestParam(value = "artist") String artist, Model model) {
-        name = this.service.cleanString(name);
-        artist = this.service.cleanString(artist);
 
         if (this.service.albumExists(name, artist)) {
             model.addAttribute("error", "An album with this name and artist already exists!");
@@ -165,10 +158,8 @@ public class TrackerController {
 
     @RequestMapping("/rename/phase")
     public String renamePhase(@RequestParam(value = "phasenumber") String phasenumber, @RequestParam(value = "newname") String newname, Model model) {
-//        System.out.println(phasenumber);
-        newname = this.service.cleanString(newname);
 
-        if (this.service.getAlbum().getIndex().getPhases().contains(newname)) {
+        if (this.service.getAlbum().getIndex().getPhases().contains(this.service.cleanString(newname))) {
             model.addAttribute("error", "A phase by this name already exists!");
             return "error";
         }
@@ -181,9 +172,6 @@ public class TrackerController {
 
     @RequestMapping("/rename/song")
     public String renameSong(@RequestParam(value = "oldname") String oldname, @RequestParam(value = "newname") String newname, @RequestParam(value = "returnto") String returnto, Model model) {
-//        System.out.println(phasenumber);
-        newname = this.service.cleanString(newname);
-
         if (this.service.getAlbum().getSongs().contains(new Song(newname))) {
             model.addAttribute("error", "A song by this name already exists!");
             return "error";
@@ -212,7 +200,7 @@ public class TrackerController {
                 model.addAttribute("error", "Album not found");
                 return "error";
             }
-            this.service.renameAlbum(Long.valueOf(id), this.service.cleanString(name), this.service.cleanString(artist));
+            this.service.renameAlbum(Long.valueOf(id), name, artist);
 
             model.addAttribute("album", this.service.getAlbum());
             String returnString = "redirect:/" + returnto.trim();
@@ -224,7 +212,7 @@ public class TrackerController {
 
     @RequestMapping("/new/phase") //create new phase
     public String newPhase(@RequestParam(value = "name") String name, Model model) {
-        name = this.service.cleanString(name);
+        name = this.service.cleanString(name); //required because of delimiters
 
         if (this.service.getAlbum().getIndex().getPhases().contains(name)) {
             model.addAttribute("error", "A phase by this name already exists!");
@@ -240,7 +228,7 @@ public class TrackerController {
 
     @RequestMapping("/new/task") //create new task
     public String newTask(@RequestParam(value = "name") String name, Model model) {
-        name = this.service.cleanString(name);
+        name = this.service.cleanString(name); //required because of delimiters
 
         if (this.service.getAlbum().getIndex().getTaskIndex().containsKey(name)) {
             model.addAttribute("error", "A task by this name already exists!");
@@ -279,7 +267,7 @@ public class TrackerController {
 
     @RequestMapping("/new/song") //create new song
     public String newSong(@RequestParam(value = "name") String name, @RequestParam(value = "returnto") String returnto, Model model) {
-        name = this.service.cleanString(name);
+//        name = this.service.cleanString(name);
 
         if (this.service.getAlbum().getSongs().contains(new Song(name))) {
             model.addAttribute("error", "A song by this name already exists!");
@@ -451,12 +439,8 @@ public class TrackerController {
         return "redirect:/albums";
     }
 
-//    @PutMapping("/songs/{id}") //update name/notes for specified song from current album
-//
-//    //delete
     @RequestMapping("/delete/album") //set specified album as current album
     public String deleteAlbum(@RequestParam(value = "id") String id, Model model) {
-//        System.out.println("deleting");
         if (this.service.getAlbumRepository().count() > 0) {
 
             Optional<Album> toDelete = this.service.getAlbumRepository().findById(Long.valueOf(id));

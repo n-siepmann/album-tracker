@@ -5,11 +5,13 @@
 package com.nicksiepmann.albumtracker.domain;
 
 import java.util.ArrayList;
+import lombok.Getter;
 
 /**
  *
  * @author Nick.Siepmann
  */
+@Getter
 public abstract class TaskContainer {
 
     private ArrayList<Task> tasks;
@@ -54,19 +56,9 @@ public abstract class TaskContainer {
         return allDone;
     }
 
-    public ArrayList<Task> getTasks() {
-        return tasks;
-    }
-//
-//    public String cleanString(String input) {
-//        String output = input.replace("~", "").replace("¬", "").replace(" ", "_");
-//        return output;
-//    }
-
     @Override
     public String toString() {
         return "TaskContainer{" + "tasks=" + tasks + '}';
-//    return tasks.toString();
     }
 
 }

@@ -5,11 +5,13 @@
 package com.nicksiepmann.albumtracker.domain;
 
 import java.util.Objects;
+import lombok.Data;
 
 /**
  *
  * @author Nick.Siepmann
  */
+@Data
 public class Comment {
 
     private User user;
@@ -26,15 +28,6 @@ public class Comment {
         this.user = null;
         this.timestamp = "";
         this.commentText = "";
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    @Override
-    public String toString() {
-        return "Comment{" + "user=" + user + ", timestamp=" + timestamp + ", commentText=" + commentText + '}';
     }
 
     @Override
@@ -64,18 +57,6 @@ public class Comment {
             return false;
         }
         return Objects.equals(this.timestamp, other.timestamp);
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public String getTimestamp() {
-        return timestamp;
-    }
-
-    public String getCommentText() {
-        return commentText;
     }
 
 }

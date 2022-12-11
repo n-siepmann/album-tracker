@@ -7,12 +7,14 @@ package com.nicksiepmann.albumtracker.domain;
 import com.google.cloud.spring.data.datastore.core.mapping.Entity;
 import java.util.ArrayList;
 import java.util.HashMap;
+import lombok.Data;
 
 /**
  *
  * @author Nick.Siepmann
  */
 @Entity
+@Data
 public class Index {
 
     private HashMap<String, Integer[]> taskIndex; //task name, [global order, phase number]
@@ -28,18 +30,6 @@ public class Index {
         this.phases = phases;
     }
 
-    public void setTaskIndex(HashMap<String, Integer[]> taskIndex) {
-        this.taskIndex = taskIndex;
-    }
-
-    public void setPhases(ArrayList<String> phases) {
-        this.phases = phases;
-    }
-
-    public HashMap<String, Integer[]> getTaskIndex() {
-        return taskIndex;
-    }
-
     public void createTask(String name) {
         if (this.phases.isEmpty()) {
             System.out.println("no phases set up");
@@ -49,7 +39,6 @@ public class Index {
             int latestPhase = taskIndex.values().stream().mapToInt(s -> s[1]).max().orElse(this.phases.size() - 1);
             Integer[] values = {taskIndex.keySet().size(), latestPhase};
             this.taskIndex.put(name, values);
-//            System.out.println("created task " + name + "in position " + taskIndex.get(name)[0] + " and phase " + taskIndex.get(name)[1] + ": " + phases.get(taskIndex.get(name)[1]));
         } else {
             System.out.println("Task already exists; did you want to reorder?");
         }
@@ -96,11 +85,11 @@ public class Index {
 
     }
 
-    public void setTaskPhase(String name, int phase) {
-        if (taskIndex.containsKey(name)) {
+    public void setTaskPhase(String taskName, int phase) {
+        if (taskIndex.containsKey(taskName)) {
 
-            Integer[] val = {taskIndex.get(name)[0], phase};
-            taskIndex.put(name, val);
+            Integer[] val = {taskIndex.get(taskName)[0], phase};
+            taskIndex.put(taskName, val);
 
             // set phase of any tasks earler in the hierarchy set to a higher phase to be equal to the given phase
             taskIndex.values().stream().filter(s -> s[0] < val[0]).filter(s -> s[1] > val[1]).forEach(s -> s[1] = val[1]);
@@ -132,9 +121,6 @@ public class Index {
         return null;
     }
 
-    public ArrayList<String> getPhases() {
-        return phases;
-    }
 
     public void addPhase(String name) {
         this.phases.add(name);
