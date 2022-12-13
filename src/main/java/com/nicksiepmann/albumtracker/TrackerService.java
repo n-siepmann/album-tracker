@@ -7,6 +7,7 @@ package com.nicksiepmann.albumtracker;
 import com.nicksiepmann.albumtracker.domain.Album;
 import com.nicksiepmann.albumtracker.domain.AlbumRepository;
 import com.nicksiepmann.albumtracker.domain.GridBuilder;
+import com.nicksiepmann.albumtracker.domain.Song;
 import com.nicksiepmann.albumtracker.domain.Task;
 import com.nicksiepmann.albumtracker.domain.User;
 import java.util.ArrayList;
@@ -58,20 +59,21 @@ public class TrackerService {
         return StreamSupport.stream(this.albumRepository.findAll().spliterator(), false).filter(s -> s.getEditors().contains(this.user)).toList();
     }
 
-    Album findAlbumById(long id) {
+    Album findAlbumById(long id) throws ATException {
+        if (this.albumRepository.count() == 0) {
+            throw new ATException("No albums found");
+        }
         Optional<Album> optAlbum = this.albumRepository.findById(id);
         if (optAlbum.isPresent()) {
             return optAlbum.get();
         }
-        return null;
+        throw new ATException("Album not found");
     }
 
-    void setAlbumById(String id) {
+    void setAlbumById(String id) throws ATException {
         if (!id.equals("")) {
             Album foundAlbum = findAlbumById(Long.valueOf(id));
-            if (!Objects.isNull(foundAlbum)) {
-                this.album = foundAlbum;
-            }
+            this.album = foundAlbum;
         }
     }
 
@@ -95,48 +97,71 @@ public class TrackerService {
         return !this.albumRepository.findByNameAndArtist(name, artist).isEmpty();
     }
 
-    Album newAlbum(String name, String artist) {
+    Album newAlbum(String name, String artist) throws ATException {
+        if (albumExists(name, artist)) {
+            throw new ATException("An album with this name and artist already exists!");
+        }
         Album newalbum = new Album(name, artist, this.user);
         this.albumRepository.save(newalbum);
         this.album = newalbum;
         return this.album;
     }
 
-    void renamePhase(Integer phasenumber, String newname) {
+    void renamePhase(Integer phasenumber, String newname) throws ATException {
+        if (this.album.getIndex().getPhases().contains(newname)) {
+            throw new ATException("A phase by this name already exists!");
+        }
         this.album.getIndex().getPhases().set(phasenumber, newname);
         this.albumRepository.save(this.album);
     }
 
-    void renameSong(String oldname, String newname) {
+    void renameSong(String oldname, String newname) throws ATException {
+        if (this.album.getSongs().contains(new Song(cleanString(newname)))) {
+            throw new ATException("A song by this name already exists!");
+        }
         this.album.getSong(oldname).setName(cleanString(newname));
         this.albumRepository.save(this.album);
     }
 
-    void renameAlbum(long id, String name, String artist) {
+    void renameAlbum(long id, String name, String artist) throws ATException {
         Album foundalbum = findAlbumById(id);
+        if (albumExists(name, artist)) {
+            throw new ATException("An album with this name and artist already exists!");
+        }
         foundalbum.setName(name);
         foundalbum.setArtist(artist);
         this.albumRepository.save(foundalbum);
         this.album = foundalbum;
     }
 
-    void addPhase(String name) {
+    void addPhase(String name) throws ATException {
+        if (this.album.getIndex().getPhases().contains(name)) {
+            throw new ATException("A phase by this name already exists!");
+        }
         this.album.getIndex().getPhases().add(name);
         this.albumRepository.save(this.album);
     }
 
-    void newTask(String name) {
+    void newTask(String name) throws ATException {
+        if (this.album.getIndex().getTaskIndex().containsKey(name)) {
+            throw new ATException("A task by this name already exists!");
+        }
         this.album.getIndex().createTask(cleanString(name));
         this.albumRepository.save(this.album);
     }
 
-    void addSubtask(String songname, String taskname, String subtaskname) {
-        Task task = this.album.getSong(songname).getTask(taskname);
+    void addSubtask(String songname, Task task, String subtaskname) throws ATException {
+        if (task.getTasks().contains(new Task(subtaskname))) {
+            throw new ATException("A subtask by this name already exists!");
+        }
         task.addTask(cleanString(subtaskname));
         this.albumRepository.save(this.album);
     }
 
-    void addSong(String name) {
+    void addSong(String name) throws ATException {
+        if (this.album.getSongs().contains(new Song(name))) {
+            throw new ATException("A song by this name already exists!");
+        }
         this.album.addSong(cleanString(name));
         this.albumRepository.save(this.album);
     }
@@ -167,7 +192,6 @@ public class TrackerService {
     }
 
     void setTaskStatus(String songName, String taskName, String value) {
-        
         switch (value) {
             case "complete":
                 this.album.getSong(songName).getTask(taskName).setDone(true);
@@ -182,7 +206,6 @@ public class TrackerService {
                 this.album.getSong(songName).removeTask(taskName);
                 break;
         }
-
         this.albumRepository.save(this.album);
     }
 
@@ -227,19 +250,36 @@ public class TrackerService {
         this.albumRepository.save(this.album);
     }
 
-    void deleteSong(String song) {
+    void deleteSong(String song) throws ATException {
+        if (!this.album.getOwner().equals(this.getUser())) {
+            throw new ATException("Only the album owner can delete songs!");
+        }
         this.album.getSongs().remove(this.album.getSong(song));
         this.albumRepository.save(this.album);
     }
 
-    void deletePhase(int phasenumber) {
+    void deletePhase(int phasenumber) throws ATException {
+        if (!this.album.getOwner().equals(this.getUser())) {
+            throw new ATException("Only the album owner can delete phases!");
+        }
         this.album.getIndex().deletePhase(phasenumber);
         this.albumRepository.save(this.album);
     }
 
-    void deleteTask(String task) {
+    void deleteTask(String task) throws ATException {
+        if (!this.album.getOwner().equals(this.getUser())) {
+            throw new ATException("Only the album owner can delete tasks!");
+        }
         this.album.getIndex().deleteTask(task);
         this.albumRepository.save(this.album);
+    }
+
+    void deleteAlbum(Long id) throws ATException {
+        Album toDelete = findAlbumById(id);
+        if (!toDelete.getOwner().equals(this.getUser())) {
+            throw new ATException("Only the owner can delete the album!");
+        }
+        this.getAlbumRepository().deleteById(id);
     }
 
 }

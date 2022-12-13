@@ -67,8 +67,6 @@ public class Index {
             if (!next.isEmpty()) {
                 taskIndex.put(next, oldVal);
                 taskIndex.put(name, newVal);
-            } else {
-                System.out.println("not found - this may be the last task");
             }
 
         } else {
@@ -78,8 +76,6 @@ public class Index {
             if (!prev.isEmpty()) {
                 taskIndex.put(prev, oldVal);
                 taskIndex.put(name, newVal);
-            } else {
-                System.out.println("not found - this may be the first task");
             }
         }
 
@@ -95,9 +91,6 @@ public class Index {
             taskIndex.values().stream().filter(s -> s[0] < val[0]).filter(s -> s[1] > val[1]).forEach(s -> s[1] = val[1]);
             // set phase of any tasks later in the hierarchy set to a lower phase to avoid doubling back into a previous phase
             taskIndex.values().stream().filter(s -> s[0] > val[0]).filter(s -> s[1] < val[1]).forEach(s -> s[1] = val[1]);
-
-        } else {
-            System.out.println("task not found");
         }
 
     }

@@ -97,21 +97,21 @@ public class TrackerController {
 
     @GetMapping("/index") //set specified album as current album
     public String getAlbum(@RequestParam(value = "id") String id, Model model) {
-        if (this.service.getAlbumRepository().count() > 0) {
+        try {
             this.service.setAlbumById(id);
+        } catch (ATException ex) {
+            Logger.getLogger(TrackerController.class.getName()).log(Level.SEVERE, null, ex);
+            return "albums";
         }
 
-        if (this.service.getAlbum() != null) {
-            this.service.updateWithCurrentEditor();
-            model.addAttribute("album", this.service.getAlbum());
-            if (!this.service.getAlbum().getSongs().isEmpty()) {
-                model.addAttribute("grid", this.service.getAlbumGrid());
-            }
-            model.addAttribute("nosongs", this.service.getAlbum().getSongs().isEmpty());
-            model.addAttribute("notasks", this.service.getAlbum().getIndex().getTaskIndex().keySet().isEmpty() | this.service.getAlbum().getIndex().getPhases().isEmpty());
-            return "index";
+        this.service.updateWithCurrentEditor();
+        model.addAttribute("album", this.service.getAlbum());
+        if (!this.service.getAlbum().getSongs().isEmpty()) {
+            model.addAttribute("grid", this.service.getAlbumGrid());
         }
-        return "albums";
+        model.addAttribute("nosongs", this.service.getAlbum().getSongs().isEmpty());
+        model.addAttribute("notasks", this.service.getAlbum().getIndex().getTaskIndex().keySet().isEmpty() | this.service.getAlbum().getIndex().getPhases().isEmpty());
+        return "index";
     }
 
     @GetMapping("/song") //get specified song from current album
@@ -145,26 +145,29 @@ public class TrackerController {
 
     @RequestMapping("/new/album") //create new album
     public String newAlbum(@RequestParam(value = "name") String name, @RequestParam(value = "artist") String artist, Model model) {
+        try {
+            Album newalbum = this.service.newAlbum(name, artist);
+            model.addAttribute("album", newalbum);
+            return "redirect:/";
 
-        if (this.service.albumExists(name, artist)) {
-            model.addAttribute("error", "An album with this name and artist already exists!");
+        } catch (ATException ex) {
+            Logger.getLogger(TrackerController.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
+            model.addAttribute("error", ex.getMessage());
             return "error";
         }
-
-        Album newalbum = this.service.newAlbum(name, artist);
-        model.addAttribute("album", newalbum);
-        return "redirect:/";
     }
 
     @RequestMapping("/rename/phase")
     public String renamePhase(@RequestParam(value = "phasenumber") String phasenumber, @RequestParam(value = "newname") String newname, Model model) {
-
-        if (this.service.getAlbum().getIndex().getPhases().contains(this.service.cleanString(newname))) {
-            model.addAttribute("error", "A phase by this name already exists!");
-            return "error";
-        }
         if (this.service.getAlbum() != null) {
-            this.service.renamePhase(Integer.valueOf(phasenumber), newname);
+            try {
+                this.service.renamePhase(Integer.valueOf(phasenumber), newname);
+
+            } catch (ATException ex) {
+                Logger.getLogger(TrackerController.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
+                model.addAttribute("error", ex.getMessage());
+                return "error";
+            }
             return "redirect:/tasks";
         }
         return "redirect:/albums";
@@ -172,13 +175,15 @@ public class TrackerController {
 
     @RequestMapping("/rename/song")
     public String renameSong(@RequestParam(value = "oldname") String oldname, @RequestParam(value = "newname") String newname, @RequestParam(value = "returnto") String returnto, Model model) {
-        if (this.service.getAlbum().getSongs().contains(new Song(newname))) {
-            model.addAttribute("error", "A song by this name already exists!");
-            return "error";
-        }
-
         if (this.service.getAlbum() != null) {
-            this.service.renameSong(oldname, newname);
+            try {
+                this.service.renameSong(oldname, newname);
+
+            } catch (ATException ex) {
+                Logger.getLogger(TrackerController.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
+                model.addAttribute("error", ex.getMessage());
+                return "error";
+            }
 
             String returnString = "redirect:/" + returnto.trim();
             returnString = returnString.replace("//", "/").replace("index", "");
@@ -189,39 +194,35 @@ public class TrackerController {
 
     @RequestMapping("/albums/rename") //update name/notes for current album
     public String renameAlbum(@RequestParam(value = "id") String id, @RequestParam(value = "name") String name, @RequestParam(value = "artist") String artist, @RequestParam(value = "returnto") String returnto, Model model) {
-        if (this.service.getAlbumRepository().count() > 0) {
-
-            if (!this.service.getAlbumRepository().findByNameAndArtist(name, artist).isEmpty()) {
-                model.addAttribute("error", "An album with this name and artist already exists!");
-                return "error";
-            }
-            Album foundAlbum = this.service.findAlbumById(Long.valueOf(id));
-            if (Objects.isNull(foundAlbum) || id.equals("")) {
-                model.addAttribute("error", "Album not found");
-                return "error";
-            }
+        Album foundAlbum;
+        try {
+            foundAlbum = this.service.findAlbumById(Long.valueOf(id));
             this.service.renameAlbum(Long.valueOf(id), name, artist);
-
-            model.addAttribute("album", this.service.getAlbum());
-            String returnString = "redirect:/" + returnto.trim();
-            returnString = returnString.replace("//", "/").replace("index", "");
-            return returnString;
+        } catch (ATException ex) {
+            Logger.getLogger(TrackerController.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
+            model.addAttribute("error", ex.getMessage());
+            return "error";
         }
-        return "error";
+
+        model.addAttribute("album", this.service.getAlbum());
+        String returnString = "redirect:/" + returnto.trim();
+        returnString = returnString.replace("//", "/").replace("index", "");
+        return returnString;
     }
 
     @RequestMapping("/new/phase") //create new phase
     public String newPhase(@RequestParam(value = "name") String name, Model model) {
         name = this.service.cleanString(name); //required because of delimiters
 
-        if (this.service.getAlbum().getIndex().getPhases().contains(name)) {
-            model.addAttribute("error", "A phase by this name already exists!");
-            return "error";
-        }
-
         if (this.service.getAlbum() != null) {
-            this.service.addPhase(name);
-            return "redirect:/tasks";
+            try {
+                this.service.addPhase(name);
+                return "redirect:/tasks";
+            } catch (ATException ex) {
+                Logger.getLogger(TrackerController.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
+                model.addAttribute("error", ex.getMessage());
+                return "error";
+            }
         }
         return "redirect:/albums";
     }
@@ -230,13 +231,14 @@ public class TrackerController {
     public String newTask(@RequestParam(value = "name") String name, Model model) {
         name = this.service.cleanString(name); //required because of delimiters
 
-        if (this.service.getAlbum().getIndex().getTaskIndex().containsKey(name)) {
-            model.addAttribute("error", "A task by this name already exists!");
-            return "error";
-        }
-
         if (this.service.getAlbum() != null) {
-            this.service.newTask(name);
+            try {
+                this.service.newTask(name);
+            } catch (ATException ex) {
+                Logger.getLogger(TrackerController.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
+                model.addAttribute("error", ex.getMessage());
+                return "error";
+            }
             return "redirect:/tasks";
         }
         return "redirect:/albums";
@@ -247,15 +249,14 @@ public class TrackerController {
         subtaskname = this.service.cleanString(subtaskname);
 
         if (this.service.getAlbum() != null) {
-
             Task task = this.service.getAlbum().getSong(songname).getTask(taskname);
-
-            if (task.getTasks().contains(new Task(subtaskname))) {
-                model.addAttribute("error", "A subtask by this name already exists!");
+            try {
+                this.service.addSubtask(songname, task, subtaskname);
+            } catch (ATException ex) {
+                Logger.getLogger(TrackerController.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
+                model.addAttribute("error", ex.getMessage());
                 return "error";
             }
-
-            this.service.addSubtask(songname, taskname, subtaskname);
 
             model.addAttribute("task", task);
             String returnString = "redirect:/" + returnto.trim();
@@ -267,15 +268,15 @@ public class TrackerController {
 
     @RequestMapping("/new/song") //create new song
     public String newSong(@RequestParam(value = "name") String name, @RequestParam(value = "returnto") String returnto, Model model) {
-//        name = this.service.cleanString(name);
-
-        if (this.service.getAlbum().getSongs().contains(new Song(name))) {
-            model.addAttribute("error", "A song by this name already exists!");
-            return "error";
-        }
 
         if (this.service.getAlbum() != null) {
-            this.service.addSong(name);
+            try {
+                this.service.addSong(name);
+            } catch (ATException ex) {
+                Logger.getLogger(TrackerController.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
+                model.addAttribute("error", ex.getMessage());
+                return "error";
+            }
 
             String returnString = "redirect:/" + returnto.trim();
             returnString = returnString.replace("//", "/").replace("index", "");
@@ -287,14 +288,18 @@ public class TrackerController {
     @RequestMapping("/editors/add") //add editors
     public String addEditor(@RequestParam(value = "email") String email, @RequestParam(value = "returnto") String returnto, Model model) {
         if (this.service.getAlbum() != null) {
-
-            System.out.println("sending email");
             try {
-                System.out.println(this.service.getEmailer().SendInvite(email, this.service.getUser().getName().replace("_", " ")).toString());
+                this.service.getEmailer().SendInvite(email, this.service.getUser().getName().replace("_", " "));
+
             } catch (MailjetException ex) {
-                Logger.getLogger(TrackerController.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(TrackerController.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
+                model.addAttribute("error", ex.getMessage());
+                return "error";
+
             } catch (MailjetSocketTimeoutException ex) {
-                Logger.getLogger(TrackerController.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(TrackerController.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
+                model.addAttribute("error", ex.getMessage());
+                return "error";
             }
 
             this.service.addEditor(new User(email));
@@ -441,36 +446,29 @@ public class TrackerController {
 
     @RequestMapping("/delete/album") //set specified album as current album
     public String deleteAlbum(@RequestParam(value = "id") String id, Model model) {
-        if (this.service.getAlbumRepository().count() > 0) {
-
-            Optional<Album> toDelete = this.service.getAlbumRepository().findById(Long.valueOf(id));
-            if (toDelete.isPresent()) {
-                if (toDelete.get().getOwner().equals(this.service.getUser())) {
-                    this.service.getAlbumRepository().deleteById(Long.valueOf(id));
-                    return "redirect:/albums";
-                } else {
-                    model.addAttribute("error", "Only the owner can delete the album.");
-                    return "error";
-                }
-            }
+        try {
+            this.service.deleteAlbum(Long.valueOf(id));
+        } catch (ATException ex) {
+            Logger.getLogger(TrackerController.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
+            model.addAttribute("error", ex.getMessage());
+            return "error";
         }
-        System.out.println("delete failed: id was " + id);
         return "redirect:/albums";
     }
 
     @RequestMapping("/delete/song") //set specified album as current album
     public String deleteSong(@RequestParam(value = "song") String song, @RequestParam(value = "returnto") String returnto, Model model) {
         if (this.service.getAlbum() != null) {
-
-            if (this.service.getAlbum().getOwner().equals(this.service.getUser())) {
+            try {
                 this.service.deleteSong(song);
-                String returnString = "redirect:/" + returnto.trim();
-                returnString = returnString.replace("//", "/").replace("index", "");
-                return returnString;
-            } else {
-                model.addAttribute("error", "Only the owner can delete songs.");
+            } catch (ATException ex) {
+                Logger.getLogger(TrackerController.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
+                model.addAttribute("error", ex.getMessage());
                 return "error";
             }
+            String returnString = "redirect:/" + returnto.trim();
+            returnString = returnString.replace("//", "/").replace("index", "");
+            return returnString;
         }
         return "redirect:/albums";
     }
@@ -478,27 +476,32 @@ public class TrackerController {
     @RequestMapping("/delete/phase") //set specified album as current album
     public String deletePhase(@RequestParam(value = "phasenumber") String phasenumber, Model model) {
         if (this.service.getAlbum() != null) {
-            if (this.service.getAlbum().getOwner().equals(this.service.getUser())) {
+
+            try {
                 this.service.deletePhase(Integer.valueOf(phasenumber));
-                return "redirect:/tasks";
-            } else {
-                model.addAttribute("error", "Only the owner can delete phases.");
+            } catch (ATException ex) {
+                Logger.getLogger(TrackerController.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
+                model.addAttribute("error", ex.getMessage());
                 return "error";
             }
+            return "redirect:/tasks";
         }
         return "redirect:/albums";
     }
 
     @RequestMapping("/delete/task") //set specified album as current album
-    public String deleteTask(@RequestParam(value = "task") String task, Model model) {
+    public String deleteTask(@RequestParam(value = "task") String task, Model model
+    ) {
         if (this.service.getAlbum() != null) {
-            if (this.service.getAlbum().getOwner().equals(this.service.getUser())) {
+            try {
                 this.service.deleteTask(task);
-                return "redirect:/tasks";
-            } else {
-                model.addAttribute("error", "Only the owner can delete tasks.");
+            } catch (ATException ex) {
+                Logger.getLogger(TrackerController.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
+                model.addAttribute("error", ex.getMessage());
                 return "error";
             }
+            return "redirect:/tasks";
+
         }
 
         return "redirect:/albums";

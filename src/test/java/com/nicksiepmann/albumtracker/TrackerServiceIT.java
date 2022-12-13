@@ -10,6 +10,8 @@ import com.nicksiepmann.albumtracker.domain.GridBuilder;
 import com.nicksiepmann.albumtracker.domain.User;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.junit.jupiter.api.Test;
 import static org.junit.Assert.*;
 import org.junit.jupiter.api.AfterEach;
@@ -78,13 +80,21 @@ public class TrackerServiceIT {
         given(principal.getAttribute("name")).willReturn("User Name");
         given(principal.getAttribute("email")).willReturn("email@gmail.com");
         this.underTest.newUser(principal);
-        this.underTest.newAlbum("Album Title", "Artist Name");
+        try {
+            this.underTest.newAlbum("Album Title", "Artist Name");
+        } catch (ATException ex) {
+            Logger.getLogger(TrackerServiceIT.class.getName()).log(Level.SEVERE, null, ex);
+        }
         assertEquals("User Name", this.underTest.getUser().getName()); //remember spaces get replaced!
         assertEquals("Album Title", this.underTest.getAlbum().getName());
         assertEquals("User Name", this.underTest.getAlbum().getOwner().getName());
         List<Album> myAlbums = this.underTest.listMyAlbums();
         assertEquals(1, myAlbums.size());
         assertEquals("Album Title", myAlbums.get(0).getName());
+        assertThrows(ATException.class, () -> {
+            this.underTest.newAlbum("Album Title", "Artist Name");
+        });
+
     }
 
     @Test
@@ -92,7 +102,11 @@ public class TrackerServiceIT {
         given(principal.getAttribute("name")).willReturn("Original Name");
         given(principal.getAttribute("email")).willReturn("email@gmail.com");
         this.underTest.newUser(principal);
-        this.underTest.newAlbum("Album Title", "Artist Name");
+        try {
+            this.underTest.newAlbum("Album Title", "Artist Name");
+        } catch (ATException ex) {
+            Logger.getLogger(TrackerServiceIT.class.getName()).log(Level.SEVERE, null, ex);
+        }
         assertEquals("Original Name", this.underTest.getUser().getName()); //remember spaces get replaced!    
         given(principal.getAttribute("name")).willReturn("User Name");
         this.underTest.newUser(principal);
@@ -106,19 +120,28 @@ public class TrackerServiceIT {
         given(principal.getAttribute("name")).willReturn("Original Name");
         given(principal.getAttribute("email")).willReturn("email@gmail.com");
         this.underTest.newUser(principal);
-        this.underTest.newAlbum("Album Title", "Artist Name");
-        this.underTest.addPhase("Phase Name");
-        this.underTest.addPhase("Second Phase");
-        this.underTest.newTask("New Task");
-        this.underTest.newTask("Next Task");
-        this.underTest.newTask("Third Task");
-        this.underTest.addSong("Song Title");
-        this.underTest.addSong("Second Song");
+        try {
+            this.underTest.newAlbum("Album Title", "Artist Name");
+            this.underTest.addPhase("Phase Name");
+            this.underTest.addPhase("Second Phase");
+            this.underTest.newTask("New Task");
+            this.underTest.newTask("Next Task");
+            this.underTest.newTask("Third Task");
+            this.underTest.addSong("Song Title");
+            this.underTest.addSong("Second Song");
+        } catch (ATException ex) {
+            Logger.getLogger(TrackerServiceIT.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
         this.underTest.setTaskPhase("New_Task̪QQQ0"); //set to phase 0
         this.underTest.setTaskPhase("Next_Task̪QQQ0"); //set to phase 0
         this.underTest.setTaskPhase("Third_Task̪QQQ1"); //set to phase 1
         this.underTest.setTaskStatus("Song_Title", "New_Task", "add");
-        this.underTest.addSubtask("Song_Title", "New_Task", "New Subtask");
+        try {
+            this.underTest.addSubtask("Song_Title", this.underTest.getAlbum().getSong("Song_Title").getTask("New_Task"), "New Subtask");
+        } catch (ATException ex) {
+            Logger.getLogger(TrackerServiceIT.class.getName()).log(Level.SEVERE, null, ex);
+        }
         this.underTest.setTaskStatus("Second_Song", "New_Task", "add");
 
         String[][] grid = this.underTest.getAlbumGrid();
@@ -134,18 +157,27 @@ public class TrackerServiceIT {
         given(principal.getAttribute("name")).willReturn("Original Name");
         given(principal.getAttribute("email")).willReturn("email@gmail.com");
         this.underTest.newUser(principal);
-        this.underTest.newAlbum("Album Title", "Artist Name");
-        this.underTest.addPhase("Phase Name");
-        this.underTest.addPhase("Second Phase");
-        this.underTest.newTask("New Task");
-        this.underTest.newTask("Next Task");
-        this.underTest.newTask("Third Task");
-        this.underTest.addSong("Song Title");
+        try {
+            this.underTest.newAlbum("Album Title", "Artist Name");
+            this.underTest.addPhase("Phase Name");
+            this.underTest.addPhase("Second Phase");
+            this.underTest.newTask("New Task");
+            this.underTest.newTask("Next Task");
+            this.underTest.newTask("Third Task");
+            this.underTest.addSong("Song Title");
+        } catch (ATException ex) {
+            Logger.getLogger(TrackerServiceIT.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
         this.underTest.setTaskPhase("New_Task̪QQQ0"); //set to phase 0
         this.underTest.setTaskPhase("Next_Task̪QQQ0"); //set to phase 0
         this.underTest.setTaskPhase("Third_Task̪QQQ1"); //set to phase 1
         this.underTest.setTaskStatus("Song_Title", "New_Task", "add");
-        this.underTest.addSubtask("Song_Title", "New_Task", "New Subtask");
+        try {
+            this.underTest.addSubtask("Song_Title", this.underTest.getAlbum().getSong("Song_Title").getTask("New_Task"), "New Subtask");
+        } catch (ATException ex) {
+            Logger.getLogger(TrackerServiceIT.class.getName()).log(Level.SEVERE, null, ex);
+        }
         this.underTest.setTaskStatus("Song_Title", "Next_Task", "add");
 
         String[][] grid = this.underTest.getSongGrid(("Song_Title"));
@@ -161,13 +193,26 @@ public class TrackerServiceIT {
         given(principal.getAttribute("name")).willReturn("Original Name");
         given(principal.getAttribute("email")).willReturn("email@gmail.com");
         this.underTest.newUser(principal);
-        this.underTest.newAlbum("Album Title", "Artist Name");
-        this.underTest.addPhase("Phase Name");
-        this.underTest.newTask("New Task");
-        this.underTest.addSong("Song Title");
+        try {
+            this.underTest.newAlbum("Album Title", "Artist Name");
+        } catch (ATException ex) {
+            Logger.getLogger(TrackerServiceIT.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            this.underTest.addPhase("Phase Name");
+            this.underTest.newTask("New Task");
+            this.underTest.addSong("Song Title");
+        } catch (ATException ex) {
+            Logger.getLogger(TrackerServiceIT.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
         this.underTest.setTaskPhase("New_Task̪QQQ0"); //set to phase 0
         this.underTest.setTaskStatus("Song_Title", "New_Task", "add");
-        this.underTest.addSubtask("Song_Title", "New_Task", "New Subtask");
+        try {
+            this.underTest.addSubtask("Song_Title", this.underTest.getAlbum().getSong("Song_Title").getTask("New_Task"), "New Subtask");
+        } catch (ATException ex) {
+            Logger.getLogger(TrackerServiceIT.class.getName()).log(Level.SEVERE, null, ex);
+        }
         assertEquals("New_Subtask", this.underTest.getSubtasks("PLACEHOLDER̪QQQSong_Title̪QQQNew_Task").get(0).getName());
     }
 
@@ -176,7 +221,11 @@ public class TrackerServiceIT {
         given(principal.getAttribute("name")).willReturn("Original Name");
         given(principal.getAttribute("email")).willReturn("email@gmail.com");
         this.underTest.newUser(principal);
-        this.underTest.newAlbum("Album Title", "Artist Name");
+        try {
+            this.underTest.newAlbum("Album Title", "Artist Name");
+        } catch (ATException ex) {
+            Logger.getLogger(TrackerServiceIT.class.getName()).log(Level.SEVERE, null, ex);
+        }
         assertTrue(this.underTest.albumExists("Album Title", "Artist Name"));
         assertFalse(this.underTest.albumExists("Other Title", "Other Name"));
     }
@@ -186,11 +235,26 @@ public class TrackerServiceIT {
         given(principal.getAttribute("name")).willReturn("Original Name");
         given(principal.getAttribute("email")).willReturn("email@gmail.com");
         this.underTest.newUser(principal);
-        this.underTest.newAlbum("Album Title", "Artist Name");
-        this.underTest.addPhase("Phase Name");
+        try {
+            this.underTest.newAlbum("Album Title", "Artist Name");
+        } catch (ATException ex) {
+            Logger.getLogger(TrackerServiceIT.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            this.underTest.addPhase("Phase Name");
+        } catch (ATException ex) {
+            Logger.getLogger(TrackerServiceIT.class.getName()).log(Level.SEVERE, null, ex);
+        }
         assertEquals("Phase Name", this.underTest.getAlbum().getIndex().getPhases().get(0));
-        this.underTest.renamePhase(0, "New Phase Name");
+        try {
+            this.underTest.renamePhase(0, "New Phase Name");
+        } catch (ATException ex) {
+            Logger.getLogger(TrackerServiceIT.class.getName()).log(Level.SEVERE, null, ex);
+        }
         assertEquals("New Phase Name", this.underTest.getAlbum().getIndex().getPhases().get(0));
+        assertThrows(ATException.class, () -> {
+            this.underTest.renamePhase(0, "New Phase Name");
+        });
     }
 
     @Test
@@ -198,10 +262,22 @@ public class TrackerServiceIT {
         given(principal.getAttribute("name")).willReturn("Original Name");
         given(principal.getAttribute("email")).willReturn("email@gmail.com");
         this.underTest.newUser(principal);
-        this.underTest.newAlbum("Album Title", "Artist Name");
-        this.underTest.addSong("Old Title");
-        this.underTest.renameSong(this.underTest.getAlbum().getSongs().get(0).getName(), "New Title");
+        try {
+            this.underTest.newAlbum("Album Title", "Artist Name");
+            this.underTest.addSong("Old Title");
+
+        } catch (ATException ex) {
+            Logger.getLogger(TrackerServiceIT.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            this.underTest.renameSong(this.underTest.getAlbum().getSongs().get(0).getName(), "New Title");
+        } catch (ATException ex) {
+            Logger.getLogger(TrackerServiceIT.class.getName()).log(Level.SEVERE, null, ex);
+        }
         assertEquals("New_Title", this.underTest.getAlbum().getSongs().get(0).getName());
+        assertThrows(ATException.class, () -> {
+            this.underTest.renameSong(this.underTest.getAlbum().getSongs().get(0).getName(), "New Title");
+        });
     }
 
     @Test
@@ -209,8 +285,16 @@ public class TrackerServiceIT {
         given(principal.getAttribute("name")).willReturn("Original Name");
         given(principal.getAttribute("email")).willReturn("email@gmail.com");
         this.underTest.newUser(principal);
-        this.underTest.newAlbum("Old Title", "Old Artist");
-        this.underTest.renameAlbum(this.underTest.getAlbum().getId(), "Album Title", "Artist Name");
+        try {
+            this.underTest.newAlbum("Old Title", "Old Artist");
+        } catch (ATException ex) {
+            Logger.getLogger(TrackerServiceIT.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            this.underTest.renameAlbum(this.underTest.getAlbum().getId(), "Album Title", "Artist Name");
+        } catch (ATException ex) {
+            Logger.getLogger(TrackerServiceIT.class.getName()).log(Level.SEVERE, null, ex);
+        }
         assertEquals("Album Title", this.underTest.getAlbum().getName());
     }
 
@@ -219,9 +303,20 @@ public class TrackerServiceIT {
         given(principal.getAttribute("name")).willReturn("Original Name");
         given(principal.getAttribute("email")).willReturn("email@gmail.com");
         this.underTest.newUser(principal);
-        this.underTest.newAlbum("Album Title", "Artist Name");
-        this.underTest.addPhase("Phase Name");
+        try {
+            this.underTest.newAlbum("Album Title", "Artist Name");
+        } catch (ATException ex) {
+            Logger.getLogger(TrackerServiceIT.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            this.underTest.addPhase("Phase Name");
+        } catch (ATException ex) {
+            Logger.getLogger(TrackerServiceIT.class.getName()).log(Level.SEVERE, null, ex);
+        }
         assertEquals(1, this.underTest.getAlbum().getIndex().getPhases().size());
+        assertThrows(ATException.class, () -> {
+            this.underTest.addPhase("Phase Name");
+        });
     }
 
     @Test
@@ -229,9 +324,17 @@ public class TrackerServiceIT {
         given(principal.getAttribute("name")).willReturn("Original Name");
         given(principal.getAttribute("email")).willReturn("email@gmail.com");
         this.underTest.newUser(principal);
-        this.underTest.newAlbum("Album Title", "Artist Name");
-        this.underTest.addPhase("Phase Name");
-        this.underTest.newTask("New Task");
+        try {
+            this.underTest.newAlbum("Album Title", "Artist Name");
+        } catch (ATException ex) {
+            Logger.getLogger(TrackerServiceIT.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            this.underTest.addPhase("Phase Name");
+            this.underTest.newTask("New Task");
+        } catch (ATException ex) {
+            Logger.getLogger(TrackerServiceIT.class.getName()).log(Level.SEVERE, null, ex);
+        }
         assertTrue(this.underTest.getAlbum().getIndex().getTaskIndex().containsKey("New_Task"));
     }
 
@@ -240,20 +343,36 @@ public class TrackerServiceIT {
         given(principal.getAttribute("name")).willReturn("Original Name");
         given(principal.getAttribute("email")).willReturn("email@gmail.com");
         this.underTest.newUser(principal);
-        this.underTest.newAlbum("Album Title", "Artist Name");
-        this.underTest.addPhase("Phase Name");
-        this.underTest.newTask("New Task");
-        this.underTest.addSong("Song Title");
+        try {
+            this.underTest.newAlbum("Album Title", "Artist Name");
+        } catch (ATException ex) {
+            Logger.getLogger(TrackerServiceIT.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            this.underTest.addPhase("Phase Name");
+            this.underTest.newTask("New Task");
+            this.underTest.addSong("Song Title");
+        } catch (ATException ex) {
+            Logger.getLogger(TrackerServiceIT.class.getName()).log(Level.SEVERE, null, ex);
+        }
         this.underTest.setTaskPhase("New_Task̪QQQ0"); //set to phase 0 (the only one)
         this.underTest.setTaskStatus("Song_Title", "New_Task", "add");
         this.underTest.setTaskStatus("Song_Title", "New_Task", "complete");
 
-        this.underTest.addSubtask("Song_Title", "New_Task", "New Subtask");
+        try {
+            this.underTest.addSubtask("Song_Title", this.underTest.getAlbum().getSong("Song_Title").getTask("New_Task"), "New Subtask");
+        } catch (ATException ex) {
+            Logger.getLogger(TrackerServiceIT.class.getName()).log(Level.SEVERE, null, ex);
+        }
         assertEquals("New_Subtask", this.underTest.getAlbum().getSong("Song_Title").getTask("New_Task").getTasks().get(0).getName());
         assertTrue(this.underTest.getAlbum().getSong("Song_Title").getTask("New_Task").isSplit());
         assertFalse(this.underTest.getAlbum().getSong("Song_Title").getTask("New_Task").isDone());
 
-        this.underTest.addSubtask("Song_Title", "New_Task", "Another Subtask");
+        try {
+            this.underTest.addSubtask("Song_Title", this.underTest.getAlbum().getSong("Song_Title").getTask("New_Task"), "Another Subtask");
+        } catch (ATException ex) {
+            Logger.getLogger(TrackerServiceIT.class.getName()).log(Level.SEVERE, null, ex);
+        }
         this.underTest.setSubtaskStatus("Song_Title", "New_Task", "Another_Subtask", "delete");
         assertEquals(1, this.underTest.getAlbum().getSong("Song_Title").getTask("New_Task").getTasks().size());
 
@@ -270,8 +389,12 @@ public class TrackerServiceIT {
         given(principal.getAttribute("name")).willReturn("Original Name");
         given(principal.getAttribute("email")).willReturn("email@gmail.com");
         this.underTest.newUser(principal);
-        this.underTest.newAlbum("Album Title", "Artist Name");
-        this.underTest.addSong("Song Title");
+        try {
+            this.underTest.newAlbum("Album Title", "Artist Name");
+            this.underTest.addSong("Song Title");
+        } catch (ATException ex) {
+            Logger.getLogger(TrackerServiceIT.class.getName()).log(Level.SEVERE, null, ex);
+        }
         assertEquals("Song_Title", this.underTest.getAlbum().getSongs().get(0).getName());
     }
 
@@ -280,7 +403,11 @@ public class TrackerServiceIT {
         given(principal.getAttribute("name")).willReturn("Original Name");
         given(principal.getAttribute("email")).willReturn("email@gmail.com");
         this.underTest.newUser(principal);
-        this.underTest.newAlbum("Album Title", "Artist Name");
+        try {
+            this.underTest.newAlbum("Album Title", "Artist Name");
+        } catch (ATException ex) {
+            Logger.getLogger(TrackerServiceIT.class.getName()).log(Level.SEVERE, null, ex);
+        }
         User newUser = new User("New Editor", "newemail@gmail.com");
         this.underTest.addEditor(newUser);
         assertEquals("New Editor", this.underTest.getAlbum().getEditors().get(1).getName());
@@ -291,7 +418,11 @@ public class TrackerServiceIT {
         given(principal.getAttribute("name")).willReturn("Original Name");
         given(principal.getAttribute("email")).willReturn("email@gmail.com");
         this.underTest.newUser(principal);
-        this.underTest.newAlbum("Album Title", "Artist Name");
+        try {
+            this.underTest.newAlbum("Album Title", "Artist Name");
+        } catch (ATException ex) {
+            Logger.getLogger(TrackerServiceIT.class.getName()).log(Level.SEVERE, null, ex);
+        }
         User newUser = new User("New Editor", "newemail@gmail.com");
         this.underTest.addEditor(newUser);
         assertEquals("New Editor", this.underTest.getAlbum().getEditors().get(1).getName());
@@ -304,9 +435,14 @@ public class TrackerServiceIT {
         given(principal.getAttribute("name")).willReturn("Original Name");
         given(principal.getAttribute("email")).willReturn("email@gmail.com");
         this.underTest.newUser(principal);
-        this.underTest.newAlbum("Album Title", "Artist Name");
-        this.underTest.addSong("Song Title");
-        this.underTest.addSong("Song 2");
+        try {
+            this.underTest.newAlbum("Album Title", "Artist Name");
+            this.underTest.addSong("Song Title");
+            this.underTest.addSong("Song 2");
+        } catch (ATException ex) {
+            Logger.getLogger(TrackerServiceIT.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
         assertEquals("Song_Title", this.underTest.getAlbum().getSongs().get(0).getName());
         this.underTest.moveSong("Song_Title", true); //testing normal increase
         assertEquals("Song_2", this.underTest.getAlbum().getSongs().get(0).getName());
@@ -323,12 +459,21 @@ public class TrackerServiceIT {
         given(principal.getAttribute("name")).willReturn("Original Name");
         given(principal.getAttribute("email")).willReturn("email@gmail.com");
         this.underTest.newUser(principal);
-        this.underTest.newAlbum("Album Title", "Artist Name");
-        this.underTest.addPhase("Phase Name");
-        this.underTest.addPhase("Second Phase");
-        this.underTest.newTask("New Task");
-        this.underTest.newTask("Next Task");
-        this.underTest.newTask("Third Task");
+        try {
+            this.underTest.newAlbum("Album Title", "Artist Name");
+        } catch (ATException ex) {
+            Logger.getLogger(TrackerServiceIT.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            this.underTest.addPhase("Phase Name");
+            this.underTest.addPhase("Second Phase");
+            this.underTest.newTask("New Task");
+            this.underTest.newTask("Next Task");
+            this.underTest.newTask("Third Task");
+        } catch (ATException ex) {
+            Logger.getLogger(TrackerServiceIT.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
         this.underTest.setTaskPhase("New_Task̪QQQ0"); //set to phase 0
         this.underTest.setTaskPhase("Next_Task̪QQQ0"); //set to phase 0
         this.underTest.setTaskPhase("Third_Task̪QQQ1"); //set to phase 1
@@ -356,13 +501,25 @@ public class TrackerServiceIT {
         given(principal.getAttribute("name")).willReturn("Original Name");
         given(principal.getAttribute("email")).willReturn("email@gmail.com");
         this.underTest.newUser(principal);
-        this.underTest.newAlbum("Album Title", "Artist Name");
-        this.underTest.addPhase("Phase Name");
-        this.underTest.newTask("New Task");
-        this.underTest.newTask("Next Task");
+        try {
+            this.underTest.newAlbum("Album Title", "Artist Name");
+        } catch (ATException ex) {
+            Logger.getLogger(TrackerServiceIT.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            this.underTest.addPhase("Phase Name");
+            this.underTest.newTask("New Task");
+            this.underTest.newTask("Next Task");
+        } catch (ATException ex) {
+            Logger.getLogger(TrackerServiceIT.class.getName()).log(Level.SEVERE, null, ex);
+        }
         assertEquals((int) 0, (int) this.underTest.getAlbum().getIndex().getTaskIndex().get("Next_Task")[1]); //check task phase
-        this.underTest.addPhase("Second Phase");
-        this.underTest.newTask("Third Task");
+        try {
+            this.underTest.addPhase("Second Phase");
+            this.underTest.newTask("Third Task");
+        } catch (ATException ex) {
+            Logger.getLogger(TrackerServiceIT.class.getName()).log(Level.SEVERE, null, ex);
+        }
         assertEquals((int) 0, (int) this.underTest.getAlbum().getIndex().getTaskIndex().get("Third_Task")[1]); //check task phase
         this.underTest.setTaskPhase("New_Task̪QQQ1"); //set to phase 1 (which should affect any after it)
         assertEquals((int) 1, (int) this.underTest.getAlbum().getIndex().getTaskIndex().get("New_Task")[1]); //check task phase 
@@ -376,10 +533,14 @@ public class TrackerServiceIT {
         given(principal.getAttribute("name")).willReturn("Original Name");
         given(principal.getAttribute("email")).willReturn("email@gmail.com");
         this.underTest.newUser(principal);
-        this.underTest.newAlbum("Album Title", "Artist Name");
-        this.underTest.addPhase("Phase Name");
-        this.underTest.newTask("New Task");
-        this.underTest.addSong("Song Title");
+        try {
+            this.underTest.newAlbum("Album Title", "Artist Name");
+            this.underTest.addPhase("Phase Name");
+            this.underTest.newTask("New Task");
+            this.underTest.addSong("Song Title");
+        } catch (ATException ex) {
+            Logger.getLogger(TrackerServiceIT.class.getName()).log(Level.SEVERE, null, ex);
+        }
         this.underTest.setTaskPhase("New_Task̪QQQ0"); //set to phase 0 (the only one)
         assertEquals(0, this.underTest.getAlbum().getSong("Song_Title").getTasks().size());
         assertTrue(this.underTest.getAlbum().getIndex().getTaskIndex().keySet().contains("New_Task"));
@@ -399,8 +560,12 @@ public class TrackerServiceIT {
         given(principal.getAttribute("name")).willReturn("User Name");
         given(principal.getAttribute("email")).willReturn("email@gmail.com");
         this.underTest.newUser(principal);
-        this.underTest.newAlbum("Album Title", "Artist Name");
-        this.underTest.addSong("Song Title");
+        try {
+            this.underTest.newAlbum("Album Title", "Artist Name");
+            this.underTest.addSong("Song Title");
+        } catch (ATException ex) {
+            Logger.getLogger(TrackerServiceIT.class.getName()).log(Level.SEVERE, null, ex);
+        }
         this.underTest.addSongComment("Song_Title", "This is a comment");
         assertEquals("This is a comment", this.underTest.getAlbum().getSong("Song_Title").getComments().get(0).getCommentText());
         assertEquals("User Name", this.underTest.getAlbum().getSong("Song_Title").getComments().get(0).getUser().getName());
@@ -411,7 +576,11 @@ public class TrackerServiceIT {
         given(principal.getAttribute("name")).willReturn("User Name");
         given(principal.getAttribute("email")).willReturn("email@gmail.com");
         this.underTest.newUser(principal);
-        this.underTest.newAlbum("Album Title", "Artist Name");
+        try {
+            this.underTest.newAlbum("Album Title", "Artist Name");
+        } catch (ATException ex) {
+            Logger.getLogger(TrackerServiceIT.class.getName()).log(Level.SEVERE, null, ex);
+        }
         this.underTest.addAlbumComment("This is a comment");
         assertEquals("This is a comment", this.underTest.getAlbum().getComments().get(0).getCommentText());
         assertEquals("User Name", this.underTest.getAlbum().getComments().get(0).getUser().getName());
@@ -423,8 +592,12 @@ public class TrackerServiceIT {
         given(principal.getAttribute("name")).willReturn("User Name");
         given(principal.getAttribute("email")).willReturn("email@gmail.com");
         this.underTest.newUser(principal);
-        this.underTest.newAlbum("Album Title", "Artist Name");
-        this.underTest.addSong("Song Title");
+        try {
+            this.underTest.newAlbum("Album Title", "Artist Name");
+            this.underTest.addSong("Song Title");
+        } catch (ATException ex) {
+            Logger.getLogger(TrackerServiceIT.class.getName()).log(Level.SEVERE, null, ex);
+        }
         this.underTest.setSongNotes("Song_Title", "This is a note");
         assertEquals("This is a note", this.underTest.getAlbum().getSong("Song_Title").getNotes());
     }
@@ -434,7 +607,11 @@ public class TrackerServiceIT {
         given(principal.getAttribute("name")).willReturn("User Name");
         given(principal.getAttribute("email")).willReturn("email@gmail.com");
         this.underTest.newUser(principal);
-        this.underTest.newAlbum("Album Title", "Artist Name");
+        try {
+            this.underTest.newAlbum("Album Title", "Artist Name");
+        } catch (ATException ex) {
+            Logger.getLogger(TrackerServiceIT.class.getName()).log(Level.SEVERE, null, ex);
+        }
         this.underTest.setAlbumNotes("This is a note");
         assertEquals("This is a note", this.underTest.getAlbum().getNotes());
     }
@@ -444,12 +621,20 @@ public class TrackerServiceIT {
         given(principal.getAttribute("name")).willReturn("Original Name");
         given(principal.getAttribute("email")).willReturn("email@gmail.com");
         this.underTest.newUser(principal);
-        this.underTest.newAlbum("Album Title", "Artist Name");
-        this.underTest.addPhase("Phase Name");
-        this.underTest.newTask("New Task");
-        this.underTest.addSong("Song Title");
+        try {
+            this.underTest.newAlbum("Album Title", "Artist Name");
+            this.underTest.addPhase("Phase Name");
+            this.underTest.newTask("New Task");
+            this.underTest.addSong("Song Title");
+        } catch (ATException ex) {
+            Logger.getLogger(TrackerServiceIT.class.getName()).log(Level.SEVERE, null, ex);
+        }
         assertEquals(1, this.underTest.getAlbum().getSongs().size());
-        this.underTest.deleteSong("Song_Title");
+        try {
+            this.underTest.deleteSong("Song_Title");
+        } catch (ATException ex) {
+            Logger.getLogger(TrackerServiceIT.class.getName()).log(Level.SEVERE, null, ex);
+        }
         assertEquals(0, this.underTest.getAlbum().getSongs().size());
     }
 
@@ -458,15 +643,27 @@ public class TrackerServiceIT {
         given(principal.getAttribute("name")).willReturn("Original Name");
         given(principal.getAttribute("email")).willReturn("email@gmail.com");
         this.underTest.newUser(principal);
-        this.underTest.newAlbum("Album Title", "Artist Name");
-        this.underTest.addPhase("Phase Name");
-        this.underTest.addPhase("Second Phase");
-        this.underTest.addPhase("Third Phase");
-        this.underTest.newTask("New Task");
+        try {
+            this.underTest.newAlbum("Album Title", "Artist Name");
+        } catch (ATException ex) {
+            Logger.getLogger(TrackerServiceIT.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            this.underTest.addPhase("Phase Name");
+            this.underTest.addPhase("Second Phase");
+            this.underTest.addPhase("Third Phase");
+            this.underTest.newTask("New Task");
+        } catch (ATException ex) {
+            Logger.getLogger(TrackerServiceIT.class.getName()).log(Level.SEVERE, null, ex);
+        }
         this.underTest.setTaskPhase("New_Task̪QQQ2"); //set to phase 2 
 
         assertEquals(3, this.underTest.getAlbum().getIndex().getPhases().size());
-        this.underTest.deletePhase(1);
+        try {
+            this.underTest.deletePhase(1);
+        } catch (ATException ex) {
+            Logger.getLogger(TrackerServiceIT.class.getName()).log(Level.SEVERE, null, ex);
+        }
         assertEquals(2, this.underTest.getAlbum().getIndex().getPhases().size());
         assertEquals("Third Phase", this.underTest.getAlbum().getIndex().getPhases().get(1));
         assertEquals((int) 1, (int) this.underTest.getAlbum().getIndex().getTaskIndex().get("New_Task")[1]); //check task phase has been adjusted
@@ -477,12 +674,21 @@ public class TrackerServiceIT {
         given(principal.getAttribute("name")).willReturn("Original Name");
         given(principal.getAttribute("email")).willReturn("email@gmail.com");
         this.underTest.newUser(principal);
-        this.underTest.newAlbum("Album Title", "Artist Name");
-        this.underTest.addPhase("Phase Name");
-        this.underTest.newTask("New Task");
-        this.underTest.newTask("Next Task");
-        this.underTest.newTask("Third Task");
-        this.underTest.deleteTask("Next_Task");
+        try {
+            this.underTest.newAlbum("Album Title", "Artist Name");
+            this.underTest.addPhase("Phase Name");
+            this.underTest.newTask("New Task");
+            this.underTest.newTask("Next Task");
+            this.underTest.newTask("Third Task");
+        } catch (ATException ex) {
+            Logger.getLogger(TrackerServiceIT.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        try {
+            this.underTest.deleteTask("Next_Task");
+        } catch (ATException ex) {
+            Logger.getLogger(TrackerServiceIT.class.getName()).log(Level.SEVERE, null, ex);
+        }
         assertEquals(2, this.underTest.getAlbum().getIndex().getTaskIndex().size());
         assertEquals((int) 1, (int) this.underTest.getAlbum().getIndex().getTaskIndex().get("Third_Task")[0]); //check task order has been adjusted to remove gap
 
