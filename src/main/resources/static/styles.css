@@ -171,7 +171,7 @@ textarea{
     text-align: left;
 }
 .table-album tr:first-child td:first-child{
-    min-width: 300px;
+    max-width: 500px;
 }
 .table-album tr:first-child td:nth-child(2){
     width: 50px;
@@ -184,6 +184,8 @@ textarea{
 .table-album tr td:last-child .btn-outline-dark {
     width: 100%;
 }
+
+
 
 .table-comments{
     table-layout: fixed;
@@ -222,7 +224,7 @@ textarea{
     text-align: left;
 }
 .table-tasks tr:first-child td:first-child{
-    min-width: 300px;
+    min-width: 200px;
 }
 .table-tasks tr:first-child td:nth-child(2){
     width: 50px;
@@ -361,10 +363,6 @@ textarea{
 
 
 
-
-
-
-
 @media screen and (max-width: 991px){
     section.divide-thirds{
         display: inline-block;
@@ -374,6 +372,29 @@ textarea{
         display: inline-block;
         width: 100%;
 
+    }
+    nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        box-sizing: border-box;
+    }
+    header{
+        padding-top:99px;
+    }
+    .navbar{
+        position: fixed;
+        width: 100%;
+
+    }
+    .navbar-nav {
+        flex-direction: row;
+    }
+    .nav-link{
+        margin-right: 10px;
+    }
+    .table-album, .table-tasks{
+        width: inherit !important;
     }
 }
 
