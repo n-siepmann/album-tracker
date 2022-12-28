@@ -1,4 +1,4 @@
-## Album Tracker
+# Album Tracker
 When recording and producing musical releases, there can be a lot of steps in the process, and a traditional method for keeping track is a grid drawn on a whiteboard - list of songs down one side, list of tasks (drums, bass, guitars etc) along the top. This has the advantage of being simple to implement, and making it satisfying to check tasks off.
 
 However, as the process goes on and tasks need to be added for specific songs, or subdivided into sub-tasks, you have to either squeeze additional columns into the grid or continually redraw it, and your neat progress tracker becomes illegible and annoying. It's also not much use if you want to check your progress from elsewhere.
@@ -9,5 +9,5 @@ You can drill down into each individual Song to see only the tasks assigned to i
 
 Try it out at https://album-tracker-358914.nw.r.appspot.com/
 
-# Stack
+## Stack
 Java, Spring Boot, Thymeleaf, Hibernate, Google Datastore, OAuth2, Spring Security, MailJet
