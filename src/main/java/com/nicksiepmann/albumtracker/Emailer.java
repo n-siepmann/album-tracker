@@ -26,7 +26,6 @@ public class Emailer {
         MailjetResponse response;
         client = new MailjetClient(key, secret, new ClientOptions("v3.1"));
 
-//        client = new MailjetClient("b889c863c2c4f80069b79c6a7ae4e9f4", "78d46af94de3b619eacca82bbc59b1ec", new ClientOptions("v3.1"));
         request = new MailjetRequest(Emailv31.resource)
                 .property(Emailv31.MESSAGES, new JSONArray()
                         .put(new JSONObject()
