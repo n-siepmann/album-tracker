@@ -24,7 +24,8 @@ public class Config {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests().antMatchers("/oauth2/**", "/error", "/welcome", "/static/**", "/*.css", "/favicon*.png", "/android*.png").permitAll()
                 .anyRequest().authenticated()
-                .and().oauth2Login().loginPage("/welcome").defaultSuccessUrl("/", true);
+                .and().oauth2Login().loginPage("/welcome").defaultSuccessUrl("/", true)
+                .and().headers().contentSecurityPolicy("upgrade-insecure-requests");
         return http.build();
 
     }
