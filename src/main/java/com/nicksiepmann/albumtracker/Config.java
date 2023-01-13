@@ -22,7 +22,7 @@ public class Config {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.authorizeRequests().antMatchers("/oauth2/**", "/error", "/welcome", "/static/**", "/*.css", "/favicon*.png", "/android*.png").permitAll()
+        http.authorizeRequests().antMatchers("/oauth2/**", "/error", "/welcome", "/static/**", "/*.css", "/favicon*.png", "/android*.png", "/apple-touch-icon.png").permitAll()
                 .anyRequest().authenticated()
                 .and().oauth2Login().loginPage("/welcome").defaultSuccessUrl("/", true)
                 .and().headers().contentSecurityPolicy("upgrade-insecure-requests");
